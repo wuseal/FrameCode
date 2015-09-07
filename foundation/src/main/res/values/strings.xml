@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">foundation</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="dh_net_lv_load_more">加载中...</string>
+</resources>

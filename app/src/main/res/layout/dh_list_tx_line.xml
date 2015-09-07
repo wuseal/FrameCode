@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:longClickable="false"
+    android:measureWithLargestChild="false">
+    <TextView
+        android:id="@+id/dh_list_tx"
+        android:layout_width="match_parent"
+        android:gravity="center|left"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_color"/>
+</LinearLayout>

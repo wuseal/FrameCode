@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+        <include
+        android:id="@+id/otherfeedlist_header"
+        layout="@layout/include_header" />
+        
+        <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"    
+        android:layout_marginTop="10dp"
+        >
+     
+          <LinearLayout 
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_alignParentLeft="true"
+           android:layout_centerVertical="true"
+           android:layout_marginLeft="10dp" 
+          >
+             <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_launcher"
+	           android:id="@+id/imageview_me"    
+	          />
+              <TextView 
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:layout_gravity="center"
+               android:textColor="@color/black_color"    
+              />
+          </LinearLayout>
+          <ImageView 
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="10dp"
+           android:src="@drawable/ic_launcher"
+           android:layout_centerVertical="true"  
+           />
+        </RelativeLayout>
+    
+
+</LinearLayout>

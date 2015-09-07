@@ -1,0 +1,26 @@
+<resources>
+
+
+    <string name="title_section1">section1</string>
+    <string name="title_section2">section2</string>
+    <string name="title_section3">section3</string>
+    <string name="action_example">action_example</string>
+    <string name="navigation_drawer_open">打开</string>
+    <string name="navigation_drawer_close">关闭</string>
+
+    <string name="app_name">物盟盟demo</string>
+    <string name="exception_parse">解析数据异常</string>
+    <string name="exception_timeout">网络连接超时</string>
+    <string name="bottom_first">首页</string>
+    <string name="bottom_second">第二</string>
+    <string name="bottom_three">第三</string>
+    <string name="bottom_four">最后</string>
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="udpateCheck">升级检查</string>
+    <string name="Hint">提示</string>
+    <string name="exitHint">退出</string>
+    <string name="exitChoose">您确定要退出吗？</string>
+    <string name="NotNeedUpt">您当前的版本是最新版本，无需升级！</string>
+    <string name="versionUpdate">版本升级</string>
+</resources>
