@@ -1,5 +1,8 @@
 package com.dh.foundation.utils;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import com.dh.foundation.manager.FoundationManager;
 
 import java.util.Set;
@@ -71,14 +74,15 @@ public class SharedPreferenceUtils {
             return FoundationManager.getSharedPreferences().getLong(key, defaultValue);
         }
     };
-
     public static final Controller<Set<String>> STRING_SET_CONTROLLER = new Controller<Set<String>>() {
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void set(String key, Set<String> aStringSet) {
             FoundationManager.getSharedPreferences().edit().putStringSet(key, aStringSet).apply();
 
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public Set<String> get(String key, Set<String> defaultValue) {
             return FoundationManager.getSharedPreferences().getStringSet(key, defaultValue);

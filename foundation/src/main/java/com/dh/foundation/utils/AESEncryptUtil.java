@@ -13,7 +13,6 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class AESEncryptUtil {
 
-
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
 
     private static final String DEFAULT_KEY = "com.dahanis.foundation";
@@ -23,7 +22,7 @@ public class AESEncryptUtil {
     private static final AESEncryptUtil instance = new AESEncryptUtil();
 
     private AESEncryptUtil() {
-        key = DEFAULT_KEY;
+        key = StringUtils.substring(DEFAULT_KEY, 0, 16);
     }
 
     private AESEncryptUtil(String key) {
@@ -34,6 +33,7 @@ public class AESEncryptUtil {
     public static AESEncryptUtil getInstance() {
         return instance;
     }
+
     public static AESEncryptUtil getInstance(String key) {
         return new AESEncryptUtil(key);
     }

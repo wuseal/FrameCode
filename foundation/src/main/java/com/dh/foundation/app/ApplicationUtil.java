@@ -119,12 +119,12 @@ public class ApplicationUtil {
 
         if (APPLICATION_INFO != null) {
 
-            return APPLICATION_INFO.metaData.getString(key);
+            return String.valueOf(APPLICATION_INFO.metaData.get(key));
         } else {
             initInfos();
             if (APPLICATION_INFO != null) {
 
-                return APPLICATION_INFO.metaData.getString(key);
+                return String.valueOf(APPLICATION_INFO.metaData.get(key));
             } else {
                 return null;
             }
@@ -141,7 +141,12 @@ public class ApplicationUtil {
         } catch (PackageManager.NameNotFoundException e) {
            DLoggerUtils.e(e);
         }
-        return info.metaData.getString(key);
+        if (info != null) {
+
+            return String.valueOf(info.metaData.get(key));
+        } else {
+            return null;
+        }
     }
 
     public static ComponentName getComponentName(Context context) {

@@ -26,6 +26,5 @@ public class MainActivity extends Activity {
         DLoggerUtils.i(instance.encrypt("hello,my babyhello,my babyhello,my babyhello,my babyhello,my babyhello,my baby"));
         DLoggerUtils.i(instance.decrypt(encrypt));
         setContentView(R.layout.main_activity);
-
     }
 }

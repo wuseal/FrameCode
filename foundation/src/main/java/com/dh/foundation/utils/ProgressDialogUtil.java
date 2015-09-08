@@ -15,7 +15,9 @@ import java.lang.reflect.Field;
  * Time: 22:17
  */
 public class ProgressDialogUtil {
+
     private static Dialog progressDialog;
+
     private static int level;//等待框展示层级，只有level=0的时候才能关闭progressDialog
 
     private static DefaultProgressDialogMaker defaultProgressDialogMaker = new DefaultProgressDialogMaker();//对话框制造者
@@ -33,6 +35,7 @@ public class ProgressDialogUtil {
      * @param dialogMaker 对话框构建者
      */
     public static void setDialogMaker(DialogMakeAbility dialogMaker) {
+
         ProgressDialogUtil.dialogMaker = dialogMaker;
     }
 
@@ -61,6 +64,7 @@ public class ProgressDialogUtil {
     }
 
     public static synchronized void showProgressDialog(Context context) {
+
         showProgressDialog(context, null);
     }
 
@@ -73,21 +77,26 @@ public class ProgressDialogUtil {
             if (progressDialog == null || !context.equals(getDialogBaseContext(progressDialog)) || !progressDialog.isShowing()) {
 
                 dismissProgressDialog();
+
                 if (StringUtils.isEmpty(content)) {
+
                     content = "请稍候...";
                 }
                 if (dialogMaker != null) {
+
                     progressDialog = dialogMaker.makeDialog(context);
 
-
                 } else {
+
                     defaultProgressDialogMaker.setContent(content);
+
                     progressDialog = defaultProgressDialogMaker.makeDialog(context);
                 }
 
 
                 progressDialog.show();
             }
+
             level++;
 
         }
@@ -97,11 +106,15 @@ public class ProgressDialogUtil {
      * 消除对话框，不用担心多个对话框同时出现，只有当showProgressDialog的次数和dismissProgressDialog调用次数相同时，ProgressDialog才会消除
      */
     public static synchronized void dismissProgressDialog() {
+
         level--;
+
         if (level < 0) {
+
             level = 0;
         }
         if (progressDialog != null && level == 0 && progressDialog.isShowing()) {
+
             progressDialog.dismiss();
         }
     }
@@ -110,6 +123,7 @@ public class ProgressDialogUtil {
      * 一般情况下不要调用此方法，此方法为一次性全部消除所有对话框层级．推荐调用dismissProgressDialog按层级进行消除等待框
      */
     public static void dismissAll() {
+
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
 

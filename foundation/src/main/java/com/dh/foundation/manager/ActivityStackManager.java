@@ -2,6 +2,8 @@ package com.dh.foundation.manager;
 
 import android.app.Activity;
 
+import com.dh.foundation.manager.managerinterface.IActivityStackManager;
+
 import java.util.Stack;
 
 /**
@@ -10,14 +12,16 @@ import java.util.Stack;
  * Date: 2015/4/25
  * Time: 22:59
  */
-public class ActivityStackManager {
+public class ActivityStackManager implements IActivityStackManager {
     private final Stack<Activity> stack = new Stack<Activity>();
 
+    @Override
     public void push(Activity activity) {
         stack.push(activity);
     }
 
 
+    @Override
     public void finishAll() {
         Activity activity;
         while (!stack.empty() && (activity = stack.pop()) != null) {
@@ -26,12 +30,14 @@ public class ActivityStackManager {
     }
 
 
+    @Override
     public void pop(Activity activity) {
         if (stack.contains(activity)) {
             stack.remove(activity);
         }
     }
 
+    @Override
     public Stack<Activity> getStack() {
         return stack;
     }

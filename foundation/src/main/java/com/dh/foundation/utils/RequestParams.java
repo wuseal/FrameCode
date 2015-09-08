@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 请求参数配置集合类
  * Created By: Seal.Wu
  * Date: 2015/4/7
  * Time: 10:57
