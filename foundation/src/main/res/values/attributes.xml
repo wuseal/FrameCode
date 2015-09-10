@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="DhNetListView">
         <attr name="load_more_layout" format="reference" />
-        <attr name="empty_view" format="reference" />
+        <attr name="empty_view_id" format="reference" />
     </declare-styleable>
 
     <attr name="DhNetListViewStyle" format="reference" />

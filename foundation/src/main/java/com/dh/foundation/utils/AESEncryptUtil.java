@@ -30,10 +30,19 @@ public class AESEncryptUtil {
     }
 
 
+    /**
+     * 获取默认的加密对象
+     */
     public static AESEncryptUtil getInstance() {
         return instance;
     }
 
+    /**
+     * 获取定制的加密对象
+     *
+     * @param key 加密密钥
+     * @return 加密对象
+     */
     public static AESEncryptUtil getInstance(String key) {
         return new AESEncryptUtil(key);
     }

@@ -13,7 +13,7 @@ import java.io.File;
  * Date: 2015/6/3
  * Time: 14:37
  */
-public class InvokeIntentUtils {
+public class IntentInvokeUtils {
 
 
     public static void invokeActivity(Context context,Class<? extends Activity> activityClass) {

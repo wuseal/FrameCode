@@ -121,7 +121,7 @@ public class DhNetListView extends ListView {
 
         loadMoreView = LayoutInflater.from(getContext()).inflate(loadMoreLayout, this, false);
 
-         emptyViewLayout = a.getResourceId(R.styleable.DhNetListView_empty_view, 0);
+         emptyViewLayout = a.getResourceId(R.styleable.DhNetListView_empty_view_id, 0);
 
 
         a.recycle();

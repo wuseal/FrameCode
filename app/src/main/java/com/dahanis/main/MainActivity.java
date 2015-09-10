@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import com.dahanis.main.activity.DhNetListViewActivity;
 import com.dahanis.main.activity.LoadImageActivity;
 import com.dh.foundation.manager.FoundationManager;
-import com.dh.foundation.utils.InvokeIntentUtils;
+import com.dh.foundation.utils.IntentInvokeUtils;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -41,7 +41,6 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -70,7 +69,7 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
-                InvokeIntentUtils.invokeActivity(this, com.dahanis.main.activity.MainActivity.class);
+                IntentInvokeUtils.invokeActivity(this, com.dahanis.main.activity.MainActivity.class);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
