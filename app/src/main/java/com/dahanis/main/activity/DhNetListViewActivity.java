@@ -38,7 +38,7 @@ public class DhNetListViewActivity extends ActionBarActivity implements SwipeRef
 
     @OnClick(R.id.load_image)
     public void to() {
-        startActivity(new Intent(DhNetListViewActivity.this, MainActivity.class));
+        startActivity(new Intent(DhNetListViewActivity.this, LoadImageActivity.class));
     }
 
 

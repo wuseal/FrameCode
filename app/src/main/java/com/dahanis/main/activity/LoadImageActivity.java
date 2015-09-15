@@ -1,6 +1,5 @@
 package com.dahanis.main.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -79,10 +78,6 @@ public class LoadImageActivity extends Activity {
         MAdapter mAdapter = new MAdapter();
         mAdapter.setList(strings);
         listView.setAdapter(mAdapter);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         new AppDownLoaderWithNotification(url).start();
         DownLoadUtil.getInstance().startADownloadTask(url, new DownloadListener() {

@@ -130,17 +130,27 @@ public class UnCatchExceptionHandler implements Thread.UncaughtExceptionHandler 
             String fileName = "crash-" + time + "-" + timestamp + ".log";
             String path;
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                 path = Environment.getExternalStorageDirectory().getPath() + "/" + ApplicationUtil.getAppName();
+                 path = Environment.getExternalStorageDirectory().getPath() + "/" + ApplicationUtil.getPackageName();
             } else {
                 path=context.getCacheDir()+ "/" + ApplicationUtil.getAppName();
             }
             File dir = new File(path);
             if (!dir.exists()) {
-                dir.mkdirs();
+                if (!dir.mkdirs()) {
+                    DLoggerUtils.e(new RuntimeException("创建文件夹:" + path + "失败"));
+                }
             }
-            FileOutputStream fos = new FileOutputStream(path + fileName);
-            fos.write(sb.toString().getBytes());
-            fos.close();
+            File file = new File(dir, fileName);
+            if (!file.exists()) {
+                if (file.createNewFile()) {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(sb.toString().getBytes());
+                    fos.close();
+                } else {
+                    DLoggerUtils.e(new RuntimeException("创建文件" + path + "/" + fileName + "失败"));
+                }
+            }
+
             return fileName;
         } catch (Exception e) {
             DLoggerUtils.e(e);

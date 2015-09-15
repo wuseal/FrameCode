@@ -77,6 +77,22 @@ public class ApplicationUtil {
         }
     }
 
+    public static String getPackageName()//获取包名
+    {
+        if (PACKAGE_INFO != null) {
+
+            return PACKAGE_INFO.packageName;
+        } else {
+            initInfos();
+            if (PACKAGE_INFO != null) {
+
+                return PACKAGE_INFO.packageName;
+            } else {
+                return "未知版本号";
+            }
+        }
+    }
+
     public static int getVersionCode()//获取版本号(内部识别号)
     {
         if (PACKAGE_INFO != null) {
