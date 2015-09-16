@@ -59,6 +59,7 @@ class DefaultProgressDialogMaker extends ProgressDialogMaker {
 
             progressDialog.setIndeterminate(false);
 
+            progressDialog.setTitle(null);
 
             if (StringUtils.isNotEmpty(content)) {
 
