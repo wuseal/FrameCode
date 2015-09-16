@@ -29,8 +29,6 @@ class DefaultProgressDialogMaker extends ProgressDialogMaker {
     private int customViewLayout;
 
 
-
-
     @Override
     public Dialog makeDialog(Context context) {
 
@@ -47,11 +45,19 @@ class DefaultProgressDialogMaker extends ProgressDialogMaker {
             dialog.setContentView(customViewLayout);
 
         } else {
-            ProgressDialog progressDialog = new ProgressDialog(context, style);
+
+            ProgressDialog progressDialog;
+
+            if (style == 0) {
+
+                progressDialog = new ProgressDialog(context);
+
+            } else {
+
+                progressDialog = new ProgressDialog(context, style);
+            }
 
             progressDialog.setIndeterminate(false);
-
-            progressDialog.setTitle(null);
 
             if (StringUtils.isNotEmpty(content)) {
 
