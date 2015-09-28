@@ -77,6 +77,10 @@ public class AfkImageView extends View {
      */
     private int mWidth, mHeight;
 
+    /**
+     * 是否播放动画的开关
+     */
+    private boolean mExcessiveAnimatorEable;
 
     public AfkImageView(Context context) {
         this(context, null);
@@ -112,7 +116,7 @@ public class AfkImageView extends View {
             return;
         }
 
-        if (mLastDrawable == null || mExcessiveAnimation == null) {
+        if (mLastDrawable == null || mExcessiveAnimation == null || mExcessiveAnimatorEable == false) {
             drawWithOutExcessiveAnimation(canvas);
         } else {
             drawWithAnimation(canvas);
@@ -155,6 +159,7 @@ public class AfkImageView extends View {
         mFirstImageWidth = -1;
 
         setExcessiveAnimation(mAnimType);
+        setExcessiveAnimationEnable(true);
     }
 
     private void drawWithOutExcessiveAnimation(Canvas canvas) {
@@ -194,7 +199,7 @@ public class AfkImageView extends View {
 //            setDrawableSize(mLastDrawable);
 //        }
 
-        if (mExcessiveAnimation != null) {
+        if(mExcessiveAnimation != null) {
             mExcessiveAnimation.setImage(mDrawable);
         }
 
@@ -309,6 +314,19 @@ public class AfkImageView extends View {
         this.mExcessiveAnimation = animation;
     }
 
+    /**
+     * 设置是否播放动画切换效果
+     * @param enable
+     */
+    public void setExcessiveAnimationEnable(boolean enable){
+        this.mExcessiveAnimatorEable = enable;
+    }
+
+    /**
+     * 设置动画类型（使用foundation提供的切换效果）
+     * 注：现在只提供了一种效果
+     * @param type
+     */
     public void setAnimType(AfkImageView.AnimType type) {
         this.mAnimType = type;
 
