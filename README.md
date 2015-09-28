@@ -78,8 +78,6 @@ Latest Version is :1.1.3
 
             AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
             afkImageView.setImage(R.drawable.image1);
-            afkImageView.setImage(R.drawable.image2);//第二次setImage就能看见渐变切换效果
             
             afkImageView.setExcessiveAnimationEnable(false);//关闭动画效果
 
-   注：第一次调用setImage时看不到效果
