@@ -24,4 +24,5 @@ public interface ExcessiveAnimation {
      */
     int duration();
 
+    void setDuration(int duration);
 }
