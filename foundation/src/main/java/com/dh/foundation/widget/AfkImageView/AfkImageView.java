@@ -49,7 +49,7 @@ public class AfkImageView extends View {
 
     private Paint mPaint;
 
-    private ExcessiveAnimation mExcessiveAnimation;
+    private TransitionAnimation mTransitionAnimation;
     private Drawable mDrawable;
 
     /**
@@ -79,7 +79,7 @@ public class AfkImageView extends View {
     /**
      * 是否播放动画的开关
      */
-    private boolean mExcessiveAnimatorEnable;
+    private boolean mTransitionAnimatorEnable;
 
     /**
      * 动画时间、效果渐变时间
@@ -120,8 +120,8 @@ public class AfkImageView extends View {
             return;
         }
 
-        if (mExcessiveAnimation == null || mExcessiveAnimatorEnable == false) {
-            drawWithOutExcessiveAnimation(canvas);
+        if (mTransitionAnimation == null || mTransitionAnimatorEnable == false) {
+            drawWithOutTransitionAnimation(canvas);
         } else {
             drawWithAnimation(canvas);
         }
@@ -166,11 +166,11 @@ public class AfkImageView extends View {
 
         mDuration = 500;
 
-        setExcessiveAnimation(mAnimType);
-        setExcessiveAnimationEnable(true);
+        setTransitionAnimation(mAnimType);
+        setTransitionAnimationEnable(true);
     }
 
-    private void drawWithOutExcessiveAnimation(Canvas canvas) {
+    private void drawWithOutTransitionAnimation(Canvas canvas) {
         mDrawable.draw(canvas);
     }
 
@@ -195,17 +195,17 @@ public class AfkImageView extends View {
 
         mAnimationStartTime = System.currentTimeMillis();
 
-        if(mExcessiveAnimation != null) {
-            mExcessiveAnimation.setImage(mDrawable);
+        if(mTransitionAnimation != null) {
+            mTransitionAnimation.setImage(mDrawable);
         }
 
         invalidate();
     }
 
-    private void setExcessiveAnimation(AnimType type) {
+    private void setTransitionAnimation(AnimType type) {
         switch (type) {
             case ALPHA_ANIM:
-                setExcessiveAnimation(new AlphaAnimation());
+                setTransitionAnimation(new AlphaAnimation());
                 break;
         }
     }
@@ -257,21 +257,21 @@ public class AfkImageView extends View {
 //        if(mAnimationRemainingTime <= 0)
 //            progress = 1;
 //        else{
-//            double duration = mExcessiveAnimation.duration();
+//            double duration = mTransitionAnimation.duration();
 //            double retime = mAnimationRemainingTime;
 //            progress = 1- retime / duration;
 //        }
 //        if(progress < 0)
 //            progress = 0;
-        double duration = mExcessiveAnimation.duration();
+        double duration = mTransitionAnimation.duration();
         double retime = mAnimationRemainingTime;
         progress = retime / duration;
         if (progress > 1)
             progress = 1;
         else if (progress < 0)
             progress = 0;
-        mExcessiveAnimation.changeProgress(progress);
-        mAnimationFinish = mExcessiveAnimation.draw(canvas);
+        mTransitionAnimation.changeProgress(progress);
+        mAnimationFinish = mTransitionAnimation.draw(canvas);
         if (mAnimationFinish) {
             //animation is finish
         } else {
@@ -284,7 +284,7 @@ public class AfkImageView extends View {
      */
     private void countRemainingTime() {
         mAnimationNowTime = System.currentTimeMillis();
-        mAnimationRemainingTime = mExcessiveAnimation.duration() - (mAnimationNowTime - mAnimationStartTime);
+        mAnimationRemainingTime = mTransitionAnimation.duration() - (mAnimationNowTime - mAnimationStartTime);
     }
 
     /**
@@ -321,16 +321,16 @@ public class AfkImageView extends View {
         setDrawable(drawable);
     }
 
-    public void setExcessiveAnimation(ExcessiveAnimation animation) {
-        this.mExcessiveAnimation = animation;
+    public void setTransitionAnimation(TransitionAnimation animation) {
+        this.mTransitionAnimation = animation;
     }
 
     /**
      * 设置是否播放动画切换效果
      * @param enable
      */
-    public void setExcessiveAnimationEnable(boolean enable){
-        this.mExcessiveAnimatorEnable = enable;
+    public void setTransitionAnimationEnable(boolean enable){
+        this.mTransitionAnimatorEnable = enable;
 
         setDuration(mDuration);
     }
@@ -343,7 +343,7 @@ public class AfkImageView extends View {
     public void setAnimType(AfkImageView.AnimType type) {
         this.mAnimType = type;
 
-        setExcessiveAnimation(mAnimType);
+        setTransitionAnimation(mAnimType);
     }
 
     /**
@@ -352,7 +352,7 @@ public class AfkImageView extends View {
      */
     public void setDuration(int duration){
         this.mDuration = duration;
-        if(mExcessiveAnimation != null)
-            mExcessiveAnimation.setDuration(duration);
+        if(mTransitionAnimation != null)
+            mTransitionAnimation.setDuration(duration);
     }
 }

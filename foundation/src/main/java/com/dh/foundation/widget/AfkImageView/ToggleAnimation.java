@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by lee on 2015/9/22.
  */
-public abstract class ToggleAnimation implements ExcessiveAnimation {
+public abstract class ToggleAnimation implements TransitionAnimation {
     protected double progress;
 
     private int duration = 5 * 100;
