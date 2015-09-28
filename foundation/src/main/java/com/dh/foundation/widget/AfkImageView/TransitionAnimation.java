@@ -1,4 +1,4 @@
-package com.dh.foundation.widget.AfkImageView;
+package lee.afk.view.AfkImageView;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by dahan on 2015/9/21.
  */
-public interface ExcessiveAnimation {
+public interface TransitionAnimation {
 
     boolean draw(Canvas canvas);
 
