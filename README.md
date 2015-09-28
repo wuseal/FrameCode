@@ -63,3 +63,17 @@ Latest Version is :1.1.3
 
 上面方法中两个参数依次为对应的imageView和需要获取并设置的网络图片地址
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
+
+
+#二．控件
+<h4>AfkImageView</h4>
+
+简介：作用于切换图片效果的控件
+
+<h4>示例代码<h4>
+
+            AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
+            afkImageView.setImage(R.drawable.image1);
+            afkImageView.setImage(R.drawable.image2);//第二次setImage就能看见渐变切换效果
+
+   注：第一次调用setImage时看不到效果
