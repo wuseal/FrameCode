@@ -50,7 +50,6 @@ public class AfkImageView extends View {
     private Paint mPaint;
 
     private ExcessiveAnimation mExcessiveAnimation;
-    private Drawable mLastDrawable;
     private Drawable mDrawable;
 
     /**
@@ -80,7 +79,12 @@ public class AfkImageView extends View {
     /**
      * 是否播放动画的开关
      */
-    private boolean mExcessiveAnimatorEable;
+    private boolean mExcessiveAnimatorEnable;
+
+    /**
+     * 动画时间、效果渐变时间
+     */
+    private int mDuration;
 
     public AfkImageView(Context context) {
         this(context, null);
@@ -116,7 +120,7 @@ public class AfkImageView extends View {
             return;
         }
 
-        if (mLastDrawable == null || mExcessiveAnimation == null || mExcessiveAnimatorEable == false) {
+        if (mExcessiveAnimation == null || mExcessiveAnimatorEnable == false) {
             drawWithOutExcessiveAnimation(canvas);
         } else {
             drawWithAnimation(canvas);
@@ -140,11 +144,13 @@ public class AfkImageView extends View {
         mWidth = width;
         mHeight = height;
 
-        mImageWidth = mFirstImageWidth;
-        mImageHeight = mFirstImageHeight;
+//        mImageWidth = mFirstImageWidth;
+//        mImageHeight = mFirstImageHeight;
+
+        mImageWidth = setDrawableSize(mFirstImageWidth,mWidth,widthMeasureSpec);
+        mImageHeight = setDrawableSize(mFirstImageHeight,mHeight,heightMeasureSpec);
 
         setDrawableSize(mDrawable);
-        setDrawableSize(mLastDrawable);
         setMeasuredDimension(width, height);
     }
 
@@ -158,6 +164,8 @@ public class AfkImageView extends View {
         mFirstImageHeight = -1;
         mFirstImageWidth = -1;
 
+        mDuration = 500;
+
         setExcessiveAnimation(mAnimType);
         setExcessiveAnimationEnable(true);
     }
@@ -167,15 +175,9 @@ public class AfkImageView extends View {
     }
 
     private void setDrawable(Drawable drawable) {
-        if (mExcessiveAnimation == null) {
-            throw new NullPointerException("you must setExcessiveAnimation() before setImage(),and this can't be null");
-        }
 
         if (drawable == null)
             return;
-
-        if (mDrawable != null)
-            mLastDrawable = mDrawable;
 
         mDrawable = drawable;
 
@@ -189,15 +191,9 @@ public class AfkImageView extends View {
             }
         }
 
-//        setDrawableSize(mDrawable);
         setDrawableSize(mDrawable);
-        setDrawableSize(mLastDrawable);
 
         mAnimationStartTime = System.currentTimeMillis();
-
-//        if(mLastDrawable != null){
-//            setDrawableSize(mLastDrawable);
-//        }
 
         if(mExcessiveAnimation != null) {
             mExcessiveAnimation.setImage(mDrawable);
@@ -217,7 +213,22 @@ public class AfkImageView extends View {
     private void setDrawableSize(Drawable drawable) {
         if (drawable == null)
             return;
+
         drawable.setBounds(0, 0, mImageWidth, mImageHeight);
+    }
+
+    private int setDrawableSize(int imageSize, int layoutSize,int measureSpec){
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int result = layoutSize;
+        switch (specMode) {
+            case MeasureSpec.AT_MOST:
+                result = imageSize;
+                break;
+            case MeasureSpec.EXACTLY:
+                result = layoutSize;
+                break;
+        }
+        return result;
     }
 
     private int resolveAdjustedSize(int imageSize, int layoutSize, int measureSpec) {
@@ -231,10 +242,10 @@ public class AfkImageView extends View {
                     result = layoutSize;
                 break;
             case MeasureSpec.AT_MOST:
-                result = layoutSize;
+                result = imageSize;
                 break;
             case MeasureSpec.EXACTLY:
-                result = imageSize;
+                result = layoutSize;
                 break;
         }
         return result;
@@ -319,7 +330,9 @@ public class AfkImageView extends View {
      * @param enable
      */
     public void setExcessiveAnimationEnable(boolean enable){
-        this.mExcessiveAnimatorEable = enable;
+        this.mExcessiveAnimatorEnable = enable;
+
+        setDuration(mDuration);
     }
 
     /**
@@ -331,5 +344,15 @@ public class AfkImageView extends View {
         this.mAnimType = type;
 
         setExcessiveAnimation(mAnimType);
+    }
+
+    /**
+     * 设置渐变动画时间
+     * @param duration
+     */
+    public void setDuration(int duration){
+        this.mDuration = duration;
+        if(mExcessiveAnimation != null)
+            mExcessiveAnimation.setDuration(duration);
     }
 }

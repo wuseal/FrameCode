@@ -18,11 +18,10 @@ public abstract class ToggleAnimation implements ExcessiveAnimation {
     @Override
     public boolean draw(Canvas canvas) {
         mIsFinish = progress <= 0;
-//        if (mIsFinish)
-//            finish(canvas);
-//        else
-        {
+        if(mLastDrawable != null){
             drawLastDrawable(canvas);
+        }
+        if(mDrawable != null){
             drawDrawable(canvas);
         }
 
@@ -45,6 +44,7 @@ public abstract class ToggleAnimation implements ExcessiveAnimation {
         return duration;
     }
 
+    @Override
     public void setDuration(int duration){
         this.duration = duration;
     }
