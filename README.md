@@ -77,14 +77,14 @@ compile 'com.dahanis:foundation:1.1.3'
 
 默认效果是透明度渐变切换效果，无需设置任何代码，直接调用setImage(image)即可；
 
-若想自定义切换效果，实现ExcessiveAnimation接口，然后调用AfkImageView.setExcessiveAnimation(ExcessiveAnimation animation)即可，<b>注意，必须在setImage(image)之前设置动画效果才会生效用于切换图片效果的控件<B>
+若想自定义切换效果，实现TransitionAnimation接口，然后调用AfkImageView.setTransitionAnimation(TransitionAnimation animation)即可，<b>注意，必须在setImage(image)之前设置动画效果才会生效用于切换图片效果的控件<B>
 
 <h4>示例代码<h4>
 
             AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
             afkImageView.setImage(R.drawable.image1);
             
-            afkImageView.setExcessiveAnimationEnable(false);//关闭动画效果
+            afkImageView.setTransitionAnimationEnable(false);//关闭动画效果
 
 
 ####NetListView
