@@ -10,5 +10,5 @@ import java.util.List;
  * Date: 2015/7/17
  * Time: 16:48
  */
-public abstract class DhNetListViewBaseAdapter<T extends BaseBean<List<E>>, E> extends DhBaseAdapter<E> {
+public abstract class DhNetListViewBaseAdapter<T extends BaseBean<List<E>>, E> extends NetListViewBaseAdapter<T,E> {
 }
