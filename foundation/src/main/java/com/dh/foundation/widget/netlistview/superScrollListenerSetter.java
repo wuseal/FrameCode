@@ -10,7 +10,6 @@ import android.widget.AbsListView;
  */
 interface SuperScrollListenerSetter {
 
-
     /**
      * 设置滚动监听器
      *
