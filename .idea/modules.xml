@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FrameCode.iml" filepath="$PROJECT_DIR$/FrameCode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FrameCode.iml" filepath="$PROJECT_DIR$/FrameCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/foundation/foundation.iml" filepath="$PROJECT_DIR$/foundation/foundation.iml" />
     </modules>
