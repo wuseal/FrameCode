@@ -1,6 +1,7 @@
 package com.dahanis.main.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,6 +9,8 @@ import com.dahanis.main.R;
 import com.dh.foundation.utils.AESEncryptUtil;
 import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.IntentInvokeUtils;
+
+import butterknife.OnClick;
 
 /**
  * Created By: Seal.Wu
@@ -44,5 +47,9 @@ public class MainActivity extends Activity {
     }
     public void dhNetListViewDemo(View view) {
         IntentInvokeUtils.invokeActivity(this, DhNetListViewActivity.class);
+    }
+
+    public void toAfkImageView(View view) {
+        IntentInvokeUtils.invokeActivity(this, LoadImageAfkImageViewActivity.class);
     }
 }

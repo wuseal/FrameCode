@@ -30,4 +30,13 @@
         android:gravity="center"
         android:onClick="dhNetListViewDemo"
         android:text="DhNetListViewDemo" />
+
+    <Button
+        android:id="@+id/load_image_afkimageview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:onClick="toAfkImageView"
+        android:text="AfkImageView" />
 </LinearLayout>
