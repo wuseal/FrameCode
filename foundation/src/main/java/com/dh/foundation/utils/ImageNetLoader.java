@@ -45,7 +45,7 @@ public class ImageNetLoader {
         return imageCache;
     }
 
-    public static Bitmap getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
+    public static void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
 
         final BitmapHolder bitmapHolder = new BitmapHolder();
 
@@ -53,13 +53,9 @@ public class ImageNetLoader {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
 
-                if (isImmediate) {
-
-                    bitmapHolder.bitmap = response.getBitmap();
-                }
                 if (bitmapReceiver != null && response.getBitmap() != null) {
 
-                    bitmapReceiver.onReceiveBitmap(response.getBitmap());
+                    bitmapReceiver.onReceiveBitmap(response.getBitmap(), isImmediate);
                 }
             }
 
@@ -74,12 +70,11 @@ public class ImageNetLoader {
             }
         }, maxWidth, maxHigh);
 
-        return bitmapHolder.bitmap;
     }
 
-    public static Bitmap getBitmap(final String url, final BitmapReceiver bitmapReceiver) {
+    public static void getBitmap(final String url, final BitmapReceiver bitmapReceiver) {
 
-        return getBitmap(url, bitmapReceiver, 0, 0);
+        getBitmap(url, bitmapReceiver, 0, 0);
     }
 
     public static void loadImage(final ImageView imageView, final String url) {
@@ -185,17 +180,29 @@ public class ImageNetLoader {
         Bitmap bitmap;
     }
 
+    /**
+     * Bitmap接收者
+     */
     public interface BitmapReceiver {
 
-        void onReceiveBitmap(Bitmap bitmap);
+        /**
+         * @param bitmap      接收到的位图
+         * @param isImmediate 是否是在内存中立即返回
+         */
+        void onReceiveBitmap(Bitmap bitmap, boolean isImmediate);
 
+        /**
+         * 接收位图失败
+         *
+         * @param error 失败原因
+         */
         void onError(Throwable error);
     }
 
     public static class SimpleBitmapReceiver implements BitmapReceiver {
 
         @Override
-        public void onReceiveBitmap(Bitmap bitmap) {
+        public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
         }
 
