@@ -11,11 +11,7 @@ import android.widget.ListView;
 
 import com.dahanis.main.R;
 import com.dh.foundation.adapter.DhBaseAdapter;
-import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.ImageNetLoader;
-import com.dh.foundation.utils.download.AppDownLoaderWithNotification;
-import com.dh.foundation.utils.download.DownLoadUtil;
-import com.dh.foundation.utils.download.DownloadListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,20 +74,6 @@ public class LoadImageActivity extends Activity {
         MAdapter mAdapter = new MAdapter();
         mAdapter.setList(strings);
         listView.setAdapter(mAdapter);
-
-        new AppDownLoaderWithNotification(url).start();
-        DownLoadUtil.getInstance().startADownloadTask(url, new DownloadListener() {
-            @Override
-             public void onLoadChange(int total, int currentSize, int state) {
-                DLoggerUtils.i("download change =="+currentSize + "/" + total);
-            }
-
-            @Override
-            public void onComplete(long downloadId, String filePath) {
-                DLoggerUtils.i("download complete");
-            }
-        });
-
 
     }
 

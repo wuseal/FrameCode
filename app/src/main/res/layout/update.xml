@@ -28,7 +28,7 @@
                 android:textStyle="bold" />
 
             <ProgressBar
-                android:id="@+update_id/pbDownload"
+                android:id="@+id/pbDownload"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="12dip"
@@ -37,7 +37,7 @@
                 android:progressDrawable="@drawable/progress_bg5" />
 
             <TextView
-                android:id="@+update_id/tvProcess"
+                android:id="@+id/tvProcess"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="已下载0%"

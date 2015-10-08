@@ -13,7 +13,7 @@
             android:name="A_A"
             android:value="1" />
         <activity
-            android:name=".activity.DhNetListViewActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,8 @@
         </activity>
 
         <activity android:name=".activity.LoadImageActivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.NetListViewActivity" />
+        <activity android:name=".activity.DhNetListViewActivity" />
     </application>
 
 </manifest>

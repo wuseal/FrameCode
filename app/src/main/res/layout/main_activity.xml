@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:id="@+id/swipe"
             android:layout_gravity="center_horizontal" >
-            <com.dh.foundation.widget.DhNetListView
+            <com.dh.foundation.widget.netlistview.DhNetListView
                 android:id="@+id/listview"
                 app:load_more_layout="@layout/loadmore"
                 android:layout_width="match_parent"
