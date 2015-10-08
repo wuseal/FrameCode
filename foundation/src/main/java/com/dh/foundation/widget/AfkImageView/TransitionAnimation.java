@@ -1,4 +1,4 @@
-package lee.afk.view.AfkImageView;
+package com.dh.foundation.widget.AfkImageView;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -16,7 +16,7 @@ public interface TransitionAnimation {
      * 矫正微调速度
      * @param progress
      */
-    void changeProgress(double progress);
+    void changeProgress(float progress);
 
     /**
      * 持续时间

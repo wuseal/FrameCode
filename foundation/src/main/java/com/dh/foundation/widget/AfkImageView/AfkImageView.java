@@ -9,16 +9,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * Created by Lee on 2015/9/21.
  */
-public class AfkImageView extends View {
+public class AfkImageView extends ImageView {
 
     public enum AnimType {
         ALPHA_ANIM,
+        CENTER_EXPAND,
     }
 
     /**
@@ -206,6 +207,11 @@ public class AfkImageView extends View {
         switch (type) {
             case ALPHA_ANIM:
                 setTransitionAnimation(new AlphaAnimation());
+                setDuration(500);
+                break;
+            case CENTER_EXPAND:
+                setTransitionAnimation(new CenterExpandAnimation());
+                setDuration(500);
                 break;
         }
     }
@@ -253,7 +259,7 @@ public class AfkImageView extends View {
 
     private void drawWithAnimation(Canvas canvas) {
         countRemainingTime();
-        double progress;
+        float progress;
 //        if(mAnimationRemainingTime <= 0)
 //            progress = 1;
 //        else{
@@ -263,8 +269,8 @@ public class AfkImageView extends View {
 //        }
 //        if(progress < 0)
 //            progress = 0;
-        double duration = mTransitionAnimation.duration();
-        double retime = mAnimationRemainingTime;
+        float duration = mTransitionAnimation.duration();
+        float retime = mAnimationRemainingTime;
         progress = retime / duration;
         if (progress > 1)
             progress = 1;
@@ -305,6 +311,25 @@ public class AfkImageView extends View {
 //    public void setScaleType() {
 //
 //    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+//        super.setImageBitmap(bm);
+        setImage(bm);
+    }
+
+    @Override
+    public void setImageResource(int resId) {
+//        super.setImageResource(resId);
+        setImage(resId);
+    }
+
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+//        super.setImageDrawable(drawable);
+        setImage(drawable);
+    }
+
     public void setImage(int res) {
         Drawable drawable = getResources().getDrawable(res);
 
