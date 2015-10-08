@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
  * Created by lee on 2015/9/22.
  */
 public abstract class ToggleAnimation implements TransitionAnimation {
-    protected double progress;
+    protected float progress;
 
     private int duration = 5 * 100;
     protected Drawable mLastDrawable;
@@ -35,7 +35,7 @@ public abstract class ToggleAnimation implements TransitionAnimation {
     }
 
     @Override
-    public void changeProgress(double progress) {
+    public void changeProgress(float progress) {
         this.progress = progress;
     }
 
