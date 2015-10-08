@@ -1,4 +1,4 @@
-package com.dh.foundation.widget.AfkImageView;
+package com.dh.foundation.widget.afkimageview;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,8 +7,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
-import lee.afk.AfkUtils.log.LeeLog;
 
 /**
  * Created by Lee on 2015/9/28.
@@ -73,8 +71,7 @@ public class CenterExpandAnimation extends ToggleAnimation{
 
 //        drawable.setAlpha(255);
 //        disCanvas.drawColor(Color.TRANSPARENT);
-        disCanvas.drawCircle(width/2,height/2,width*(1-progress),mPaint);
-        LeeLog.p("progress " + progress);
+        disCanvas.drawCircle(width / 2, height / 2, width * (1 - progress), mPaint);
 
         int sc = canvas.saveLayer(0,0,width,height,null,Canvas.ALL_SAVE_FLAG);
         canvas.drawBitmap(bitmapDis,0,0,mPaint);
