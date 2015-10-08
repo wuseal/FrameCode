@@ -14,9 +14,11 @@ import com.dahanis.main.R;
 import com.dh.foundation.adapter.DhNetListViewBaseAdapter;
 import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
-import com.dh.foundation.widget.DhNetListView;
+import com.dh.foundation.widget.netlistview.DhDefaultLoadMoreAbleListener;
+import com.dh.foundation.widget.netlistview.DhNetListView;
+import com.dh.foundation.widget.netlistview.NetListView;
+import com.google.gson.JsonObject;
 
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.Bind;
@@ -54,13 +56,13 @@ public class DhNetListViewActivity extends ActionBarActivity implements SwipeRef
         ButterKnife.bind(this);
         FoundationManager.init(this);
         listview.initNetListView(url, null, new MBaseAdapter(), null);
-        listview.setLoadMoreAbleListener(new DhNetListView.LoadMoreAbleListener() {
+        listview.setLoadMoreAbleListener(new DhDefaultLoadMoreAbleListener(){
             @Override
-            public boolean isLoadMoreAble(BaseBean baseBean, Collection list) {
+            public boolean isLoadMoreAble(BaseBean<List<JsonObject>> listBaseBean, List<?> allListData) {
                 return true;
             }
         });
-        listview.setOnLoadFinishListener(new DhNetListView.OnLoadFinishListener() {
+        listview.setOnLoadFinishListener(new NetListView.OnLoadFinishListener() {
             @Override
             public void onLoadFinished() {
                 swipe.setRefreshing(false);

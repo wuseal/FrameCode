@@ -16,13 +16,13 @@ import java.lang.reflect.Field;
  */
 public class ProgressDialogUtil {
 
-private static Dialog progressDialog;
+    private static Dialog progressDialog;
 
-private static int level;//等待框展示层级，只有level=0的时候才能关闭progressDialog
+    private static int level;//等待框展示层级，只有level=0的时候才能关闭progressDialog
 
-private static DefaultProgressDialogMaker defaultProgressDialogMaker = new DefaultProgressDialogMaker();//对话框制造者
+    private static DefaultProgressDialogMaker defaultProgressDialogMaker = new DefaultProgressDialogMaker();//对话框制造者
 
-private static ProgressDialogMaker dialogMaker;
+    private static ProgressDialogMaker dialogMaker;
 
 
     public static ProgressDialogMaker getDialogMaker() {
