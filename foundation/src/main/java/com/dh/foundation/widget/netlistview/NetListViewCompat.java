@@ -10,6 +10,7 @@ import android.widget.AbsListView;
 
 import com.dahanis.foundation.R;
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
+import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.RequestParams;
 
 /**
@@ -34,6 +35,7 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
     }
 
     public NetListViewCompat(Context context, AttributeSet attrs, int defStyle) {
+
         super(context, attrs, defStyle);
 
         final TypedArray a = context.obtainStyledAttributes(
@@ -169,5 +171,15 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
     @Override
     public void loadMore() {
         netListViewDelegate.loadMore();
+    }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+
+        HttpNetUtils.cancelAll(this);
+
+        super.onDetachedFromWindow();
+
     }
 }

@@ -10,8 +10,11 @@ import java.util.logging.Level;
  * Time: 10:15
  */
 class DhLogger implements ILogger {
+
     private Level level = Level.ALL;
+
     private final static String LOG_TAG = "DaHan_LOG";
+
     private static DhLogger dhLogger = new DhLogger();
 
     private DhLogger() {
@@ -19,14 +22,18 @@ class DhLogger implements ILogger {
 
     @Override
     public void logInfo(String info) {
+
         if (level.intValue() <= Level.INFO.intValue()) {
+
             Log.i(LOG_TAG, info);
         }
     }
 
     @Override
     public void logError(String info, Throwable throwable) {
+
         if (level.intValue() <= Level.WARNING.intValue()) {
+
             Log.e(LOG_TAG, info, throwable);
         }
     }

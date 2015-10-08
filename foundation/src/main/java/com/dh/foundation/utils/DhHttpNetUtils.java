@@ -3,6 +3,7 @@ package com.dh.foundation.utils;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 
+import com.dh.foundation.exception.DhBaseBeanError;
 import com.dh.foundation.exception.DhRequestError;
 import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
@@ -20,21 +21,30 @@ public class DhHttpNetUtils {
 
         @Override
         public final void onSuccess(T t) {
+
             if (t instanceof BaseBean) {
+
                 if (isGetDataSuccessfully((BaseBean) t)) {
+
                     onSuccessfully(t);
+
                 } else {
+
                     ToastUtils.toast(FoundationManager.getContext(), ((BaseBean) t).getReturnMsg());
-                    onFailure(new DhRequestError((BaseBean) t));
+
+                    onFailure(new DhRequestError(new DhBaseBeanError((BaseBean) t)));
                 }
             } else {
+
                 onSuccessfully(t);
             }
         }
 
         @Override
         public final void onFailed(Throwable throwable) {
-            ToastUtils.toast(FoundationManager.getContext(), "网络异常");
+
+            ToastUtils.toast(FoundationManager.getContext(), throwable.getMessage());
+
             onFailure(new DhRequestError(throwable));
         }
 
@@ -59,8 +69,11 @@ public class DhHttpNetUtils {
      * @param <T>             返回对象类类型
      */
     public static synchronized <T> void getData(Context context, String baseAddress, RequestParams requestParams, RequestListener<T> requestListener) {
+
         if (isNetStateUnavailable(context, requestListener)) return;
+
         ProgressDialogUtil.showProgressDialog(context);
+
         AutoPrintHttpNetUtils.getData(context, baseAddress, requestParams, requestListener);
     }
 
@@ -74,8 +87,11 @@ public class DhHttpNetUtils {
      * @param <T>             返回对象类类型
      */
     public static synchronized <T> void postData(Context context, String baseAddress, RequestParams requestParams, RequestListener<T> requestListener) {
+
         if (isNetStateUnavailable(context, requestListener)) return;
+
         ProgressDialogUtil.showProgressDialog(context);
+
         AutoPrintHttpNetUtils.postData(context, baseAddress, requestParams, requestListener);
     }
 
@@ -83,10 +99,15 @@ public class DhHttpNetUtils {
      * 网络状态是否不可用
      */
     private static <T> boolean isNetStateUnavailable(Context context, RequestListener<T> requestListener) {
+
         if (!NetWorkDetector.isNetConnected()) {
+
             ToastUtils.toast(context, "无可用网络请检查网络设置");
+
             if (requestListener != null) {
+
                 requestListener.onFailure(new DhRequestError(new NetworkErrorException("无可用网络请检查网络设置")));
+
                 requestListener.onFinished();
             }
             return true;
@@ -99,6 +120,7 @@ public class DhHttpNetUtils {
      * 获取数据监听器
      */
     interface CompatListener<T> {
+
         void onSuccessfully(T t);
 
         void onFailure(DhRequestError requestError);
@@ -111,6 +133,7 @@ public class DhHttpNetUtils {
      * @return true:代表成功
      */
     public static boolean isGetDataSuccessfully(BaseBean baseBean) {
+
         return StringUtils.equals("1", baseBean.getReturnCode());
     }
 

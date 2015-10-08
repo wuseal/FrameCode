@@ -51,9 +51,9 @@ class NetListViewDelegate implements NLVCommonInterface {
 
     private int startPageNo;//分页功能起始页码
 
-    private NetListView.LoadMoreAbleListener loadMoreAbleListener;//扩展接口，是否可加载更多自定义使能
+    private NLVCommonInterface.LoadMoreAbleListener loadMoreAbleListener;//扩展接口，是否可加载更多自定义使能
 
-    private NetListView.OnLoadFinishListener onLoadFinishListener;
+    private NLVCommonInterface.OnLoadFinishListener onLoadFinishListener;
 
     private boolean isLoadOkToast = true;//加载全部是否进行提示
 
@@ -314,7 +314,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
         params.setParams(pageName, pageNo + "");
 
-        AutoPrintHttpNetUtils.getData(listView.getContext(), baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener);
+        AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView);
 
         if (pageNo != startPageNo || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
 
@@ -358,7 +358,7 @@ class NetListViewDelegate implements NLVCommonInterface {
      * @param t      网络请求返回对象
      * @param invoke 数据列表
      */
-    public void setLoadMoreAble(Object t, List<?> invoke) {
+    private void setLoadMoreAble(Object t, List<?> invoke) {
 
         loadMoreAble = loadMoreAbleListener.isLoadMoreAble(t, invoke);
     }

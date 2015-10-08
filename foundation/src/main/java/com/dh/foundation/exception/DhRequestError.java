@@ -3,15 +3,15 @@ package com.dh.foundation.exception;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
 
 /**
+ * 请求异常类
  * Created By: Seal.Wu
  * Date: 2015/8/6
  * Time: 13:38
  * <p/>
- * 专用网络请求异常类
  */
 public class DhRequestError extends Exception {
 
-    private BaseBean baseBean;
+    private Throwable throwable;
 
     public DhRequestError(String detailMessage) {
         super(detailMessage);
@@ -19,25 +19,27 @@ public class DhRequestError extends Exception {
 
 
     public DhRequestError(String detailMessage, Throwable throwable) {
+
         super(detailMessage, throwable);
+
+        this.throwable = throwable;
+
     }
 
     public DhRequestError(Throwable throwable) {
+
         super(throwable);
+
+        this.throwable = throwable;
     }
 
 
-    public DhRequestError(BaseBean baseBean) {
-        super(baseBean.getReturnMsg());
-        this.baseBean = baseBean;
+    public Throwable getThrowable() {
+        return throwable;
     }
 
-
-    public BaseBean getBaseBean() {
-        return baseBean;
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
     }
 
-    public void setBaseBean(BaseBean baseBean) {
-        this.baseBean = baseBean;
-    }
 }

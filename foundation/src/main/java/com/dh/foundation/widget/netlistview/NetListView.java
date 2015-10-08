@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.dahanis.foundation.R;
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
+import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.RequestParams;
 
 /**
@@ -155,4 +156,12 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
         netListViewDelegate.loadMore();
     }
 
+
+    @Override
+    protected void onDetachedFromWindow() {
+
+        HttpNetUtils.cancelAll(this);
+
+        super.onDetachedFromWindow();
+    }
 }

@@ -24,6 +24,7 @@ public class DhDefaultLoadMoreAbleListener implements NLVCommonInterface.LoadMor
     public boolean isLoadMoreAble(BaseBean<List<JsonObject>> listBaseBean, List<?> allListData) {
 
         if (listBaseBean.getReturnData().size() == getPageSize()) {
+
             return  true;
         }
         return false;
@@ -31,6 +32,7 @@ public class DhDefaultLoadMoreAbleListener implements NLVCommonInterface.LoadMor
 
     @Override
     public List<?> getLoadedData(BaseBean<List<JsonObject>> returnObj) {
+
         return returnObj.getReturnData();
     }
 
@@ -39,7 +41,9 @@ public class DhDefaultLoadMoreAbleListener implements NLVCommonInterface.LoadMor
     }
 
     public DhDefaultLoadMoreAbleListener setPageSize(int pageSize) {
+
         this.pageSize = pageSize;
+
         return this;
     }
 }

@@ -45,7 +45,7 @@ public class DhNetListView extends NetListViewCompat {
 
         if (loadMoreAbleListener instanceof DhDefaultLoadMoreAbleListener) {
 
-            this.dhDefaultLoadMoreAbleListener= (DhDefaultLoadMoreAbleListener) loadMoreAbleListener;
+            this.dhDefaultLoadMoreAbleListener = (DhDefaultLoadMoreAbleListener) loadMoreAbleListener;
         }
         super.setLoadMoreAbleListener(loadMoreAbleListener);
     }
