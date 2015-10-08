@@ -2,7 +2,8 @@ package com.dh.foundation.utils.filemanager;
 
 import android.content.Context;
 import android.os.Environment;
-
+import android.os.StatFs;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,37 +21,49 @@ import java.io.RandomAccessFile;
 public class FileUtil {
     private static FileUtil mFileUtil;
     private RandomAccessFile RandomAccess = null;
+    private static Context mContext;
 
     private FileUtil() {
     }
 
-    public static FileUtil getInstance() {
+    public static FileUtil getInstance(Context context) {
+        mContext = context;
+        initRootDirectory(mContext);
         if (mFileUtil == null)
             mFileUtil = new FileUtil();
         return mFileUtil;
     }
 
+    private static void initRootDirectory(Context context) {
+        String dir = FilePathUtil.getExtPath();
+        if (FilePathUtil.isExistExtPath()) {
+            String dirFile = dir + FilePathUtil.getFileDirectoryPath(context);
+            if (!new File(dirFile).exists())
+                new File(dirFile).mkdirs();
+            String dirPhoto = dir + FilePathUtil.getImageDirectoryPath(context);
+            if (!new File(dirPhoto).exists())
+                new File(dirPhoto).mkdirs();
+        }
+    }
+
     //    一、资源文件的读取：
 //            1) 从resource的raw中读取文件数据：
-    public static String readFromRaw(Context mContext, int rawId, String charsetName) {
-        String str = "";
+    public byte[] readFromRaw(int rawId) {
+        byte[] buffer = null;
         try {
             //得到资源中的Raw数据流
             InputStream in = mContext.getResources().openRawResource(rawId);
             //得到数据的大小
             int length = in.available();
-            byte[] buffer = new byte[length];
+            buffer = new byte[length];
             //读取数据
             in.read(buffer);
-            //依test.txt的编码类型选择合适的编码，如果不调整会乱码
-            str = new String(buffer, charsetName);
-            //关闭
             in.close();
-            return str;
+            return buffer;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
     //    public static void readInRaw(Context mContext,String packName,String  fileName){
@@ -69,34 +82,35 @@ public class FileUtil {
 //
 //    };
     //    2) 从resource的asset中读取文件数据
-    public static String readFromAsset(Context mContext, String fileName, String charsetName) {
-        String str = "";
+    public byte[] readFromAsset(String fileName) {
+        byte[] buffer = null;
         try {
             //得到资源中的asset数据流
             InputStream in = mContext.getResources().getAssets().open(fileName);
 
             //得到数据的大小
             int length = in.available();
-            byte[] buffer = new byte[length];
+            buffer = new byte[length];
             //读取数据
             in.read(buffer);
-            //依test.txt的编码类型选择合适的编码，如果不调整会乱码
-            str = new String(buffer, charsetName);
-            //关闭
             in.close();
-            return str;
+            return buffer;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
     //    二、读写/data/data/<应用程序名>目录上的文件:/data/data/包.名/files
 //写数据
-    public static void writeFile(Context mContext, String fileName, String writestr) throws IOException {
+    public void writeFileToSys(String fileName, byte[] bytes) throws IOException {
+        if(getAvailableInternalMemorySize()<bytes.length)
+        {
+            Log.e("TAG","系统内部可用空间不足");
+            return;
+        }
         try {
             FileOutputStream fout = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            byte[] bytes = writestr.getBytes();
             fout.write(bytes);
             fout.close();
         } catch (Exception e) {
@@ -105,82 +119,69 @@ public class FileUtil {
     }
 
     //读数据
-    public static String readFile(Context mContext, String fileName) throws IOException {
-        String str = "";
+    public byte[] readFileFromSys(String fileName) throws IOException {
+        byte[] buffer = null;
         try {
             FileInputStream fin = mContext.openFileInput(fileName);
             int length = fin.available();
-            byte[] buffer = new byte[length];
+            buffer = new byte[length];
             fin.read(buffer);
-            str = new String(buffer, "UTF-8");
             fin.close();
+            return buffer;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return str;
+        return null;
 
     }
 
-    //    三、读写SD卡中的文件。也就是/mnt/sdcard/目录下面的文件 ：
-//写数据到SD中的文件FilePath.FIlE_DIRECTORY_PATH
-//    public static void writeSdcardFile(String filePathType,String fileName,byte[] bytes) throws IOException {
-//        String DirPath=FilePathUtil.EXTERNAL_DIRECTORY_PATH+filePathType+"/";
-//        try {
-//            FileOutputStream fout = new FileOutputStream(DirPath+fileName);
-//            fout.write(bytes);
-//            fout.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    //读SD中的文件
-//    public static String readSdcardFile(String filePathType,String fileName) throws IOException {
-//        String DirPath=FilePathUtil.EXTERNAL_DIRECTORY_PATH+filePathType+"/";
-//        String str  = "";
-//        try {
-//            FileInputStream fin = new FileInputStream(DirPath+fileName);
-//            int length = fin.available();
-//            byte[] buffer = new byte[length];
-//            fin.read(buffer);
-//            str = new String(buffer, "UTF-8");
-//
-//            fin.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return str ;
-//    }
+    /*根据名称获取文件*/
+    private File getFile(int filePathType, String fileName) {
+        String dir = "";
+        if (FilePathType.PHOTO == filePathType)
+            dir = FilePathUtil.getImageDirectoryPath(mContext);
+        else {
+            dir = FilePathUtil.getFileDirectoryPath(mContext);
+        }
+        if (FilePathUtil.isExistExtPath()) {
+            if (fileName != null)
+                return new File(FilePathUtil.getExtPath() + dir, fileName);
+            else {
+                return new File(FilePathUtil.getExtPath() + dir);
+            }
+        } else {
+            if (fileName != null)
+                return new File(FilePathUtil.getSystemPath(mContext), fileName);
+            else {
+                return new File(FilePathUtil.getSystemPath(mContext));
+            }
+        }
+    }
 
     //    四、使用File类进行文件的读写：
 //读文件
-    public static String readSDFile(String filePathType, String fileName) throws IOException {
-        String dir = "";
-        if (isExistSdCard())
-            dir = FilePathUtil.EXTERNAL_DIRECTORY_PATH;
-        else {
-            dir = FilePathUtil.ROOT_DIRECTORY_PATH;
-        }
-        String str = "";
-        File file = new File(dir + filePathType, fileName);
+    public byte[] readSDFile(int filePathType, String fileName) throws IOException {
+
+        File file = getFile(filePathType, fileName);
         FileInputStream fis = new FileInputStream(file);
         int length = fis.available();
         byte[] buffer = new byte[length];
         fis.read(buffer);
-        str = new String(buffer, "UTF-8");
         fis.close();
-        return str;
+        return buffer;
     }
 
     //写文件
-    public static void writeSDFile(String filePathType, String fileName, byte[] bytes) throws IOException {
-        String dir = "";
-        if (isExistSdCard())
-            dir = FilePathUtil.EXTERNAL_DIRECTORY_PATH;
-        else {
-            dir = FilePathUtil.ROOT_DIRECTORY_PATH;
+    public void writeSDFile(int filePathType, String fileName, byte[] bytes) throws IOException {
+        if(getAvailableExternalMemorySize()<bytes.length)
+        {
+            Log.e("TAG","sdcard可用空间不足");
+            return;
         }
-        File file = new File(dir + filePathType, fileName);
+        File file = getFile(filePathType, fileName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(bytes);
         fos.close();
@@ -197,7 +198,7 @@ public class FileUtil {
                     this.deleteFile(files[i]); // 把每个文件 用这个方法进行迭代
                 }
             }
-            file.delete();
+//            file.delete();
         } else {
             System.out.println("文件不存在！");
         }
@@ -205,21 +206,43 @@ public class FileUtil {
 
     //删除文件
     public void deleteCaCheFile() {
-        if (isExistSdCard()) {
-            File file = new File(FilePathUtil.EXTERNAL_DIRECTORY_PATH + FilePathUtil.FIlE_DIRECTORY_PATH);
-            if (file.exists())
-                deleteFile(file);
-            File photoFile = new File(FilePathUtil.EXTERNAL_DIRECTORY_PATH + FilePathUtil.IMAGE_DIRECTORY_PATH);
-            if (photoFile.exists())
-                deleteFile(photoFile);
-        } else {
-            File file = new File(FilePathUtil.ROOT_DIRECTORY_PATH + FilePathUtil.FIlE_DIRECTORY_PATH);
-            if (file.exists())
-                deleteFile(file);
-            File photoFile = new File(FilePathUtil.ROOT_DIRECTORY_PATH + FilePathUtil.IMAGE_DIRECTORY_PATH);
-            if (photoFile.exists())
-                deleteFile(photoFile);
+
+        File file = getFile(FilePathType.FILE, null);
+        if (file.exists())
+            deleteFile(file);
+        File photoFile = getFile(FilePathType.PHOTO, null);
+        if (photoFile.exists())
+            deleteFile(photoFile);
+        File rootFile = new File(FilePathUtil.getSystemPath(mContext));
+        if (rootFile.exists())
+            deleteFile(rootFile);
+    }
+
+    /*获取根目录下所有文件路径*/
+    public String[] getCaCheFilePaths(int filePathType) {
+        File[] files = null;
+        File file = getFile(filePathType, null);
+        if (file.exists()) {
+            files = file.listFiles();
+            if (files.length > 0) {
+                String[] str = new String[files.length];
+                for (int i = 0; i < files.length; i++) {
+                    str[i] = files[i].getAbsolutePath();
+//                    Log.i("TAGG","CaCheF=="+ str[i]);
+                }
+                return str;
+            }
         }
+        return null;
+    }
+
+    /*获取根目录下某文件路径*/
+    public String getFilePath(int filePathType, String fileName) {
+
+        File file = getFile(filePathType, fileName);
+        if (file.exists())
+            return file.getAbsolutePath();
+        return "";
     }
 
     //    APK资源文件的大小不能超过1M，如果超过了怎么办？我们可以将这个数据再复制到data目录下，然后再使用。复制数据的代码如下：
@@ -270,8 +293,68 @@ public class FileUtil {
     }
 
     public static boolean isExistSdCard() {
-        return Environment.MEDIA_MOUNTED.equals(Environment
-                .getExternalStorageState());
+//        Environment.MEDIA_MOUNTED.equals(Environment
+//                .getExternalStorageState())
+//        Environment.getExternalStorageState()
+//                .equals(android.os.Environment.MEDIA_MOUNTED);
+//        Log.i("TAGG",android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)+"");
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 获取手机内部剩余存储空间
+     * @return
+     */
+    public long getAvailableInternalMemorySize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return availableBlocks * blockSize;
+    }
+
+    /**
+     * 获取手机内部总的存储空间
+     * @return
+     */
+    public long getTotalInternalMemorySize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return totalBlocks * blockSize;
+    }
+
+    /**
+     * 获取SDCARD剩余存储空间
+     * @return
+     */
+    public long getAvailableExternalMemorySize() {
+        if (isExistSdCard()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long availableBlocks = stat.getAvailableBlocks();
+            return availableBlocks * blockSize;
+        } else {
+            return -1;//这里返回错误信息
+        }
+    }
+
+    /**
+     * 获取SDCARD总的存储空间
+     * @return
+     */
+    public long getTotalExternalMemorySize() {
+        if (isExistSdCard()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long totalBlocks = stat.getBlockCount();
+            return totalBlocks * blockSize;
+        } else {
+            return -1;//这里返回错误信息
+        }
     }
 
     public RandomAccessFile getRandomAccessFile() {
@@ -284,21 +367,23 @@ public class FileUtil {
 
         return RandomAccess;
     }
-    private static String  getString(InputStream inputStream, String charset) throws IOException {
+
+    private static String getString(InputStream inputStream, String charset) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[]  buffer=new byte[512];
-        int  len=0;
-        while((len=inputStream.read(buffer))!=-1){
-            baos.write(buffer,0,len);
+        byte[] buffer = new byte[512];
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            baos.write(buffer, 0, len);
         }
-        byte[]  data=baos.toByteArray();
+        byte[] data = baos.toByteArray();
         inputStream.close();
         baos.close();
-        return new String(data,charset);
+        return new String(data, charset);
     }
+
     public class FilePathType {
-        public final static String PHOTO = FilePathUtil.IMAGE_DIRECTORY_PATH;
-        public final static String FILE = FilePathUtil.FIlE_DIRECTORY_PATH;
+        public final static int PHOTO = 1000;
+        public final static int FILE = 1001;
     }
 //    <!-- SDCard中创建与删除文件权限 -->
 //            02.  <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -309,5 +394,5 @@ public class FileUtil {
 //    android:sharedUerId="android.uid.system"这个属性。
 //    放在源码环境中编译，并通过adb install 的方式进行安装
 //    mk文件中的属性改为LOCAL_CERTIFICATE := platform
-
+//WRITE_MEDIA_STORAGE 权限仅提供给系统应用，不再授予第三方App。所以暂时无法对外置sdcard读写
 }
