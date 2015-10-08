@@ -43,11 +43,6 @@ public class DhNetListViewActivity extends ActionBarActivity implements SwipeRef
         startActivity(new Intent(DhNetListViewActivity.this, LoadImageActivity.class));
     }
 
-    @OnClick(R.id.load_image_afkimageview)
-    public void toAfkImageView() {
-        startActivity(new Intent(DhNetListViewActivity.this, LoadImageAfkImageViewActivity.class));
-    }
-
     private String url = "http://m.dahanis.com:24080/BasicService.asmx/GetVehicleLengthList?token=Zrmp6OJN8JilVNd66DSRntEQAzPtNXNdQzGUK8FDhavb9Lv%2BGSEmpqVvPXLgk0S00F1isuQY5R4%3D&userId=600000032&";
 
 
