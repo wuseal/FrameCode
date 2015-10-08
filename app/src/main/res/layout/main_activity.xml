@@ -19,7 +19,12 @@
             android:id="@+id/load_image"
             android:layout_gravity="center_horizontal" />
 
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="load images with AfkImageView"
+            android:id="@+id/load_image_afkimageview"
+            android:layout_gravity="center_horizontal" />
 
 
         <android.support.v4.widget.SwipeRefreshLayout

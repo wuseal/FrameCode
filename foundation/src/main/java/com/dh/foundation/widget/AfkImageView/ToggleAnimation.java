@@ -1,4 +1,4 @@
-package com.dh.foundation.widget.AfkImageView;
+package com.dh.foundation.widget.afkimageview;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
