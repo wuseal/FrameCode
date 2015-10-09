@@ -2,14 +2,14 @@
 
 Framecode for android team
 
-Latest Version is :1.1.3
+Latest Version is :1.2.0
 
 
 <h3>How to use</h3>
 <h4>In gradle you can set it in by a single line Code in your build.gradle:</h4>
-<code>compile 'com.dahanis:foundation:1.1.3'</code>
+<code>compile 'com.dahanis:foundation:1.2.0'</code>
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入
-compile 'com.dahanis:foundation:1.1.3'
+compile 'com.dahanis:foundation:1.2.0'
 即可完成引入</h4>
 #一．网络请求框架
 <h4>示例代码</h4>
