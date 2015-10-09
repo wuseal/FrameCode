@@ -87,6 +87,21 @@ compile 'com.dahanis:foundation:1.1.3'
             afkImageView.setTransitionAnimationEnable(false);//关闭动画效果
 
 
+<h4>NetAfkImageView</h4>
+
+简介：继承于AfkImageView，实现了类似唯品会app的网络图片加载效果。
+
+
+<h4>示例代码<h4>
+
+            NetAfkImageView netAfkImageView = (NetAfkImageView) v.findViewById(R.id.ii_aiv);
+            netAfkImageView.setImageUrl(url, R.drawable.error, R.drawable.default);
+以上示例代码中，setImageUrl方法中三个参数依次为，网络图片地址，加载失败要显示的图片，默认显示图片．
+也有更简单的方法直接设置url：
+
+            netAfkImageView.setImageUrl(url);
+            
+
 ####NetListView
 简介：全自动获取网络数据并且到底自动加载更多ListView
 ####示例代码：
