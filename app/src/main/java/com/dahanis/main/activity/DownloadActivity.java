@@ -21,7 +21,7 @@ import butterknife.OnClick;
  */
 public class DownloadActivity extends Activity {
 
-    String url = "http://dl.coolapkmarket.com/down/apk_file/2015/1009/com.imo.android.imoimbeta-9.4.7-797.apk?_upt=5e0c191f1444409650";
+    String url = "http://cdn6.down.apk.gfan.com/asdf/Pfiles/2015/9/21/148567_5cc64a68-393b-4872-ae54-739873c146bc.apk";
 
 
     @Bind(R.id.progressBar)
