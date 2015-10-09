@@ -65,6 +65,9 @@ compile 'com.dahanis:foundation:1.2.0'
     });
 ```
 
+使用DhHttpNetUtils同名方法，可以更全套化节省开发时间，内部集成了请稍候对话框和网络情况提示，让开发只专注于界面开发，从而无需关注网络相关内容
+
+
 ####网络图片加载框架
 示例代码<br>
 ```  ImageNetLoader.loadImage(imageView,imageUrl); ```
