@@ -55,4 +55,12 @@
         android:gravity="center"
         android:onClick="toNetAfkImageView"
         android:text="LOAD_NetAfkImageView" />
+    <Button
+        android:id="@+id/DownloadDemo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:onClick="DownloadDemo"
+        android:text="DownloadDemo" />
 </LinearLayout>

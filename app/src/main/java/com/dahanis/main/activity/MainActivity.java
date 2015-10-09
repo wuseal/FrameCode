@@ -64,5 +64,9 @@ public class MainActivity extends Activity {
 
         IntentInvokeUtils.invokeActivity(this, LoadNetAfkImageViewActivity.class);
     }
+    public void DownloadDemo(View view) {
+
+        IntentInvokeUtils.invokeActivity(this, DownloadActivity.class);
+    }
 
 }

@@ -59,8 +59,6 @@ public class LoadImageActivity extends Activity {
             "http://pic12.nipic.com/20101228/4151459_000644738360_2.jpg"
     };
 
-    String url = "http://222.73.3.43/softfile.3g.qq.com/myapp/rcps/d/85439/com.tencent.android.qqdownloader_85439_150824110528a.apk?mkey=55deec9c807bc481&f=ae10&p=.apk";
-
     @Bind(R.id.list_View)
     ListView listView;
 

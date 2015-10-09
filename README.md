@@ -11,7 +11,7 @@ Latest Version is :1.2.0
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入
 compile 'com.dahanis:foundation:1.2.0'
 即可完成引入</h4>
-#一．网络请求框架
+####一．网络请求框架
 <h4>示例代码</h4>
 
 ```java
@@ -61,13 +61,35 @@ compile 'com.dahanis:foundation:1.2.0'
     });
 ```
 
-#网络图片加载框架
+####网络图片加载框架
 示例代码<br>
 ```  ImageNetLoader.loadImage(imageView,imageUrl); ```
 
 
 上面方法中两个参数依次为对应的imageView和需要获取并设置的网络图片地址
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
+
+####文件下载框架
+示例代码<br>
+```java
+
+    DownLoadUtil.getInstance().startADownloadTask(url, new DownloadListener() {
+    @Override
+    public void onLoadChange(int total, int currentSize, int state) {
+
+        progressBar.setMax(total);
+
+        progressBar.setProgress(currentSize);
+
+    }
+
+    @Override
+    public void onComplete(long downloadId, String filePath) {
+        startDownLoad.setText("下载完成");
+        reDownload.setText("重新下载");
+    }
+    });
+```
 
 
 #二．控件(1.2版本中方可使用)
