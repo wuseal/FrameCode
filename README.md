@@ -71,7 +71,7 @@ compile 'com.dahanis:foundation:1.1.3'
 
 
 #二．控件(1.2版本中方可使用)
-<h4>AfkImageView</h4>
+####AfkImageView
 
 简介：作用于切换图片效果的控件，也可以自定义切换动画效果。
 
@@ -79,7 +79,7 @@ compile 'com.dahanis:foundation:1.1.3'
 
 若想自定义切换效果，实现TransitionAnimation接口，然后调用AfkImageView.setTransitionAnimation(TransitionAnimation animation)即可，<b>注意，必须在setImage(image)之前设置动画效果才会生效用于切换图片效果的控件<B>
 
-<h4>示例代码</h4>
+####示例代码
 
             AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
             afkImageView.setImage(R.drawable.image1);
@@ -92,7 +92,7 @@ compile 'com.dahanis:foundation:1.1.3'
 简介：继承于AfkImageView，实现了类似唯品会app的网络图片加载效果。
 
 
-<h4>示例代码<h4>
+####示例代码
 
             NetAfkImageView netAfkImageView = (NetAfkImageView) v.findViewById(R.id.ii_aiv);
             netAfkImageView.setImageUrl(url, R.drawable.error, R.drawable.default);
