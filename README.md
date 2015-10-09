@@ -83,11 +83,11 @@ compile 'com.dahanis:foundation:1.1.3'
 
             AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
             afkImageView.setImage(R.drawable.image1);
-            
             afkImageView.setTransitionAnimationEnable(false);//关闭动画效果
 
 
-<h4>NetAfkImageView</h4>
+
+####NetAfkImageView
 
 简介：继承于AfkImageView，实现了类似唯品会app的网络图片加载效果。
 
