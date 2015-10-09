@@ -42,14 +42,21 @@ public class MainActivity extends Activity {
     }
 
     public void imageNetLoaderDemo(View view) {
+
         IntentInvokeUtils.invokeActivity(this, LoadImageActivity.class);
 
     }
     public void dhNetListViewDemo(View view) {
+
         IntentInvokeUtils.invokeActivity(this, DhNetListViewActivity.class);
     }
 
     public void toAfkImageView(View view) {
+
         IntentInvokeUtils.invokeActivity(this, LoadImageAfkImageViewActivity.class);
+    }
+    public void toNetAfkImageView(View view) {
+
+        IntentInvokeUtils.invokeActivity(this, LoadNetAfkImageViewActivity.class);
     }
 }

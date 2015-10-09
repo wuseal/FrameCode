@@ -24,6 +24,7 @@
 
         <activity android:name=".activity.LoadImageActivity" />
         <activity android:name=".activity.LoadImageAfkImageViewActivity"/>
+        <activity android:name=".activity.LoadNetAfkImageViewActivity" />
         <activity android:name=".activity.NetListViewActivity" />
         <activity android:name=".activity.DhNetListViewActivity" />
     </application>

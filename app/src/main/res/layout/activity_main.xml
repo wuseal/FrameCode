@@ -38,5 +38,13 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:onClick="toAfkImageView"
-        android:text="AfkImageView" />
+        android:text="LOAD_AfkImageView" />
+    <Button
+        android:id="@+id/load_net_image_afkimageview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:onClick="toNetAfkImageView"
+        android:text="LOAD_NetAfkImageView" />
 </LinearLayout>
