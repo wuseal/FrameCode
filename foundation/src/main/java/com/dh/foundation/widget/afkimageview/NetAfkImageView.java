@@ -23,14 +23,21 @@ public class NetAfkImageView extends AfkImageView {
     }
 
 
-    public void setImageUrl(String url) {
+    public void setImageUrl(final String url) {
+
+        setTag(url);
+
         ImageNetLoader.getBitmap(url, new ImageNetLoader.BitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                setTransitionAnimationEnable(!isImmediate);
+                if (getTag().equals(url)) {
 
-                setImageBitmap(bitmap);
+                    setTransitionAnimationEnable(!isImmediate);
+
+                    setImageBitmap(bitmap);
+                }
+
             }
 
             @Override
@@ -41,7 +48,9 @@ public class NetAfkImageView extends AfkImageView {
     }
 
 
-    public void setImageUrl(String url, final int errorImageResId, final int defaultImageResId) {
+    public void setImageUrl(final String url, final int errorImageResId, final int defaultImageResId) {
+
+        setTag(url);
 
         setTransitionAnimationEnable(false);
 
@@ -51,17 +60,24 @@ public class NetAfkImageView extends AfkImageView {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                setTransitionAnimationEnable(!isImmediate);
+                if (getTag().equals(url)) {
 
-                setImageBitmap(bitmap);
+                    setTransitionAnimationEnable(!isImmediate);
+
+                    setImageBitmap(bitmap);
+                }
+
             }
 
             @Override
             public void onError(Throwable error) {
 
-                setTransitionAnimationEnable(false);
+                if (getTag().equals(url)) {
 
-                setImageResource(errorImageResId);
+                    setTransitionAnimationEnable(false);
+
+                    setImageResource(errorImageResId);
+                }
             }
         });
     }

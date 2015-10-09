@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="NetListView">
+
         <attr name="load_more_layout" format="reference" />
+
         <attr name="empty_view_id" format="reference" />
+
     </declare-styleable>
 
     <attr name="NetListViewStyle" format="reference" />

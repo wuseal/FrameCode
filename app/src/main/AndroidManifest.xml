@@ -27,6 +27,7 @@
         <activity android:name=".activity.LoadNetAfkImageViewActivity" />
         <activity android:name=".activity.NetListViewActivity" />
         <activity android:name=".activity.DhNetListViewActivity" />
+        <activity android:name=".activity.HttpNetUtilActivity" />
     </application>
 
 </manifest>

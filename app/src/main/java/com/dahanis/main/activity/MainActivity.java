@@ -8,6 +8,7 @@ import android.view.View;
 import com.dahanis.main.R;
 import com.dh.foundation.utils.AESEncryptUtil;
 import com.dh.foundation.utils.DLoggerUtils;
+import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.IntentInvokeUtils;
 
 import butterknife.OnClick;
@@ -35,6 +36,10 @@ public class MainActivity extends Activity {
 
     }
 
+    public void toHttpNetUtils(View view) {
+
+        IntentInvokeUtils.invokeActivity(this, HttpNetUtilActivity.class);
+    }
     public void netListViewDemo(View view) {
 
         IntentInvokeUtils.invokeActivity(this, NetListViewActivity.class);
@@ -59,4 +64,5 @@ public class MainActivity extends Activity {
 
         IntentInvokeUtils.invokeActivity(this, LoadNetAfkImageViewActivity.class);
     }
+
 }
