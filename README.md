@@ -96,6 +96,7 @@ compile 'com.dahanis:foundation:1.1.3'
 
             NetAfkImageView netAfkImageView = (NetAfkImageView) v.findViewById(R.id.ii_aiv);
             netAfkImageView.setImageUrl(url, R.drawable.error, R.drawable.default);
+            
 以上示例代码中，setImageUrl方法中三个参数依次为，网络图片地址，加载失败要显示的图片，默认显示图片．
 也有更简单的方法直接设置url：
 
