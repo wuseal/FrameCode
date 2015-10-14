@@ -18,6 +18,7 @@ compile 'com.dahanis:foundation:1.2.0'
 #一．网络部分
 
 ####网络请求框架
+简介：基于volley进行二次开发的网络请求框架
 <h4>示例代码</h4>
 
 ```java
@@ -81,6 +82,7 @@ compile 'com.dahanis:foundation:1.2.0'
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
 
 ####文件下载框架
+简介：基于DownloadManager进行二次开发．
 示例代码<br>
 ```java
 
