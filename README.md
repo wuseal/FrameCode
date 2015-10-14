@@ -69,6 +69,8 @@ compile 'com.dahanis:foundation:1.2.0'
 
 使用DhHttpNetUtils同名方法，可以更全套化节省开发时间，内部集成了请稍候对话框和网络情况提示，让开发只专注于界面开发，从而无需关注网络相关内容
 
+注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Activity activty)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
+
 
 ####网络图片加载框架
 示例代码<br>
