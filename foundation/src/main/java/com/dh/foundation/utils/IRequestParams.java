@@ -10,6 +10,10 @@ import java.util.Map;
  */
 public interface IRequestParams {
 
+    void setHeaders(Map<String, String> headers);
+
+    Map<String, String> getHeaders();
+
     public void putParams(String key, String value);
 
     public void setParams(String key, String value);

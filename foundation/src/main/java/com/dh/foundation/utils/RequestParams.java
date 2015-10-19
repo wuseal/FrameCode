@@ -16,8 +16,18 @@ public class RequestParams implements IRequestParams {
     private String paramsEncoding = "utf-8";
     private Map<String, String> params;
 
+    private Map<String,String> headers;
+
     public RequestParams() {
         this.params = new HashMap<String, String>(4);
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     @Override

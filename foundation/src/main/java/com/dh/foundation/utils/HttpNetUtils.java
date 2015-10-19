@@ -63,7 +63,7 @@ public class HttpNetUtils {
      * @param <T>             返回对象类类型
      * @deprecated
      */
-    public static synchronized <T> Request getData(String baseAddress, RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
+    public static synchronized <T> Request getData(String baseAddress, final RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
 
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
@@ -121,7 +121,17 @@ public class HttpNetUtils {
                     }
                 });
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                if (requestParams != null && requestParams.getHeaders() != null) {
+
+                    return requestParams.getHeaders();
+                }
+                return super.getHeaders();
+            }
+        };
 
         DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
 
@@ -212,6 +222,15 @@ public class HttpNetUtils {
                 });
             }
         }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                if (requestParams.getHeaders() != null) {
+
+                    return requestParams.getHeaders();
+                }
+                return super.getHeaders();
+            }
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
@@ -381,7 +400,7 @@ public class HttpNetUtils {
      * @param <T>             返回对象类类型
      * @return 当前的请求对象
      */
-    public static synchronized <T> Request buildGetRequestTask(String baseAddress, RequestParams requestParams, final RequestListener<T> requestListener) {
+    public static synchronized <T> Request buildGetRequestTask(String baseAddress, final RequestParams requestParams, final RequestListener<T> requestListener) {
 
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
@@ -439,7 +458,17 @@ public class HttpNetUtils {
                     }
                 });
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                if (requestParams != null && requestParams.getHeaders() != null) {
+
+                    return requestParams.getHeaders();
+                }
+                return super.getHeaders();
+            }
+        };
 
         DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
 
@@ -518,6 +547,17 @@ public class HttpNetUtils {
                 });
             }
         }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                if (requestParams.getHeaders() != null) {
+
+                    return requestParams.getHeaders();
+                }
+                return super.getHeaders();
+            }
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
