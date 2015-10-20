@@ -47,8 +47,6 @@ public class ImageNetLoader {
 
     public static void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
 
-        final BitmapHolder bitmapHolder = new BitmapHolder();
-
         getImageLoader().get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -173,11 +171,6 @@ public class ImageNetLoader {
         queue.start();
 
         return queue;
-    }
-
-    private static class BitmapHolder {
-
-        Bitmap bitmap;
     }
 
     /**

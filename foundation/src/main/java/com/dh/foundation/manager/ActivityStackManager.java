@@ -13,6 +13,7 @@ import java.util.Stack;
  * Time: 22:59
  */
 public class ActivityStackManager implements IActivityStackManager {
+
     private final Stack<Activity> stack = new Stack<Activity>();
 
     @Override
@@ -23,8 +24,11 @@ public class ActivityStackManager implements IActivityStackManager {
 
     @Override
     public void finishAll() {
+
         Activity activity;
+
         while (!stack.empty() && (activity = stack.pop()) != null) {
+
             activity.finish();
         }
     }
@@ -32,7 +36,9 @@ public class ActivityStackManager implements IActivityStackManager {
 
     @Override
     public void pop(Activity activity) {
+
         if (stack.contains(activity)) {
+
             stack.remove(activity);
         }
     }

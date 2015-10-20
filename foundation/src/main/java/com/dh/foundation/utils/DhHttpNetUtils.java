@@ -17,6 +17,11 @@ import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
 public class DhHttpNetUtils {
 
 
+    /**
+     * 成功获取数据返回码
+     */
+    public static final String SUCCESS_CODE = "1";
+
     public static abstract class RequestListener<T> extends HttpNetUtils.RequestListener<T> implements CompatListener<T> {
 
         @Override
@@ -134,7 +139,7 @@ public class DhHttpNetUtils {
      */
     public static boolean isGetDataSuccessfully(BaseBean baseBean) {
 
-        return StringUtils.equals("1", baseBean.getReturnCode());
+        return StringUtils.equals(SUCCESS_CODE, baseBean.getReturnCode());
     }
 
 }

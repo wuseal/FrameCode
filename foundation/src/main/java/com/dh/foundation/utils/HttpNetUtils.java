@@ -1,26 +1,14 @@
 package com.dh.foundation.utils;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.dh.foundation.exception.DataFormatError;
-import com.dh.foundation.exception.NetRequestError;
 import com.dh.foundation.manager.FoundationManager;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 /**
  * 网络请求工具类
@@ -31,8 +19,6 @@ import java.util.Map;
 public class HttpNetUtils {
 
     private static RequestQueue mRequestQueue;
-
-    private static Handler handler = new Handler(Looper.getMainLooper());
 
     /**
      * GET请求网络接口数据
@@ -73,75 +59,9 @@ public class HttpNetUtils {
 
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(final String s) {
+        Request request = new NetRequest<>(Request.Method.GET, url, requestParams, type, requestListener);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Gson gson = new Gson();
-
-                        T o = null;
-
-                        try {
-
-                            o = gson.fromJson(s, type);
-
-                        } catch (JsonSyntaxException e) {
-
-                            DLoggerUtils.e(e);
-
-                            requestListener.onFailed(new DataFormatError(e));
-
-                            requestListener.onFinished();
-
-                            return;
-                        }
-
-                        requestListener.onSuccess(o);
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        DLoggerUtils.e(volleyError);
-
-                        requestListener.onFailed(new NetRequestError(volleyError));
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                if (requestParams != null && requestParams.getHeaders() != null) {
-
-                    return requestParams.getHeaders();
-                }
-                return super.getHeaders();
-            }
-        };
-
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
-
-        stringRequest.setRetryPolicy(retryPolicy);
-
-        stringRequest.setShouldCache(false);
-
-        stringRequest.setTag(baseAddress + requestParams);
-
-        return addToExecuteQueue(stringRequest);
+        return addToExecuteQueue(request);
     }
 
     /**
@@ -169,88 +89,15 @@ public class HttpNetUtils {
      * @deprecated 请求网络接口数据
      */
     public static synchronized <T> Request postData(String baseAddress, final RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
+
         if (mRequestQueue == null) {
+
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, baseAddress, new Response.Listener<String>() {
-            @Override
-            public void onResponse(final String s) {
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+        Request request = new NetRequest<>(Request.Method.POST, baseAddress, requestParams, type, requestListener);
 
-                        Gson gson = new Gson();
-
-                        T o = null;
-
-                        try {
-
-                            o = gson.fromJson(s, type);
-
-                        } catch (JsonSyntaxException e) {
-
-                            DLoggerUtils.e(e);
-
-                            requestListener.onFailed(new DataFormatError(e));
-
-                            requestListener.onFinished();
-
-                            return;
-                        }
-
-                        requestListener.onSuccess(o);
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        DLoggerUtils.e(volleyError);
-
-                        requestListener.onFailed(new NetRequestError(volleyError));
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                if (requestParams.getHeaders() != null) {
-
-                    return requestParams.getHeaders();
-                }
-                return super.getHeaders();
-            }
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                return requestParams.getParams();
-            }
-
-            @Override
-            protected String getParamsEncoding() {
-                return requestParams.getParamsEncoding();
-            }
-        };
-        stringRequest.setTag(baseAddress + requestParams);
-
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
-
-        stringRequest.setRetryPolicy(retryPolicy);
-
-        stringRequest.setShouldCache(false);
-
-        return addToExecuteQueue(stringRequest);
+        return addToExecuteQueue(request);
     }
 
     /**
@@ -272,9 +119,9 @@ public class HttpNetUtils {
      */
     public interface HttpJsonRequest<T> {
 
-        public void onSuccess(T t);
+        void onSuccess(T t);
 
-        public void onFailed(Throwable throwable);
+        void onFailed(Throwable throwable);
 
         public void onFinished();
 
@@ -410,75 +257,8 @@ public class HttpNetUtils {
 
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(final String s) {
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Gson gson = new Gson();
-
-                        T o = null;
-
-                        try {
-
-                            o = gson.fromJson(s, requestListener.getType());
-
-                        } catch (JsonSyntaxException e) {
-
-                            DLoggerUtils.e(e);
-
-                            requestListener.onFailed(new DataFormatError(e));
-
-                            requestListener.onFinished();
-
-                            return;
-                        }
-
-                        requestListener.onSuccess(o);
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        DLoggerUtils.e(volleyError);
-
-                        requestListener.onFailed(new NetRequestError(volleyError));
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                if (requestParams != null && requestParams.getHeaders() != null) {
-
-                    return requestParams.getHeaders();
-                }
-                return super.getHeaders();
-            }
-        };
-
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
-
-        stringRequest.setRetryPolicy(retryPolicy);
-
-        stringRequest.setShouldCache(false);
-
-        stringRequest.setTag(baseAddress + requestParams);
-
-        return stringRequest;
+        return new NetRequest<>(Request.Method.GET, url, requestParams, requestListener.getType(), requestListener);
     }
 
     /**
@@ -496,89 +276,9 @@ public class HttpNetUtils {
 
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, baseAddress, new Response.Listener<String>() {
 
-            @Override
-            public void onResponse(final String s) {
+        return new NetRequest<>(Request.Method.POST, baseAddress, requestParams, requestListener.getType(), requestListener);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Gson gson = new Gson();
-
-                        T o = null;
-
-                        try {
-
-                            o = gson.fromJson(s, requestListener.getType());
-
-                        } catch (JsonSyntaxException e) {
-
-                            DLoggerUtils.e(e);
-
-                            requestListener.onFailed(new DataFormatError(e));
-
-                            requestListener.onFinished();
-
-                            return;
-                        }
-
-                        requestListener.onSuccess(o);
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        DLoggerUtils.e(volleyError);
-
-                        requestListener.onFailed(new NetRequestError(volleyError));
-
-                        requestListener.onFinished();
-                    }
-                });
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                if (requestParams.getHeaders() != null) {
-
-                    return requestParams.getHeaders();
-                }
-                return super.getHeaders();
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                return requestParams.getParams();
-            }
-
-            @Override
-            protected String getParamsEncoding() {
-                return requestParams.getParamsEncoding();
-            }
-        };
-
-        stringRequest.setTag(baseAddress + requestParams);
-
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30 * 1000, 0, 1);
-
-        stringRequest.setRetryPolicy(retryPolicy);
-
-        stringRequest.setShouldCache(false);
-
-        return stringRequest;
     }
 
 }
