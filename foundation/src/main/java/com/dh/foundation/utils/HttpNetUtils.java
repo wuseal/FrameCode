@@ -59,7 +59,7 @@ public class HttpNetUtils {
 
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
-        Request request = new NetRequest<>(Request.Method.GET, url, requestParams, type, requestListener);
+        Request request = new NetRequest<T>(Request.Method.GET, url, requestParams, type, requestListener);
 
         return addToExecuteQueue(request);
     }
@@ -95,7 +95,7 @@ public class HttpNetUtils {
             mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
         }
 
-        Request request = new NetRequest<>(Request.Method.POST, baseAddress, requestParams, type, requestListener);
+        Request request = new NetRequest<T>(Request.Method.POST, baseAddress, requestParams, type, requestListener);
 
         return addToExecuteQueue(request);
     }
@@ -123,7 +123,7 @@ public class HttpNetUtils {
 
         void onFailed(Throwable throwable);
 
-        public void onFinished();
+        void onFinished();
 
     }
 

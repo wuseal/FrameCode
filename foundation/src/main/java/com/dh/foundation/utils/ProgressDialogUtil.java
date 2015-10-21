@@ -74,7 +74,7 @@ public class ProgressDialogUtil {
         if (context instanceof Activity) {
 
 
-            if (progressDialog == null || !context.equals(getDialogBaseContext(progressDialog)) || !progressDialog.isShowing()) {
+            if (progressDialog == null || !context.equals(progressDialog.getOwnerActivity()) || !progressDialog.isShowing()) {
 
                 dismissProgressDialog();
 
@@ -93,6 +93,7 @@ public class ProgressDialogUtil {
                     progressDialog = defaultProgressDialogMaker.makeDialog(context);
                 }
 
+                progressDialog.setOwnerActivity((Activity) context);
 
                 progressDialog.show();
             }
@@ -113,9 +114,15 @@ public class ProgressDialogUtil {
 
             level = 0;
         }
-        if (progressDialog != null && level == 0 && progressDialog.isShowing()) {
+        if (progressDialog != null && level == 0 && progressDialog.isShowing() && !progressDialog.getOwnerActivity().isFinishing()) {
 
-            progressDialog.dismiss();
+            try {
+                progressDialog.dismiss();
+
+            } catch (Exception e) {
+
+                DLoggerUtils.e(e);
+            }
         }
     }
 
@@ -125,6 +132,7 @@ public class ProgressDialogUtil {
     public static void dismissAll() {
 
         if (progressDialog != null && progressDialog.isShowing()) {
+
             progressDialog.dismiss();
 
             /**
@@ -134,23 +142,4 @@ public class ProgressDialogUtil {
         }
     }
 
-    private static Context getDialogBaseContext(Dialog dialog) {
-        if (dialog.getContext() instanceof ContextThemeWrapper) {
-            try {
-                Field mBase = null;
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    mBase = dialog.getContext().getClass().getDeclaredField("mBase");
-                } else {
-                    mBase = dialog.getContext().getClass().getSuperclass().getDeclaredField("mBase");
-                }
-                mBase.setAccessible(true);
-                return (Context) mBase.get(dialog.getContext());
-            } catch (NoSuchFieldException e) {
-                DLoggerUtils.e(e);
-            } catch (IllegalAccessException e) {
-                DLoggerUtils.e(e);
-            }
-        }
-        return dialog.getContext();
-    }
 }

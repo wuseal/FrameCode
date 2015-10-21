@@ -32,7 +32,7 @@ class NetRequest<ReturnObj> extends StringRequest {
     private final RequestParams requestParams;
 
 
-    public NetRequest(int method, String url,RequestParams requestParams, Type returnType, HttpNetUtils.HttpJsonRequest<ReturnObj> requestListener) {
+    public NetRequest(int method, String url, RequestParams requestParams, Type returnType, HttpNetUtils.HttpJsonRequest<ReturnObj> requestListener) {
 
         super(method, url, new Listener<ReturnObj>(returnType, requestListener), new ErrorListener(requestListener));
 
@@ -59,6 +59,7 @@ class NetRequest<ReturnObj> extends StringRequest {
         }
         return super.getHeaders();
     }
+
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
 
@@ -70,7 +71,7 @@ class NetRequest<ReturnObj> extends StringRequest {
         return requestParams.getParamsEncoding();
     }
 
-    static class Listener<ReturnObj> implements Response.Listener<String> {
+    private static class Listener<ReturnObj> implements Response.Listener<String> {
 
         /**
          * 返回对象数据类型
@@ -124,7 +125,7 @@ class NetRequest<ReturnObj> extends StringRequest {
     }
 
 
-    static class ErrorListener implements Response.ErrorListener {
+    private static class ErrorListener implements Response.ErrorListener {
 
         /**
          * 返回数据监听接口
