@@ -131,14 +131,24 @@ public class ProgressDialogUtil {
      */
     public static void dismissAll() {
 
-        if (progressDialog != null && progressDialog.isShowing()) {
+        if (progressDialog != null && progressDialog.isShowing() && !progressDialog.getOwnerActivity().isFinishing()) {
 
-            progressDialog.dismiss();
+            try {
 
-            /**
-             * 复位
-             */
-            level = 0;
+                progressDialog.dismiss();
+
+            } catch (Exception e) {
+
+                DLoggerUtils.e(e);
+
+            } finally {
+
+                /**
+                 * 复位
+                 */
+                level = 0;
+            }
+
         }
     }
 
