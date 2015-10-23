@@ -216,7 +216,16 @@ compile 'com.dahanis:foundation:1.2.0'
         }
     }
 ```
-
+######也可心直接在布局文件中指令当前ListView的加载更多footer和EmptyView
+示例如下：
+```xml
+    <com.dh.foundation.widget.netlistview.DhNetListView
+                    android:id="@+id/listview"
+                    app:load_more_layout="@layout/loadmore"
+                    app:empty_view_id="@id/load_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+```
 ##其它
 
 
