@@ -20,7 +20,7 @@ public class DhHttpNetUtils {
     /**
      * 成功获取数据返回码
      */
-    public static final String SUCCESS_CODE = "1";
+    private static final String SUCCESS_CODE = "1";
 
     public static abstract class RequestListener<T> extends HttpNetUtils.RequestListener<T> implements CompatListener<T> {
 

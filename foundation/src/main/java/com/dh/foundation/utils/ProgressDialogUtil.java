@@ -26,6 +26,7 @@ public class ProgressDialogUtil {
 
 
     public static ProgressDialogMaker getDialogMaker() {
+
         return dialogMaker;
     }
 

@@ -14,6 +14,7 @@ import java.util.HashMap;
 class HandlerManager implements IHandlerManager {
 
     private final HashMap<Object, Handler> objectHandlerHashMap = new HashMap<Object,Handler>();
+
     private static final HandlerManager ourInstance = new HandlerManager();
 
     static HandlerManager getInstance() {
@@ -25,6 +26,7 @@ class HandlerManager implements IHandlerManager {
 
     @Override
     public void registerHandler(Object key, Handler handler) {
+
         objectHandlerHashMap.put(key, handler);
     }
 
