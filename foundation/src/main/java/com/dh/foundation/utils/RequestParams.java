@@ -14,6 +14,7 @@ import java.util.Map;
 public class RequestParams implements IRequestParams {
 
     private String paramsEncoding = "utf-8";
+
     private Map<String, String> params;
 
     private Map<String,String> headers;
