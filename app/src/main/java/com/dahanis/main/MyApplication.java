@@ -19,6 +19,7 @@ public class MyApplication extends FoundationApplication {
         DLoggerUtils.i("metadata==============" + (a_a ==null?"null":a_a));
         DLoggerUtils.i("metadata==============" );
         ToastUtils.toastLongTime(this, "metadata==================" + ApplicationUtil.getApplicationInfoMetaData("A_A"));
+        ToastUtils.dismissToast();
 
     }
 }

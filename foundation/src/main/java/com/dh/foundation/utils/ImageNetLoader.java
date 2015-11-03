@@ -100,24 +100,18 @@ public class ImageNetLoader {
 
         imageView.setTag(url);
 
-        getImageLoader().get(url, new ImageLoader.ImageListener() {
+        if (defaultImageResId != 0) {
+
+            imageView.setImageResource(defaultImageResId);
+        }
+
+        getBitmap(url, new BitmapReceiver() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (errorImageResId != 0 && imageView.getTag().equals(url)) {
+                if (imageView.getTag().equals(url)) {
 
-                    imageView.setImageResource(errorImageResId);
-                }
-
-                DLoggerUtils.e(error);
-            }
-
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-
-                if (response.getBitmap() != null && imageView.getTag().equals(url)) {
-
-                    imageView.setImageBitmap(response.getBitmap());
+                    imageView.setImageBitmap(bitmap);
 
                     if (!isImmediate) {
 
@@ -127,10 +121,15 @@ public class ImageNetLoader {
 
                         imageView.startAnimation(animation);
                     }
+                }
+            }
 
-                } else if (defaultImageResId != 0 && imageView.getTag().equals(url)) {
+            @Override
+            public void onError(Throwable error) {
 
-                    imageView.setImageResource(defaultImageResId);
+                if (errorImageResId != 0 && imageView.getTag().equals(url)) {
+
+                    imageView.setImageResource(errorImageResId);
                 }
             }
         }, maxWidth, maxHigh);
