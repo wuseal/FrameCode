@@ -129,7 +129,7 @@ public class ApplicationUtil {
     }
 
     /**
-     * 获取Application内的metadata的对应key的值
+     * 获取Application内的metadata的对应key的值(P: 无论是哪种类型的数据都可以获取，并最终返回String类型)
      */
     public static String getApplicationInfoMetaData(String key) {
 

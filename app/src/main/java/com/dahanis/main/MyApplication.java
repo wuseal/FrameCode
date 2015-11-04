@@ -16,10 +16,9 @@ public class MyApplication extends FoundationApplication {
     public void onCreate() {
         super.onCreate();
         String a_a = ApplicationUtil.getApplicationInfoMetaData("A_A");
-        DLoggerUtils.i("metadata==============" + (a_a ==null?"null":a_a));
-        DLoggerUtils.i("metadata==============" );
+        DLoggerUtils.i("metadata==============" + (a_a == null ? "null" : a_a));
+        DLoggerUtils.i("metadata==============");
         ToastUtils.toastLongTime(this, "metadata==================" + ApplicationUtil.getApplicationInfoMetaData("A_A"));
         ToastUtils.dismissToast();
-
     }
 }

@@ -50,13 +50,13 @@ interface NLVCommonInterface {
      *
      * @param <T> 网络获取的结果对象类型
      */
-    public interface LoadMoreAbleListener<T> {
+    interface LoadMoreAbleListener<T> {
         /**
          * @param returnObj           当前请求服务器返回的请求结果对象
          * @param allListData listView中全部的数据列表
          * @return 是否可以加载更多
          */
-        public boolean isLoadMoreAble(T returnObj, List<?> allListData);
+        boolean isLoadMoreAble(T returnObj, List<?> allListData);
 
 
         /**
@@ -68,8 +68,8 @@ interface NLVCommonInterface {
         List<?> getLoadedData(T returnObj);
     }
 
-    public interface OnLoadFinishListener {
+    interface OnLoadFinishListener {
 
-        public void onLoadFinished();
+        void onLoadFinished();
     }
 }
