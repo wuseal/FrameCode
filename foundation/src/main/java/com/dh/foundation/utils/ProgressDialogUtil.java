@@ -123,6 +123,10 @@ public class ProgressDialogUtil {
             } catch (Exception e) {
 
                 DLoggerUtils.e(e);
+
+            }finally {
+
+                progressDialog = null;
             }
         }
     }
@@ -148,6 +152,8 @@ public class ProgressDialogUtil {
                  * 复位
                  */
                 level = 0;
+
+                progressDialog = null;
             }
 
         }

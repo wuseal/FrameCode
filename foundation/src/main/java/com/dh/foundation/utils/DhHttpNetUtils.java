@@ -35,7 +35,7 @@ public class DhHttpNetUtils {
 
                 } else {
 
-                    ToastUtils.toast(FoundationManager.getContext(), ((BaseBean) t).getReturnMsg());
+                    ToastUtils.toast(((BaseBean) t).getReturnMsg());
 
                     onFailure(new DhRequestError(new DhBaseBeanError((BaseBean) t)));
                 }
@@ -48,7 +48,7 @@ public class DhHttpNetUtils {
         @Override
         public final void onFailed(Throwable throwable) {
 
-            ToastUtils.toast(FoundationManager.getContext(), throwable.getMessage());
+            ToastUtils.toast(throwable.getMessage());
 
             onFailure(new DhRequestError(throwable));
         }
@@ -107,7 +107,7 @@ public class DhHttpNetUtils {
 
         if (!NetWorkDetector.isNetConnected()) {
 
-            ToastUtils.toast(context, "无可用网络请检查网络设置");
+            ToastUtils.toast( "无可用网络请检查网络设置");
 
             if (requestListener != null) {
 

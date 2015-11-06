@@ -98,7 +98,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
                 if (!loadMoreAble && isLoadOkToast) {
 
-                    ToastUtils.toast(context, "已全部加载");
+                    ToastUtils.toast("已全部加载");
                 }
             }
 
@@ -386,7 +386,7 @@ class NetListViewDelegate implements NLVCommonInterface {
     private <T> boolean isNetStateUnavailable(Context context, DhHttpNetUtils.RequestListener<T> requestListener) {
         if (!NetWorkDetector.isNetConnected()) {
 
-            ToastUtils.toast(context, "无可用网络请检查网络设置");
+            ToastUtils.toast("无可用网络请检查网络设置");
 
             if (requestListener != null) {
 

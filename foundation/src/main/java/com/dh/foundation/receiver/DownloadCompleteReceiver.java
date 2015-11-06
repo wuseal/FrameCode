@@ -33,13 +33,17 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
         Handler handler = FoundationManager.getHandleManager().getHandler(DownLoadUtil.DOWNLOAD_COMPLETE_HANDLER);
         DownloadManager downloadManager = FoundationManager.getDownloadManager();
         Cursor cursor = downloadManager.query(new DownloadManager.Query().setFilterById(completeDownloadId));
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             if (DownloadManager.STATUS_SUCCESSFUL == cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
                 if (handler != null && downloadIds.contains(completeDownloadId)) {
                     handler.sendMessage(handler.obtainMessage(DOWNLOAD_COMPLETE, completeDownloadId));
                     downloadIds.remove(completeDownloadId);
                 }
             }
+        }
+        if (cursor != null && !cursor.isClosed()) {
+
+            cursor.close();
         }
 
     }

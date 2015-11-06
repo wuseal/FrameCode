@@ -31,11 +31,16 @@ public class DownloadActivity extends Activity {
     @Bind(R.id.reDownload)
     Button reDownload;
 
+    private long downloadId;//下载任务的标识唯一id
+
+    DownLoadUtil downLoadUtil;
+
 
     @OnClick(R.id.startDownLoad)
     void startDownLoad() {
 
-        DownLoadUtil.getInstance().startADownloadTask(url, new DownloadListener() {
+        downLoadUtil = DownLoadUtil.getInstance();
+        downloadId = downLoadUtil.startADownloadTask(url, new DownloadListener() {
             @Override
             public void onLoadChange(int total, int currentSize, int state) {
 
@@ -71,4 +76,11 @@ public class DownloadActivity extends Activity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+
+        downLoadUtil.leaveActivity(downloadId);
+        super.onDestroy();
+    }
 }

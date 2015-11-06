@@ -43,7 +43,7 @@ public class HttpNetUtilActivity extends Activity{
 
                 TruckBean truckBean = returnObj.getTruckBeanList().get(0);
 
-                ToastUtils.toastLongTime(getBaseContext(), truckBean.getId() + "\n" + truckBean.getLengthValue());
+                ToastUtils.toastLongTime(truckBean.getId() + "\n" + truckBean.getLengthValue());
             }
 
             @Override

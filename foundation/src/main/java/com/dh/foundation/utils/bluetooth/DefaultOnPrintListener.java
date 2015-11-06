@@ -70,7 +70,7 @@ public class DefaultOnPrintListener implements OnPrintListener {
 
     @Override
     public void onInitBluetoothFunctionError() {
-        ToastUtils.toast(context, "蓝牙初始化失败");
+        ToastUtils.toast( "蓝牙初始化失败");
     }
 
     @Override
@@ -81,14 +81,14 @@ public class DefaultOnPrintListener implements OnPrintListener {
     @Override
     public void onConnectedDevice() {
         progressDialog.dismiss();
-        ToastUtils.toast(context, "蓝牙连接成功");
+        ToastUtils.toast("蓝牙连接成功");
         iBluetoothPrintUtil.printData();
     }
 
     @Override
     public void onConnectedError(Throwable throwable) {
         progressDialog.dismiss();
-        ToastUtils.toast(context, "蓝牙连接失败");
+        ToastUtils.toast("蓝牙连接失败");
     }
 
     @Override
@@ -99,13 +99,13 @@ public class DefaultOnPrintListener implements OnPrintListener {
     @Override
     public void onSuccessPrint() {
         progressDialog.dismiss();
-        ToastUtils.toast(context, "蓝牙打印成功");
+        ToastUtils.toast("蓝牙打印成功");
     }
 
     @Override
     public void onPrintError(Throwable throwable) {
         progressDialog.dismiss();
-        ToastUtils.toast(context, "蓝牙打印失败");
+        ToastUtils.toast("蓝牙打印失败");
         /**
          * 打印失败就断开连接，恢复成未初始化状态，但不清空数据
          * ，这样当下次调用IBluetoothPrintUtil.print(Context context)方法时框架会自动进行重新初始化蓝牙，并可以选择新设备进行连接

@@ -4,6 +4,7 @@ import com.dh.foundation.app.ApplicationUtil;
 import com.dh.foundation.app.FoundationApplication;
 import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.ToastUtils;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created By: Seal.Wu
@@ -18,7 +19,8 @@ public class MyApplication extends FoundationApplication {
         String a_a = ApplicationUtil.getApplicationInfoMetaData("A_A");
         DLoggerUtils.i("metadata==============" + (a_a == null ? "null" : a_a));
         DLoggerUtils.i("metadata==============");
-        ToastUtils.toastLongTime(this, "metadata==================" + ApplicationUtil.getApplicationInfoMetaData("A_A"));
+        ToastUtils.toastLongTime("metadata==================" + ApplicationUtil.getApplicationInfoMetaData("A_A"));
         ToastUtils.dismissToast();
+        LeakCanary.install(this);
     }
 }

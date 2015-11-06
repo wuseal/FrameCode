@@ -24,11 +24,11 @@ public class DhBaseFragment extends Fragment {
     }
 
     protected void toast(int resId) {
-        ToastUtils.toast(getActivity(), resId);
+        ToastUtils.toast(resId);
     }
 
     protected void toast(String message) {
-        ToastUtils.toast(getActivity(), message);
+        ToastUtils.toast(message);
     }
 
     protected void showProgressDialog() {

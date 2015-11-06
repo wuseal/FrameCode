@@ -3,6 +3,8 @@ package com.dh.foundation.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.dh.foundation.manager.FoundationManager;
+
 /**
  * Toast显示工具类
  * Created By: Seal.Wu
@@ -15,73 +17,72 @@ public class ToastUtils {
 
     /**
      * 常规提示
-     * @param context
-     * 上下文
      * @param message
      * 消息内容
      */
-    public static synchronized void toast(Context context, String message) {
+    public static synchronized void toast(String message) {
+
         if (message == null) {
             message = "";
         }
         if (instance == null) {
-            instance = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            instance = Toast.makeText(FoundationManager.getContext(), message, Toast.LENGTH_SHORT);
         } else {
             instance.cancel();
-            instance = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            instance = Toast.makeText(FoundationManager.getContext(), message, Toast.LENGTH_SHORT);
         }
         instance.show();
     }
     /**
      * 常规提示
-     * @param context
-     * 上下文
      * @param messageId
      * 消息内容String id
      */
-    public static synchronized void toast(Context context, int messageId) {
+    public static synchronized void toast(int messageId) {
+
         if (instance == null) {
-            instance = Toast.makeText(context, messageId, Toast.LENGTH_SHORT);
+
+            instance = Toast.makeText(FoundationManager.getContext(), messageId, Toast.LENGTH_SHORT);
         } else {
+
             instance.cancel();
-            instance = Toast.makeText(context, messageId, Toast.LENGTH_SHORT);
+
+            instance = Toast.makeText(FoundationManager.getContext(), messageId, Toast.LENGTH_SHORT);
         }
         instance.show();
     }
 
     /**
      * 长时间提示
-     * @param context
-     * 上下文
      * @param message
      * 消息内容
      */
-    public static synchronized void toastLongTime(Context context, String message) {
+    public static synchronized void toastLongTime(String message) {
+
         if (message == null) {
             message = "";
         }
         if (instance == null) {
-            instance = Toast.makeText(context, message, Toast.LENGTH_LONG);
+            instance = Toast.makeText(FoundationManager.getContext(), message, Toast.LENGTH_LONG);
         } else {
             instance.cancel();
-            instance = Toast.makeText(context, message, Toast.LENGTH_LONG);
+            instance = Toast.makeText(FoundationManager.getContext(), message, Toast.LENGTH_LONG);
         }
         instance.show();
     }
 
     /**
      * 长时间提示
-     * @param context
-     * 上下文
      * @param messageId
      * 消息内容String id
      */
-    public static synchronized void toastLongTime(Context context, int messageId) {
+    public static synchronized void toastLongTime(int messageId) {
+
         if (instance == null) {
-            instance = Toast.makeText(context, messageId, Toast.LENGTH_LONG);
+            instance = Toast.makeText(FoundationManager.getContext(), messageId, Toast.LENGTH_LONG);
         } else {
             instance.cancel();
-            instance = Toast.makeText(context, messageId, Toast.LENGTH_LONG);
+            instance = Toast.makeText(FoundationManager.getContext(), messageId, Toast.LENGTH_LONG);
         }
         instance.show();
     }

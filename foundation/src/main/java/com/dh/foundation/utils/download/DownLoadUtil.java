@@ -95,7 +95,9 @@ public class DownLoadUtil implements Handler.Callback {
                 DownloadListener completeListener = listenerMap.get(completeDownloadId);
                 if (completeListener != null) {
                     completeListener.onComplete(completeDownloadId, getRealFilePath(FoundationManager.getContext(), Uri.parse(fileUriName)));
+                    listenerMap.remove(completeDownloadId);
                 }
+                cursor.close();
                 break;
             default:
                 long downloadId = DownloadChangeObserver.getDownloadId(msg.what);
@@ -110,11 +112,15 @@ public class DownLoadUtil implements Handler.Callback {
 
     /**
      * 启动一个下载任务
+     *
+     * @param url              待下载文件的地址
+     * @param downloadListener 下载监听器
+     * @return 下载任务的标识唯一id
      */
 
-    public void startADownloadTask(String url, DownloadListener downloadListener) {
+    public long startADownloadTask(String url, DownloadListener downloadListener) {
 
-        startADownloadTask(url, null, null, null, false, downloadListener);
+        return startADownloadTask(url, null, null, null, false, downloadListener);
     }
 
     /**
@@ -126,8 +132,9 @@ public class DownLoadUtil implements Handler.Callback {
      * @param mimeType               文件打开类型
      * @param notificationVisibility 是否显示在通知栏及其它下载应用中
      * @param downloadListener       下载监听器
+     * @return 下载任务的标识唯一id
      */
-    public void startADownloadTask(String url, String title, String description, String
+    public long startADownloadTask(String url, String title, String description, String
             mimeType, boolean notificationVisibility, DownloadListener downloadListener) {
         Uri uri = Uri.parse(url);
         // uri 是你的下载地址，可以使用Uri.parse("http://")包装成Uri对象
@@ -172,8 +179,30 @@ public class DownLoadUtil implements Handler.Callback {
         } else if (StringUtils.isNotEmpty(mimeType)) {
             DownloadCompleteReceiver.registerDownloadTask(downloadId);
         }
+
+        return downloadId;
     }
 
+    /**
+     * 离开当前activity的时候记得要调用
+     *
+     * @param downloadId 下载任务的标识唯一id
+     */
+    public void leaveActivity(long downloadId) {
+
+        listenerMap.remove(downloadId);
+    }
+
+
+    /**
+     * 取消结束当前的下载任务
+     *
+     * @param downloadId 下载任务的标识唯一id
+     */
+    public void cancelTask(long downloadId) {
+
+        downloadManager.remove(downloadId);
+    }
 
     public static File getFile(String url) {
 
@@ -225,4 +254,5 @@ public class DownLoadUtil implements Handler.Callback {
         }
         return data;
     }
+
 }
