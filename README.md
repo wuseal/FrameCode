@@ -87,20 +87,41 @@ compile 'com.dahanis:foundation:1.2.0'
 ```java
 
     DownLoadUtil.getInstance().startADownloadTask(url, new DownloadListener() {
-    @Override
-    public void onLoadChange(int total, int currentSize, int state) {
+      @Override
+      public void onLoadChange(int total, int currentSize, int state) {
 
-        progressBar.setMax(total);
+          progressBar.setMax(total);
 
-        progressBar.setProgress(currentSize);
+          progressBar.setProgress(currentSize);
+          /**
+           * 正在下载中
+           */
+          if (state == DownloadManager.STATUS_RUNNING) {
 
-    }
 
-    @Override
-    public void onComplete(long downloadId, String filePath) {
-        startDownLoad.setText("下载完成");
-        reDownload.setText("重新下载");
-    }
+          }
+          /**
+           * 下载失败
+           */
+          else if (state == DownloadManager.STATUS_FAILED) {
+
+              startDownLoad.setText("下载失败");
+
+              reDownload.setText("重新下载");
+
+          }
+      }
+
+      /**
+       * 下载完成
+       */
+      @Override
+      public void onComplete(long downloadId, String filePath) {
+      
+          startDownLoad.setText("下载完成");
+          
+          reDownload.setText("重新下载");
+      }
     });
 ```
 

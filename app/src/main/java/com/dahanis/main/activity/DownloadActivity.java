@@ -1,11 +1,13 @@
 package com.dahanis.main.activity;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.dahanis.main.R;
+import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.download.DownLoadUtil;
 import com.dh.foundation.utils.download.DownloadListener;
 
@@ -47,9 +49,28 @@ public class DownloadActivity extends Activity {
                 progressBar.setMax(total);
 
                 progressBar.setProgress(currentSize);
+                /**
+                 * 正在下载中
+                 */
+                if (state == DownloadManager.STATUS_RUNNING) {
 
+
+                }
+                /**
+                 * 下载失败
+                 */
+                else if (state == DownloadManager.STATUS_FAILED) {
+
+                    startDownLoad.setText("下载失败");
+
+                    reDownload.setText("重新下载");
+
+                }
             }
 
+            /**
+             * 下载完成
+             */
             @Override
             public void onComplete(long downloadId, String filePath) {
                 startDownLoad.setText("下载完成");
