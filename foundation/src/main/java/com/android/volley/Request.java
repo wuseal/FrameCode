@@ -73,7 +73,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     private final int mDefaultTrafficStatsTag;
 
     /** Listener interface for errors. */
-    private final Response.ErrorListener mErrorListener;
+    private Response.ErrorListener mErrorListener;
 
     /** Sequence number of this request, used to enforce FIFO ordering. */
     private Integer mSequence;
@@ -310,6 +310,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      */
     public void cancel() {
         mCanceled = true;
+        onCancel();
     }
 
     /**
@@ -551,6 +552,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * {@link #parseNetworkResponse(NetworkResponse)}
      */
     abstract protected void deliverResponse(T response);
+
+    /**
+     * Subclasses must implement this to do something when request was canceled
+     * such as clear listener
+     */
+    protected void onCancel() {
+        this.mErrorListener = null;
+    }
 
     /**
      * Delivers error message to the ErrorListener that the Request was

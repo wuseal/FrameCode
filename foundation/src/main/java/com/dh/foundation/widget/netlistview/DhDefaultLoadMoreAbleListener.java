@@ -1,8 +1,11 @@
 package com.dh.foundation.widget.netlistview;
 
+import com.dh.foundation.utils.DhHttpNetUtils;
+import com.dh.foundation.utils.ToastUtils;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,17 +26,31 @@ public class DhDefaultLoadMoreAbleListener implements NLVCommonInterface.LoadMor
     @Override
     public boolean isLoadMoreAble(BaseBean<List<JsonObject>> listBaseBean, List<?> allListData) {
 
-        if (listBaseBean.getReturnData().size() == getPageSize()) {
+        if (DhHttpNetUtils.isGetDataSuccessfully(listBaseBean) && allListData != null) {
 
-            return  true;
+            if (listBaseBean.getReturnData().size() == getPageSize()) {
+
+                return true;
+            }
         }
+
         return false;
     }
 
     @Override
     public List<?> getLoadedData(BaseBean<List<JsonObject>> returnObj) {
 
-        return returnObj.getReturnData();
+        if (DhHttpNetUtils.isGetDataSuccessfully(returnObj)) {
+
+            return returnObj.getReturnData();
+
+        } else {
+
+            ToastUtils.toast(returnObj.getReturnMsg());
+
+            return null;
+        }
+
     }
 
     public int getPageSize() {

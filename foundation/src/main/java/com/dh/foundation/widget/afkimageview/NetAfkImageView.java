@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 
+import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.ImageNetLoader;
+import com.dh.foundation.utils.StringUtils;
 
 /**
  * 带网络加载功能AfkImageView
@@ -14,6 +16,13 @@ import com.dh.foundation.utils.ImageNetLoader;
  */
 public class NetAfkImageView extends AfkImageView {
 
+    private ImageNetLoader imageNetLoader = ImageNetLoader.getDefault();
+
+    /**
+     * 图片请求地址
+     */
+    private String url;
+
     public NetAfkImageView(Context context) {
         super(context);
     }
@@ -22,26 +31,26 @@ public class NetAfkImageView extends AfkImageView {
         super(context, attrs);
     }
 
-
     public void setImageUrl(final String url) {
 
-        setTag(url);
+        if (!StringUtils.equals(this.url, url) && StringUtils.isNotEmpty(this.url)) {
 
-        ImageNetLoader.getBitmap(url, new ImageNetLoader.BitmapReceiver() {
+            imageNetLoader.cancel(this.url);
+
+        }
+
+        this.url = url;
+
+        imageNetLoader.getBitmap(url, new ImageNetLoader.SimpleBitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (getTag().equals(url)) {
+                if (NetAfkImageView.this.url.equals(url)) {
 
                     setTransitionAnimationEnable(!isImmediate);
 
                     setImageBitmap(bitmap);
                 }
-
-            }
-
-            @Override
-            public void onError(Throwable error) {
 
             }
         });
@@ -50,17 +59,24 @@ public class NetAfkImageView extends AfkImageView {
 
     public void setImageUrl(final String url, final int errorImageResId, final int defaultImageResId) {
 
-        setTag(url);
+        if (!StringUtils.equals(this.url, url) && StringUtils.isNotEmpty(this.url)) {
+
+            imageNetLoader.cancel(this.url);
+
+        }
+
+        this.url = url;
 
         setTransitionAnimationEnable(false);
 
         setImageResource(defaultImageResId);
 
-        ImageNetLoader.getBitmap(url, new ImageNetLoader.BitmapReceiver() {
+        imageNetLoader.getBitmap(url, new ImageNetLoader.BitmapReceiver() {
+
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (getTag().equals(url)) {
+                if (NetAfkImageView.this.url.equals(url)) {
 
                     setTransitionAnimationEnable(!isImmediate);
 
@@ -72,7 +88,7 @@ public class NetAfkImageView extends AfkImageView {
             @Override
             public void onError(Throwable error) {
 
-                if (getTag().equals(url)) {
+                if (NetAfkImageView.this.url.equals(url)) {
 
                     setTransitionAnimationEnable(false);
 
@@ -82,4 +98,14 @@ public class NetAfkImageView extends AfkImageView {
         });
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+
+        if (url != null) {
+
+            imageNetLoader.cancel(url);
+
+        }
+        super.onDetachedFromWindow();
+    }
 }

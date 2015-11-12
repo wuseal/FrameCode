@@ -16,33 +16,105 @@ import java.util.List;
  */
 interface NLVCommonInterface {
 
+    /**
+     * 设置加载更多的footView
+     *
+     * @param loadMoreView 加载更多的footView
+     */
     void setLoadMoreView(View loadMoreView);
 
+    /**
+     * 设置ListView的EmptyView
+     *
+     * @param emptyViewId ListView的EmptyView
+     */
     void setEmptyViewId(int emptyViewId);
 
+    /**
+     * 设置是否弹出提示＂已经全部加载＂
+     *
+     * @param isLoadOkToast 是否弹出提示＂已经全部加载＂
+     */
     void setLoadOkToast(boolean isLoadOkToast);
 
+    /**
+     * 设置刷新时是否显示等待框
+     *
+     * @param isShowProgressDialog 是否显示等待框
+     */
     void setIsShowProgressDialog(boolean isShowProgressDialog);
 
+    /**
+     * 刷新时是否显示等待框
+     *
+     * @return true:代表是
+     */
     boolean isShowProgressDialog();
 
+    /**
+     * 设置加载更多使能功能接口
+     *
+     * @param loadMoreAbleListener 加载更多使能功能接口
+     */
     void setLoadMoreAbleListener(LoadMoreAbleListener loadMoreAbleListener);
 
+    /**
+     * 设置加载完成监听接口
+     *
+     * @param onLoadFinishListener 加载完成监听接口
+     */
     void setOnLoadFinishListener(OnLoadFinishListener onLoadFinishListener);
 
+
+    /**
+     * 设置刚开始加载监听器
+     *
+     * @param onLoadStartListener 刚开始加载监听器
+     */
+    void setOnLoadStartListener(OnLoadStartListener onLoadStartListener);
+
+    /**
+     * 设置ListView滚动监听接口
+     *
+     * @param onScrollListener 滚动监听接口
+     */
     void setOnScrollListener(AbsListView.OnScrollListener onScrollListener);
 
+    /**
+     * 获取当前ListView分页的页码数
+     *
+     * @return 当前ListView分页的页码数
+     */
     int getPageNo();
 
+    /**
+     * 初始化网络处理功能ListView
+     *
+     * @param params   参数
+     * @param adapter  专用适配器
+     * @param pageName 页码名称
+     */
     void initNetListView(String baseAddress, RequestParams params, NetListViewBaseAdapter adapter, String pageName);
 
+    /**
+     * 初始化网络处理功能ListView
+     *
+     * @param params    参数
+     * @param adapter   专用适配器
+     * @param pageName  页码名称
+     * @param emptyView 当无数据时指定显示的view
+     */
     void initNetListView(String baseAddress, RequestParams params, NetListViewBaseAdapter adapter, String pageName, View emptyView);
 
+    /**
+     * 刷新ListView数据
+     */
     void refreshData();
 
+    /**
+     * 主动调用加载更多
+     */
     void loadMore();
-
-
 
 
     /**
@@ -52,7 +124,7 @@ interface NLVCommonInterface {
      */
     interface LoadMoreAbleListener<T> {
         /**
-         * @param returnObj           当前请求服务器返回的请求结果对象
+         * @param returnObj   当前请求服务器返回的请求结果对象
          * @param allListData listView中全部的数据列表
          * @return 是否可以加载更多
          */
@@ -68,8 +140,28 @@ interface NLVCommonInterface {
         List<?> getLoadedData(T returnObj);
     }
 
+    /**
+     * 加载完成监听器
+     */
     interface OnLoadFinishListener {
 
-        void onLoadFinished();
+        /**
+         * 当一次加载完成时调用
+         */
+        void onLoadFinished(boolean isRefreshing);
+    }
+
+
+    /**
+     * 开始加载数据监听器
+     */
+    interface OnLoadStartListener {
+
+        /**
+         * 当刚开始加载时调用
+         *
+         * @param isRefreshing 是否是刷新
+         */
+        void onLoadStart(boolean isRefreshing);
     }
 }

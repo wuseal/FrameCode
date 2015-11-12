@@ -111,6 +111,12 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
     }
 
     @Override
+    public void setOnLoadStartListener(OnLoadStartListener onLoadStartListener) {
+
+        netListViewDelegate.setOnLoadStartListener(onLoadStartListener);
+    }
+
+    @Override
     public void setOnScrollListener(AbsListView.OnScrollListener onScrollListener) {
 
         netListViewDelegate.setOnScrollListener(onScrollListener);

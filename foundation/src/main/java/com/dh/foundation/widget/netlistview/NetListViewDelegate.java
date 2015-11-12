@@ -10,6 +10,7 @@ import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.exception.DhRequestError;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
 import com.dh.foundation.utils.DhHttpNetUtils;
+import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.NetWorkDetector;
 import com.dh.foundation.utils.NumUtils;
 import com.dh.foundation.utils.ProgressDialogUtil;
@@ -17,6 +18,7 @@ import com.dh.foundation.utils.RequestParams;
 import com.dh.foundation.utils.ToastUtils;
 import com.google.gson.internal.$Gson$Types;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -55,11 +57,13 @@ class NetListViewDelegate implements NLVCommonInterface {
 
     private NLVCommonInterface.OnLoadFinishListener onLoadFinishListener;
 
+    private NLVCommonInterface.OnLoadStartListener onLoadStartListener;//刚开始加载监听器
+
     private boolean isLoadOkToast = true;//加载全部是否进行提示
 
     private boolean isShowProgressDialog = true;
 
-    private boolean refreshing;//是否正在刷新
+    private boolean refreshing = true;//是否正在刷新,第一次加载默认当刷新
     /**
      * 　数据为空指示view
      */
@@ -69,7 +73,92 @@ class NetListViewDelegate implements NLVCommonInterface {
     /**
      * 妥协处理，泛型仅用于交互
      */
-    private DhHttpNetUtils.RequestListener<Object> listener;
+    private HttpNetUtils.RequestListener<Object> listener;
+
+
+    private static class RequestListener extends HttpNetUtils.RequestListener<Object> {
+
+
+        private WeakReference<NetListViewDelegate> weakReference;
+
+        public RequestListener(NetListViewDelegate netListViewDelegate) {
+
+            this.weakReference = new WeakReference<NetListViewDelegate>(netListViewDelegate);
+        }
+
+        @Override
+        public void onSuccess(Object t) {
+
+            final NetListViewDelegate netListViewDelegate = weakReference.get();
+
+            if (netListViewDelegate == null) {
+
+                return;
+            }
+
+            if (netListViewDelegate.loadMoreAbleListener == null) {
+
+                return;
+            }
+
+            final List<?> fetchedData = netListViewDelegate.loadMoreAbleListener.getLoadedData(t);
+
+            if (netListViewDelegate.refreshing) {
+
+                netListViewDelegate.list.clear();//如果此次请求是刷新动作，则先清空数据
+            }
+
+            if (fetchedData != null) {
+
+                netListViewDelegate.list.addAll(fetchedData);
+            }
+
+            netListViewDelegate.setLoadMoreAble(t, fetchedData);
+
+            if (!netListViewDelegate.loadMoreAble && netListViewDelegate.isLoadOkToast) {
+
+                ToastUtils.toast("已全部加载");
+            }
+        }
+
+        @Override
+        public void onFailed(Throwable throwable) {
+
+            final NetListViewDelegate netListViewDelegate = weakReference.get();
+
+            if (netListViewDelegate != null) {
+
+                netListViewDelegate.loadMoreFailedReset();
+            }
+
+            ToastUtils.toast(throwable.getMessage());
+
+        }
+
+        @Override
+        public void onFinished() {
+
+            final NetListViewDelegate netListViewDelegate = weakReference.get();
+
+            if (netListViewDelegate != null) {
+
+
+                if (netListViewDelegate.onLoadFinishListener != null) {
+
+                    netListViewDelegate.onLoadFinishListener.onLoadFinished(netListViewDelegate.refreshing);
+                }
+
+                netListViewDelegate.listView.removeFooterView(netListViewDelegate.loadMoreView);
+
+                netListViewDelegate.adapter.notifyDataSetChanged();
+
+                netListViewDelegate.refreshing = false;
+            }
+
+            ProgressDialogUtil.dismissProgressDialog();
+        }
+
+    }
 
     public NetListViewDelegate(ListView listView) {
 
@@ -77,56 +166,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
         this.context = listView.getContext();
 
-        this.listener = new DhHttpNetUtils.RequestListener<Object>() {
-            @Override
-            public void onSuccessfully(Object t) {
-
-                if (loadMoreAbleListener == null) {
-
-                    return;
-                }
-
-                final List<?> fetchedData = loadMoreAbleListener.getLoadedData(t);
-
-                if (refreshing) {
-
-                    list.clear();//如果此次请求是刷新动作，则先清空数据
-                }
-                list.addAll(fetchedData);
-
-                setLoadMoreAble(t, fetchedData);
-
-                if (!loadMoreAble && isLoadOkToast) {
-
-                    ToastUtils.toast("已全部加载");
-                }
-            }
-
-            @Override
-            public void onFailure(DhRequestError requestError) {
-
-                loadMoreFailedReset();
-
-            }
-
-            @Override
-            public void onFinished() {
-
-                if (onLoadFinishListener != null) {
-
-                    onLoadFinishListener.onLoadFinished();
-                }
-
-                NetListViewDelegate.this.listView.removeFooterView(loadMoreView);
-
-                adapter.notifyDataSetChanged();
-
-                refreshing = false;
-
-                ProgressDialogUtil.dismissProgressDialog();
-            }
-
-        };
+        this.listener = new RequestListener(this);
     }
 
     public void setLoadMoreView(View loadMoreView) {
@@ -173,6 +213,12 @@ class NetListViewDelegate implements NLVCommonInterface {
     public void setOnLoadFinishListener(NLVCommonInterface.OnLoadFinishListener onLoadFinishListener) {
 
         this.onLoadFinishListener = onLoadFinishListener;
+    }
+
+    @Override
+    public void setOnLoadStartListener(OnLoadStartListener onLoadStartListener) {
+
+        this.onLoadStartListener = onLoadStartListener;
     }
 
     public void setOnScrollListener(AbsListView.OnScrollListener onScrollListener) {
@@ -296,8 +342,11 @@ class NetListViewDelegate implements NLVCommonInterface {
      * 刷新数据
      */
     public void refreshData() {
+
         refreshing = true;
+
         pageNo = startPageNo;
+
         getData();
     }
 
@@ -306,13 +355,18 @@ class NetListViewDelegate implements NLVCommonInterface {
      */
     public void getData() {
 
-        if (isNetStateUnavailable(listView.getContext(), listener)) {
+        if (isNetStateUnavailable(listener)) {
 
             return;
         }
-        ProgressDialogUtil.showProgressDialog(listView.getContext());
+        ProgressDialogUtil.showProgressDialog(context);
 
         params.setParams(pageName, pageNo + "");
+
+        if (onLoadStartListener != null) {
+
+            onLoadStartListener.onLoadStart(refreshing);
+        }
 
         AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView);
 
@@ -383,14 +437,14 @@ class NetListViewDelegate implements NLVCommonInterface {
     /**
      * 网络状态是否不可用
      */
-    private <T> boolean isNetStateUnavailable(Context context, DhHttpNetUtils.RequestListener<T> requestListener) {
+    private <T> boolean isNetStateUnavailable(HttpNetUtils.RequestListener<T> requestListener) {
         if (!NetWorkDetector.isNetConnected()) {
 
             ToastUtils.toast("无可用网络请检查网络设置");
 
             if (requestListener != null) {
 
-                requestListener.onFailure(new DhRequestError(new NetworkErrorException("无可用网络请检查网络设置")));
+                requestListener.onFailed(new DhRequestError(new NetworkErrorException("无可用网络请检查网络设置")));
 
                 requestListener.onFinished();
             }

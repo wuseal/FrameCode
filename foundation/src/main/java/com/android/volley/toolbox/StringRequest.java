@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  * A canned request for retrieving the response body at a given URL as a String.
  */
 public class StringRequest extends Request<String> {
-    private final Listener<String> mListener;
+    private  Listener<String> mListener;
 
     /**
      * Creates a new request with the given method.
@@ -57,7 +57,10 @@ public class StringRequest extends Request<String> {
 
     @Override
     protected void deliverResponse(String response) {
-        mListener.onResponse(response);
+        if (mListener != null) {
+
+            mListener.onResponse(response);
+        }
     }
 
     @Override
@@ -69,5 +72,10 @@ public class StringRequest extends Request<String> {
             parsed = new String(response.data);
         }
         return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+    }
+
+    protected void onCancel() {
+        super.onCancel();
+        this.mListener = null;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
 import android.view.animation.AlphaAnimation;
@@ -21,6 +22,9 @@ import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.volley.patch.ImageDiskBasedCache;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ImageView图片请求加载工具类
@@ -30,14 +34,20 @@ import java.io.File;
  */
 public class ImageNetLoader {
 
-    private static final String DEFAULT_CACHE_DIR = "volley/image";
+    private final static String DEFAULT_CACHE_DIR = "volley/image";
 
     private final static BitmapCache imageCache = new BitmapCache();
 
-    private final static ImageLoader imageLoader = new ImageLoader(newImageRequestQueue(FoundationManager.getContext(), null), imageCache);
+    private final ImageLoader imageLoader = new ImageLoader(newImageRequestQueue(FoundationManager.getContext(), null), imageCache);
+
+    private Map<String,WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
+
+    private Map<String, WeakReference<BitmapReceiverHolder>> holderMap = new HashMap<>();
 
 
-    public static ImageLoader getImageLoader() {
+    private final static ImageNetLoader DEFAULT_INSTANCE = new ImageNetLoader();
+
+    public ImageLoader getImageLoader() {
         return imageLoader;
     }
 
@@ -45,42 +55,54 @@ public class ImageNetLoader {
         return imageCache;
     }
 
-    public static void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
+    public static ImageNetLoader getDefault() {
 
-        getImageLoader().get(url, new ImageLoader.ImageListener() {
+        return DEFAULT_INSTANCE;
+    }
+
+    public void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
+
+        final BitmapReceiverHolder bitmapReceiverHolder = new BitmapReceiverHolder(bitmapReceiver);
+
+        final ImageLoader.ImageContainer imageContainer = getImageLoader().get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
 
-                if (bitmapReceiver != null && response.getBitmap() != null) {
+                if (bitmapReceiverHolder.getBitmapReceiver() != null && response.getBitmap() != null) {
 
-                    bitmapReceiver.onReceiveBitmap(response.getBitmap(), isImmediate);
+                    bitmapReceiverHolder.getBitmapReceiver().onReceiveBitmap(response.getBitmap(), isImmediate);
                 }
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (bitmapReceiver != null) {
 
-                    bitmapReceiver.onError(error);
+                if (bitmapReceiverHolder.getBitmapReceiver() != null) {
+
+                    bitmapReceiverHolder.getBitmapReceiver().onError(error);
                 }
 
                 DLoggerUtils.e(error);
             }
         }, maxWidth, maxHigh);
 
+        imageContainerMap.put(url, new WeakReference<ImageLoader.ImageContainer>(imageContainer));
+
+        holderMap.put(url, new WeakReference<BitmapReceiverHolder>(bitmapReceiverHolder));
+
     }
 
-    public static void getBitmap(final String url, final BitmapReceiver bitmapReceiver) {
+    public void getBitmap(final String url, final BitmapReceiver bitmapReceiver) {
 
         getBitmap(url, bitmapReceiver, 0, 0);
     }
 
-    public static void loadImage(final ImageView imageView, final String url) {
+    public void loadImage(final ImageView imageView, final String url) {
 
         loadImage(imageView, url, 0, 0);
     }
 
-    public static void loadImage(final ImageView imageView, final String url, final int errorImageResId, final int defaultImageResId) {
+    public void loadImage(final ImageView imageView, final String url, final int errorImageResId, final int defaultImageResId) {
 
         loadImage(imageView, url, errorImageResId, defaultImageResId, 0, 0);
 
@@ -96,7 +118,7 @@ public class ImageNetLoader {
      * @param maxWidth          设置显示的最大宽度
      * @param maxHigh           设置显示的最大高度
      */
-    public static void loadImage(final ImageView imageView, final String url, final int errorImageResId, final int defaultImageResId, int maxWidth, int maxHigh) {
+    public void loadImage(final ImageView imageView, final String url, final int errorImageResId, final int defaultImageResId, int maxWidth, int maxHigh) {
 
         imageView.setTag(url);
 
@@ -170,6 +192,89 @@ public class ImageNetLoader {
         queue.start();
 
         return queue;
+    }
+
+
+    /**
+     * 结束所有Image的请求
+     */
+    public void cancelAll() {
+
+        for (Map.Entry<String, WeakReference<ImageLoader.ImageContainer>> entry : imageContainerMap.entrySet()) {
+
+            final ImageLoader.ImageContainer imageContainer = entry.getValue().get();
+
+            if (imageContainer != null) {
+
+                imageContainer.cancelRequest();
+            }
+
+            final BitmapReceiverHolder bitmapReceiverHolder = holderMap.get(entry.getKey()).get();
+
+            if (bitmapReceiverHolder != null) {
+
+                bitmapReceiverHolder.setBitmapReceiver(null);
+            }
+
+        }
+
+        imageContainerMap.clear();
+
+        holderMap.clear();
+
+    }
+
+    /**
+     * 结束指定Image的请求
+     *
+     * @param url 请求的image的url
+     */
+    public void cancel(String url) {
+
+        for (Map.Entry<String, WeakReference<ImageLoader.ImageContainer>> entry : imageContainerMap.entrySet()) {
+
+            if (StringUtils.equals(url, entry.getKey())) {
+
+                final ImageLoader.ImageContainer imageContainer = entry.getValue().get();
+
+                if (imageContainer != null) {
+
+                    imageContainer.cancelRequest();
+                }
+
+                final BitmapReceiverHolder bitmapReceiverHolder = holderMap.get(entry.getKey()).get();
+
+                if (bitmapReceiverHolder != null) {
+
+                    bitmapReceiverHolder.setBitmapReceiver(null);
+                }
+
+                imageContainerMap.remove(entry.getKey());
+
+                holderMap.remove(entry.getKey());
+
+                break;
+            }
+        }
+    }
+
+    static final class BitmapReceiverHolder {
+
+        private BitmapReceiver bitmapReceiver;
+
+        public BitmapReceiverHolder(BitmapReceiver bitmapReceiver) {
+
+            this.bitmapReceiver = bitmapReceiver;
+        }
+
+        public void setBitmapReceiver(BitmapReceiver bitmapReceiver) {
+
+            this.bitmapReceiver = bitmapReceiver;
+        }
+
+        public BitmapReceiver getBitmapReceiver() {
+            return bitmapReceiver;
+        }
     }
 
     /**

@@ -63,7 +63,7 @@ public class DhNetListViewActivity extends ActionBarActivity implements SwipeRef
         });
         listview.setOnLoadFinishListener(new NetListView.OnLoadFinishListener() {
             @Override
-            public void onLoadFinished() {
+            public void onLoadFinished(boolean isRefreshing) {
                 swipe.setRefreshing(false);
             }
         });

@@ -27,6 +27,9 @@ import butterknife.ButterKnife;
  */
 public class LoadImageActivity extends Activity {
 
+    private final ImageNetLoader imageNetLoader = new ImageNetLoader();
+
+
     String[] list  = {"http://www.guolv.com/file/upload/201402/11/12-32-09-39-592.jpg",
             "http://pic1a.nipic.com/2008-09-05/200895134351570_2.jpg",
             "http://pic.nipic.com/2007-12-22/20071222144424844_2.jpg",
@@ -84,6 +87,7 @@ public class LoadImageActivity extends Activity {
     }
 
     class MAdapter extends DhBaseAdapter<String> {
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView;
@@ -94,8 +98,17 @@ public class LoadImageActivity extends Activity {
             } else {
                 imageView = (ImageView) convertView;
             }
-            ImageNetLoader.loadImage(imageView, getItem(position), R.drawable.mm, R.drawable.ic_launcher);
+            imageNetLoader.loadImage(imageView, getItem(position), R.drawable.mm, R.drawable.ic_launcher);
             return imageView;
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        imageNetLoader.cancelAll();
+
+        super.onDestroy();
     }
 }

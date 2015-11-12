@@ -69,11 +69,18 @@ public class NetListViewActivity extends Activity {
                  *  }
                  *  当获得的数据条目数为１０的时候方可继续加载
                  *
-                 *  然而我们并没有做分页，所有为了有继续加载的效果　我们就直接返回true，代表永远可以加载更多
+                 *  然而我们并没有做分页，所有为了有继续加载的效果　在正确获取到值的时候我们就直接返回true，代表永远可以加载更多
+                 *
+                 *  当returnCode为１的时候代表服务器正确返回了
                  */
+                if (returnObj.getReturnCode().equals("1")) {
 
+                    return true;
 
-                return true;
+                } else {
+
+                    return false;
+                }
             }
 
             @Override

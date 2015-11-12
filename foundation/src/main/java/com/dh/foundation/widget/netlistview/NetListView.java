@@ -73,6 +73,7 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      * 加载全部是否进行提示
      */
     public void setLoadOkToast(boolean isLoadOkToast) {
+
         netListViewDelegate.setLoadOkToast(isLoadOkToast);
     }
 
@@ -80,6 +81,7 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      * 设置是否展示等待对话框
      */
     public void setIsShowProgressDialog(boolean isShowProgressDialog) {
+
         netListViewDelegate.setIsShowProgressDialog(isShowProgressDialog);
     }
 
@@ -91,6 +93,7 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      * 设置自定义加载更多使能
      */
     public void setLoadMoreAbleListener(NetListView.LoadMoreAbleListener loadMoreAbleListener) {
+
         netListViewDelegate.setLoadMoreAbleListener(loadMoreAbleListener);
     }
 
@@ -98,15 +101,24 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      * 设置自加载完成监听器
      */
     public void setOnLoadFinishListener(NetListView.OnLoadFinishListener onLoadFinishListener) {
+
         netListViewDelegate.setOnLoadFinishListener(onLoadFinishListener);
     }
 
     @Override
+    public void setOnLoadStartListener(OnLoadStartListener onLoadStartListener) {
+
+        netListViewDelegate.setOnLoadStartListener(onLoadStartListener);
+    }
+
+    @Override
     public void setOnScrollListener(AbsListView.OnScrollListener onScrollListener) {
+
         netListViewDelegate.setOnScrollListener(onScrollListener);
     }
 
     public void setSuperOnScrollListener(AbsListView.OnScrollListener onScrollListener) {
+
         super.setOnScrollListener(onScrollListener);
     }
 
