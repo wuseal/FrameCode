@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.dahanis.main.R;
 import com.dh.foundation.adapter.DhBaseAdapter;
+import com.dh.foundation.utils.BitmapOnScrollListener;
 import com.dh.foundation.utils.ImageNetLoader;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class LoadImageActivity extends Activity {
         MAdapter mAdapter = new MAdapter();
         mAdapter.setList(strings);
         listView.setAdapter(mAdapter);
+        listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));
 
     }
 

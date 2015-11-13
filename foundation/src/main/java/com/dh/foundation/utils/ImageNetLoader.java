@@ -23,7 +23,10 @@ import com.dh.foundation.volley.patch.ImageDiskBasedCache;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,10 +43,19 @@ public class ImageNetLoader {
 
     private final ImageLoader imageLoader = new ImageLoader(newImageRequestQueue(FoundationManager.getContext(), null), imageCache);
 
-    private Map<String,WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
+    private Map<String, WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
 
     private Map<String, WeakReference<BitmapReceiverHolder>> holderMap = new HashMap<>();
 
+    /**
+     * 用于存储加载过的ImageView
+     */
+    private HashMap<ImageViewInfoHolder, WeakReference<ImageView>> imageViews = new HashMap<>();
+
+    /**
+     * 当前图片加载器是否有效，能使用，默认有用
+     */
+    private boolean enable = true;
 
     private final static ImageNetLoader DEFAULT_INSTANCE = new ImageNetLoader();
 
@@ -55,9 +67,40 @@ public class ImageNetLoader {
         return imageCache;
     }
 
+
     public static ImageNetLoader getDefault() {
 
         return DEFAULT_INSTANCE;
+    }
+
+    void setEnable(boolean enable) {
+
+        this.enable = enable;
+    }
+
+    boolean isEnable() {
+
+        return enable;
+    }
+
+    void resumeAllImageViews() {
+
+        setEnable(true);
+
+        for (Map.Entry<ImageViewInfoHolder, WeakReference<ImageView>> entry : imageViews.entrySet()) {
+
+            final ImageView imageView = entry.getValue().get();
+
+            final ImageViewInfoHolder key = entry.getKey();
+            if (imageView != null) {
+
+                loadImage(imageView, key.url, key.errorImageResId, key.defaultImageResId, key.maxWidth, key.maxHeight);
+
+            } else {
+
+                imageViews.remove(key);
+            }
+        }
     }
 
     public void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
@@ -127,6 +170,33 @@ public class ImageNetLoader {
             imageView.setImageResource(defaultImageResId);
         }
 
+        final ImageViewInfoHolder imageViewInfoHolder = getImageViewInfoHolder(imageView);
+
+        if (imageViewInfoHolder == null) {
+            /**
+             * 当前ImageView没有持有info信息的时候
+             */
+            imageViews.put(new ImageViewInfoHolder(url, defaultImageResId, errorImageResId, maxWidth, maxHigh), new WeakReference<ImageView>(imageView));
+
+        } else {
+            /**
+             * 替换info信息
+             */
+            imageViewInfoHolder.url = url;
+            imageViewInfoHolder.defaultImageResId = defaultImageResId;
+            imageViewInfoHolder.errorImageResId = errorImageResId;
+            imageViewInfoHolder.maxWidth = maxWidth;
+            imageViewInfoHolder.maxHeight = maxHigh;
+        }
+
+        /**
+         * 不可用的时候直接pass掉
+         */
+        if (!enable) {
+
+            return;
+        }
+
         getBitmap(url, new BitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
@@ -155,6 +225,20 @@ public class ImageNetLoader {
                 }
             }
         }, maxWidth, maxHigh);
+    }
+
+
+    private ImageViewInfoHolder getImageViewInfoHolder(ImageView imageView) {
+
+        for (Map.Entry<ImageViewInfoHolder, WeakReference<ImageView>> entry : imageViews.entrySet()) {
+
+            if (imageView.equals(entry.getValue().get())) {
+
+                return entry.getKey();
+            }
+        }
+
+        return null;
     }
 
     public static RequestQueue newImageRequestQueue(Context context, HttpStack stack) {
@@ -221,6 +305,8 @@ public class ImageNetLoader {
         imageContainerMap.clear();
 
         holderMap.clear();
+
+        imageViews.clear();
 
     }
 
@@ -306,6 +392,45 @@ public class ImageNetLoader {
         @Override
         public void onError(Throwable error) {
 
+        }
+    }
+
+    /**
+     * 待加载图像的ImageView的加载内容信息
+     */
+    static class ImageViewInfoHolder {
+
+        /**
+         * 图像网络地址
+         */
+        String url;
+
+        /**
+         * 默认显示图片资源id
+         */
+        int defaultImageResId;
+
+        /**
+         * 加载失败显示图片资源id
+         */
+        int errorImageResId;
+
+        /**
+         * 设置显示的最大宽度
+         */
+        int maxWidth;
+
+        /**
+         * 设置显示的最大高度
+         */
+        int maxHeight;
+
+        public ImageViewInfoHolder(String url, int defaultImageResId, int errorImageResId, int maxWidth, int maxHeight) {
+            this.url = url;
+            this.defaultImageResId = defaultImageResId;
+            this.errorImageResId = errorImageResId;
+            this.maxWidth = maxWidth;
+            this.maxHeight = maxHeight;
         }
     }
 }
