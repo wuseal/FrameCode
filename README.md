@@ -276,8 +276,9 @@ compile 'com.dahanis:foundation:1.3.0'
 简介：内有默认实现等待对话框，可以自定义对话框样式，全局性显示隐藏对话框api，当某些异常请求需要开启等待而有时候会有多个重复的请求时
 多交调用ProgressDialogUtil．show()方法时，在界面上永远只会有一个等待框，不会造成多余的等待框，从而导致内存浪费
 #####示例代码
-```        ProgressDialogUtil.showProgressDialog(this);
-           ProgressDialogUtil.dismissProgressDialog();
+```java       
+        ProgressDialogUtil.showProgressDialog(this);
+        ProgressDialogUtil.dismissProgressDialog();
 ```
 
 ####ToastUtils--全局性toast显示
