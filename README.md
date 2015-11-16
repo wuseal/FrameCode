@@ -95,7 +95,8 @@ compile 'com.dahanis:foundation:1.3.0'
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
 
 * 如果在ListView中加载图片需要fling状态不加载图片，静止或触摸滚动再去加载可以给listView设置BitmapOnScrollListener到ListView中
-```    listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));  ```
+
+    ```  listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));  ```
 
 ####文件下载框架
 简介：基于DownloadManager进行二次开发<br>
