@@ -34,6 +34,13 @@ compile 'com.dahanis:foundation:1.3.0'
      * 传入请求参数
      */
     RequestParams params = new RequestParams();
+    /**
+     * 支持headers的添加
+     */
+    Map<String, String> headers = new HashMap<>();
+    headers.put("user-agent", "android-volley-dahanis-foundation-app");
+    params.setHeaders(headers);
+    
     params.putParams("token","Zrmp6OJN8JilVNd66DSRntEQAzPtNXNdQzGUK8FDhavb9Lv%2BGSEmpqVvPXLgk0S00F1isuQY5R4%3D");
     params.putParams("userId", "60");
     /**
