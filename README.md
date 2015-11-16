@@ -2,17 +2,17 @@
 
 Framecode for android team
 
-Latest Version is :1.2.0
+Latest Version is :1.3.0
 
 
 <h3>How to use</h3>
 <h4>In gradle you can set it in by a single line Code in your build.gradle:</h4>
-<code>compile 'com.dahanis:foundation:1.2.0'</code>
+<code>compile 'com.dahanis:foundation:1.3.0'</code>
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入<br>
-compile 'com.dahanis:foundation:1.2.0'
+compile 'com.dahanis:foundation:1.3.0'
 即可完成引入</h4>
 #####集成步骤：
-* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.2.0'</code>
+* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.3.0'</code>
 * 然后让app的application继承FoundationApplication就可以了
 
 #一．网络部分
@@ -70,16 +70,25 @@ compile 'com.dahanis:foundation:1.2.0'
 
 使用DhHttpNetUtils同名方法，可以更全套化节省开发时间，内部集成了请稍候对话框和网络情况提示，让开发只专注于界面开发，从而无需关注网络相关内容
 
-注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Activity activty)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
+注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Activity activity)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
 
 
 ####网络图片加载框架
 示例代码<br>
-```  ImageNetLoader.loadImage(imageView,imageUrl); ```
+
+```java
+
+   ImageNetLoader imageNetLoader = new ImageNetLoader();
+   imageNetLoader.loadImage(imageView,imageUrl);
+   
+```
 
 
 上面方法中两个参数依次为对应的imageView和需要获取并设置的网络图片地址
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
+
+* 如果在ListView中加载图片需要fling状态不加载图片，静止或触摸滚动再去加载可以给listView设置BitmapOnScrollListener到ListView中
+```    listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));  ```
 
 ####文件下载框架
 简介：基于DownloadManager进行二次开发<br>
@@ -187,19 +196,26 @@ compile 'com.dahanis:foundation:1.2.0'
     listView.setLoadMoreAbleListener(new NetListViewCompat.LoadMoreAbleListener<ReturnObj>() {
         @Override
         public boolean isLoadMoreAble(ReturnObj returnObj, List allListData) {
-            /**
-             * 此处处理的是每次请求加载完数据后来判断是否可以再进行加载更多功能，常规做法是判断returnObj里返回的数据列表条数与期望的是否一致
-             * 比如如果我们有做分页功能，且每页请求数据是期望１０条，那么我们可以这么判断
-             *  if (returnObj.getTruckBeanList().size() == 10) {
-             *      return true;
-             *  }
-             *  当获得的数据条目数为１０的时候方可继续加载
-             *
-             *  然而我们并没有做分页，所有为了有继续加载的效果　我们就直接返回true，代表永远可以加载更多
-             */
-
-
-            return true;
+             /**
+                * 此处处理的是每次请求加载完数据后来判断是否可以再进行加载更多功能，常规做法是判断returnObj里返回的数据列表条数与期望的是否一致
+                * 比如如果我们有做分页功能，且每页请求数据是期望１０条，那么我们可以这么判断
+                *  if (returnObj.getTruckBeanList().size() == 10) {
+                *      return true;
+                *  }
+                *  当获得的数据条目数为１０的时候方可继续加载
+                *
+                *  然而我们并没有做分页，所有为了有继续加载的效果　在正确获取到值的时候我们就直接返回true，代表永远可以加载更多
+                *
+                *  当returnCode为１的时候代表服务器正确返回了
+                */
+               if (returnObj.getReturnCode().equals("1")) {
+    
+                   return true;
+    
+               } else {
+    
+                   return false;
+               }
         }
 
         @Override
@@ -237,7 +253,7 @@ compile 'com.dahanis:foundation:1.2.0'
         }
     }
 ```
-######也可以直接在布局文件中指令当前ListView的加载更多footer和EmptyView
+######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView
 示例如下：
 ```xml
     <com.dh.foundation.widget.netlistview.NetListView
@@ -247,7 +263,53 @@ compile 'com.dahanis:foundation:1.2.0'
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 ```
-##其它
+#其它
 
+####ProgressDialogUtil－－全局性的等待对话框框架工具
+简介：内有默认实现等待对话框，可以自定义对话框样式，全局性显示隐藏对话框api，当某些异常请求需要开启等待而有时候会有多个重复的请求时
+多交调用ProgressDialogUtil．show()方法时，在界面上永远只会有一个等待框，不会造成多余的等待框，从而导致内存浪费
+#####示例代码
+```        ProgressDialogUtil.showProgressDialog(this);
+           ProgressDialogUtil.dismissProgressDialog();
+```
 
+####ToastUtils--全局性toast显示
+简介：调用api类似ProgressDialogUtil
+
+####SharedPreferenceManager--直接可以使用的SharedPreference配置操作类
+简介：里面已经实现基本大多数常用设置(AppToken,userId,userName,phone,password,isLogin等等)，如有需要扩展，继承此类实现方法即可
+
+#####示例代码
+两种实例方法均可：
+
+```java
+
+    SharedPreferenceManager sharedPreferenceManager = FoundationManager.getSharedPreferenceManager();
+    SharedPreferenceManager sharedPreferenceManager1= new SharedPreferenceManager();
+```
+使用方法：
+
+```java
+
+        sharedPreferenceManager.getAppToken();
+        sharedPreferenceManager.setIsLogin(true);
+                       ...
+                        
+```
+
+####ActivityStackManager--activity的栈管理者
+简介：像正常栈管理一样出栈入栈即可，同时提供了销毁全部activity的方法，可用于退出应用时调用
+
+####ApplicationUtil--用于获取application的应用信息
+简介：获取包括应用名称，id，meta-data，versionCode等信息
+
+####AESEncryptUtil－－加密工具
+简介：AES/ECB/PKCS5Padding形式加密工具类
+#####示例代码
+```java
+
+    AESEncryptUtil instance = AESEncryptUtil.getInstance("your_key");
+    String encrypt = instance.encrypt("clearText");
+    
+```
 

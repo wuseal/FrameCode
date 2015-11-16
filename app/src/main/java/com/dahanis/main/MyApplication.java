@@ -2,6 +2,8 @@ package com.dahanis.main;
 
 import com.dh.foundation.app.ApplicationUtil;
 import com.dh.foundation.app.FoundationApplication;
+import com.dh.foundation.manager.FoundationManager;
+import com.dh.foundation.manager.SharedPreferenceManager;
 import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.ToastUtils;
 import com.squareup.leakcanary.LeakCanary;

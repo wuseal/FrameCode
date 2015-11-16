@@ -7,6 +7,7 @@ import com.dahanis.main.ReturnObj;
 import com.dahanis.main.TruckBean;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
 import com.dh.foundation.utils.DhHttpNetUtils;
+import com.dh.foundation.utils.ProgressDialogUtil;
 import com.dh.foundation.utils.RequestParams;
 import com.dh.foundation.utils.ToastUtils;
 
@@ -36,6 +37,7 @@ public class HttpNetUtilActivity extends Activity{
 
         params.putParams("userId", "600000032");
 
+        ProgressDialogUtil.showProgressDialog(this);
 
         AutoPrintHttpNetUtils.getData(baseAddress, params, new AutoPrintHttpNetUtils.RequestListener<ReturnObj>() {
             @Override
@@ -53,7 +55,7 @@ public class HttpNetUtilActivity extends Activity{
 
             @Override
             public void onFinished() {
-
+                ProgressDialogUtil.dismissProgressDialog();
             }
 
         });
