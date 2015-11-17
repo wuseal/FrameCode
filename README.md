@@ -103,6 +103,9 @@ compile 'com.dahanis:foundation:1.3.0'
 * 如果在ListView中加载图片需要fling状态不加载图片，静止或触摸滚动再去加载可以给listView设置BitmapOnScrollListener到ListView中
 
     ```  listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));  ```
+    
+    参数中的imageNetLoader为你listView用来加载图片用的ImageNetLoader实例
+    true:表示在触摸滚动时可以进行图片加载
 
 ####文件下载框架
 简介：基于DownloadManager进行二次开发<br>
