@@ -11,6 +11,9 @@ import com.dh.foundation.utils.ProgressDialogUtil;
 import com.dh.foundation.utils.RequestParams;
 import com.dh.foundation.utils.ToastUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 网络加载json数据直接到对象使用示例
  * Created By: Seal.Wu
@@ -32,6 +35,13 @@ public class HttpNetUtilActivity extends Activity{
          * 然后再实例一个相应的参数对象并设值
          */
         RequestParams params = new RequestParams();
+
+        /**
+         * 支持headers的添加
+         */
+        Map<String, String> headers = new HashMap<>();
+        headers.put("user-agent", "android-volley-dahanis-foundation-app");
+        params.setHeaders(headers);
 
         params.putParams("token", "Zrmp6OJN8JilVNd66DSRntEQAzPtNXNdQzGUK8FDhavb9Lv%2BGSEmpqVvPXLgk0S00F1isuQY5R4%3D");
 

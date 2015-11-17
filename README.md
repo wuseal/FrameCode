@@ -88,10 +88,16 @@ compile 'com.dahanis:foundation:1.3.0'
    ImageNetLoader imageNetLoader = new ImageNetLoader();
    imageNetLoader.loadImage(imageView,imageUrl);
    
+   /**
+    *  在activity的onDestroy方法中选择性调用以下方法中的任一一个进行加载任务取消操作，避免内存泄漏
+    */
+   imageNetLoader.cancel(url);
+   imageNetLoader.cancelAll();
+   
 ```
 
 
-上面方法中两个参数依次为对应的imageView和需要获取并设置的网络图片地址
+上面方法中两个参数依次为对应的imageView和需要获取并设置的网络图片地址,后面两个方法为取消加载任务，当退出activity的时候要调用
 有了这个图片加载框你再也不需要担心OOM了,里面还有更多图片加载的方法，等待你去探索
 
 * 如果在ListView中加载图片需要fling状态不加载图片，静止或触摸滚动再去加载可以给listView设置BitmapOnScrollListener到ListView中
