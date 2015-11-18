@@ -41,7 +41,6 @@ public class DownloadActivity extends Activity {
     @OnClick(R.id.startDownLoad)
     void startDownLoad() {
 
-        downLoadUtil = DownLoadUtil.getInstance();
         downloadId = downLoadUtil.startADownloadTask(url, new DownloadListener() {
             @Override
             public void onLoadChange(int total, int currentSize, int state) {
@@ -93,6 +92,8 @@ public class DownloadActivity extends Activity {
 
         setContentView(R.layout.activity_donwload);
         ButterKnife.bind(this);
+        downLoadUtil = DownLoadUtil.getInstance();
+
 
 
     }

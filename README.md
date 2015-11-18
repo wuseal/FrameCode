@@ -330,4 +330,8 @@ compile 'com.dahanis:foundation:1.3.0'
     String encrypt = instance.encrypt("clearText");
     
 ```
-
+####InputUtils－－输入法软键盘控制工具
+* hideKeyboard(View v):隐藏输入软键盘
+* showKeyboard(View v):显示输入软键盘
+* setupUISoftKeyBoardHideSystem(final View viewGroup):设置当前ViewGroup内输入隐藏逻辑，实现效果为在当前viewGroup内点击输入框外的区域隐藏输入法软键盘.<br>
+  前提，当前ViewGroup内不能有控件设置onTouchListener
