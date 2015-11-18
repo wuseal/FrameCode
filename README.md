@@ -104,7 +104,8 @@ compile 'com.dahanis:foundation:1.3.0'
 
     ```  listView.setOnScrollListener(new BitmapOnScrollListener(imageNetLoader,true));  ```
     
-    参数中的imageNetLoader为你listView用来加载图片用的ImageNetLoader实例
+    参数中</br>
+    imageNetLoader: 为你listView用来加载图片用的ImageNetLoader实例</br>
     true:表示在触摸滚动时可以进行图片加载
 
 ####文件下载框架
