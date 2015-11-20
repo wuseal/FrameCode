@@ -336,3 +336,7 @@ compile 'com.dahanis:foundation:1.3.0'
 * showKeyboard(View v):显示输入软键盘
 * setupUISoftKeyBoardHideSystem(final View viewGroup):设置当前ViewGroup内输入隐藏逻辑，实现效果为在当前viewGroup内点击输入框外的区域隐藏输入法软键盘.<br>
   前提，当前ViewGroup内不能有控件设置onTouchListener
+
+####AppDownLoaderWithNotification－－app版本更新升级下载工具
+会启用一个通知栏进行下载，下载完成后自动打开提示用户安装
+``` new AppDownLoaderWithNotification( versionInfo.getDownLoadUrl()).start(); ```
