@@ -339,4 +339,5 @@ compile 'com.dahanis:foundation:1.3.0'
 
 ####AppDownLoaderWithNotification－－app版本更新升级下载工具
 会启用一个通知栏进行下载，下载完成后自动打开提示用户安装
+
 ``` new AppDownLoaderWithNotification( versionInfo.getDownLoadUrl()).start(); ```
