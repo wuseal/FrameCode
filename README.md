@@ -22,6 +22,7 @@ compile 'com.dahanis:foundation:1.3.0'
 <h4>示例代码</h4>
 
 ```java
+
     /**
      *         http://m.dahanis.com:24080/BasicService.asmx/GetVehicleLengthList?
      *         token=Zrmp6OJN8JilVNd66DSRntEQAzPtNXNdQzGUK8FDhavb9Lv%2BGSEmpqVvPXLgk0S00F1isuQY5R4%3D&userId=60
@@ -75,21 +76,21 @@ compile 'com.dahanis:foundation:1.3.0'
     }).setTag(this.toString());//最后一行设置当前请求任务的tag，以后可以用这个tag进行取消任务操作
     
     
-     @Override
-        protected void onDestroy() {
-            
-            HttpNetUtils.cancelAll(this.toString());
-            
-            super.onDestroy();
-        }
+    @Override
+    protected void onDestroy() {
         
-     记住：tag不能直接用activity和fragment本身的实例对象，否则会造成内在泄漏问题
+        AutoPrintHttpNetUtils.cancelAll(this.toString());
+        
+        super.onDestroy();
+    }
+        
+     记住：tag不能直接用activity和fragment本身的实例对象，否则会造成内存泄漏问题
      
 ```
 
 使用DhHttpNetUtils同名方法，可以更全套化节省开发时间，内部集成了请稍候对话框和网络情况提示，让开发只专注于界面开发，从而无需关注网络相关内容
 
-注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Activity activity)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
+注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Object tag)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
 
 
 ####网络图片加载框架
