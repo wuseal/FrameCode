@@ -1,6 +1,6 @@
 # FrameCode
 
-Framecode for android team
+FrameCode for android team
 
 Latest Version is :1.3.0
 
