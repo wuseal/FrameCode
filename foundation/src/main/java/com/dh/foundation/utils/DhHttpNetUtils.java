@@ -79,7 +79,7 @@ public class DhHttpNetUtils {
 
         ProgressDialogUtil.showProgressDialog(context);
 
-        AutoPrintHttpNetUtils.getData(context, baseAddress, requestParams, requestListener);
+        AutoPrintHttpNetUtils.getData(baseAddress, requestParams, requestListener).setTag(context.hashCode());
     }
 
     /**
@@ -97,7 +97,7 @@ public class DhHttpNetUtils {
 
         ProgressDialogUtil.showProgressDialog(context);
 
-        AutoPrintHttpNetUtils.postData(context, baseAddress, requestParams, requestListener);
+        AutoPrintHttpNetUtils.postData(baseAddress, requestParams, requestListener).setTag(context.hashCode());
     }
 
     /**
@@ -107,7 +107,7 @@ public class DhHttpNetUtils {
 
         if (!NetWorkDetector.isNetConnected()) {
 
-            ToastUtils.toast( "无可用网络请检查网络设置");
+            ToastUtils.toast("无可用网络请检查网络设置");
 
             if (requestListener != null) {
 
@@ -140,6 +140,17 @@ public class DhHttpNetUtils {
     public static boolean isGetDataSuccessfully(BaseBean baseBean) {
 
         return StringUtils.equals(SUCCESS_CODE, baseBean.getReturnCode());
+    }
+
+
+    /**
+     * 结束所有以context为上下文的网络请求
+     *
+     * @param context 上下文
+     */
+    public static void cancelAll(Context context) {
+
+        HttpNetUtils.cancelAll(context.hashCode());
     }
 
 }

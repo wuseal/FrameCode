@@ -26,7 +26,7 @@ public class DhDefaultLoadMoreAbleListener implements NLVCommonInterface.LoadMor
     @Override
     public boolean isLoadMoreAble(BaseBean<List<JsonObject>> listBaseBean, List<?> allListData) {
 
-        if (DhHttpNetUtils.isGetDataSuccessfully(listBaseBean) && allListData != null) {
+        if (DhHttpNetUtils.isGetDataSuccessfully(listBaseBean) && listBaseBean.getReturnData() != null) {
 
             if (listBaseBean.getReturnData().size() == getPageSize()) {
 

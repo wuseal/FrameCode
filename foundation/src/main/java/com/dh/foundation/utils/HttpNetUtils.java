@@ -1,5 +1,6 @@
 package com.dh.foundation.utils;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -19,24 +20,6 @@ import java.lang.reflect.Type;
 public class HttpNetUtils {
 
     private static RequestQueue mRequestQueue;
-
-    /**
-     * GET请求网络接口数据
-     *
-     * @param context         上下文
-     * @param baseAddress     基地址
-     * @param requestParams   参数
-     * @param type            返回对象类类型
-     * @param requestListener 返回接收器
-     * @param <T>             返回对象类类型
-     * @deprecated
-     */
-    public static synchronized <T> void getData(Context context, String baseAddress, RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
-
-        Request request = getData(baseAddress, requestParams, type, requestListener);
-
-        request.setTag(context);
-    }
 
 
     /**
@@ -62,22 +45,6 @@ public class HttpNetUtils {
         Request request = new NetRequest<T>(Request.Method.GET, url, requestParams, type, requestListener);
 
         return addToExecuteQueue(request);
-    }
-
-    /**
-     * @param baseAddress     基地址
-     * @param requestParams   参数
-     * @param type            返回对象类类型
-     * @param requestListener 返回接收器
-     * @param <T>             返回对象类类型
-     * @deprecated 请求网络接口数据
-     */
-    public static synchronized <T> void postData(Context context, String baseAddress, final RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
-
-        Request request = postData(baseAddress, requestParams, type, requestListener);
-
-        request.setTag(context);
-
     }
 
     /**
@@ -193,42 +160,6 @@ public class HttpNetUtils {
     }
 
     /**
-     * GET请求网络接口数据
-     *
-     * @param context         上下文
-     * @param baseAddress     基地址
-     * @param requestParams   参数
-     * @param requestListener 返回接收器
-     * @param <T>             返回对象类类型
-     */
-    public static synchronized <T> void getData(final Context context, String baseAddress, RequestParams requestParams, final RequestListener<T> requestListener) {
-
-        final Request stringRequest = buildGetRequestTask(baseAddress, requestParams, requestListener);
-
-        stringRequest.setTag(context);
-
-        addToExecuteQueue(stringRequest);
-    }
-
-    /**
-     * 请求网络接口数据
-     *
-     * @param context         上下文
-     * @param baseAddress     基地址
-     * @param requestParams   参数
-     * @param requestListener 返回接收器
-     * @param <T>             返回对象类类型
-     */
-    public static synchronized <T> void postData(final Context context, String baseAddress, final RequestParams requestParams, final RequestListener<T> requestListener) {
-
-        final Request stringRequest = buildPostRequestTask(baseAddress, requestParams, requestListener);
-
-        stringRequest.setTag(context);
-
-        addToExecuteQueue(stringRequest);
-    }
-
-    /**
      * 添加请求任务到执行队列中
      *
      * @param request 请求任务
@@ -279,6 +210,21 @@ public class HttpNetUtils {
 
         return new NetRequest<>(Request.Method.POST, baseAddress, requestParams, requestListener.getType(), requestListener);
 
+    }
+
+
+    /**
+     * 停止HttpNetUtils工具，关闭整个后台网络请求相关线程
+     */
+    public static synchronized void stop() {
+
+        if (mRequestQueue != null) {
+
+            mRequestQueue.stop();
+
+            mRequestQueue = null;
+
+        }
     }
 
 }

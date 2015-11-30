@@ -183,7 +183,7 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
     @Override
     protected void onDetachedFromWindow() {
 
-        HttpNetUtils.cancelAll(this);
+        HttpNetUtils.cancelAll(hashCode());
 
         super.onDetachedFromWindow();
 

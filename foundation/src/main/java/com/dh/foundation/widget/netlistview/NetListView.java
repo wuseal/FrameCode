@@ -172,7 +172,7 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
     @Override
     protected void onDetachedFromWindow() {
 
-        HttpNetUtils.cancelAll(this);
+        HttpNetUtils.cancelAll(hashCode());
 
         super.onDetachedFromWindow();
     }

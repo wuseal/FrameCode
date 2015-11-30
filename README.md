@@ -46,7 +46,7 @@ compile 'com.dahanis:foundation:1.3.0'
     /**
      * 开始正式请求
      */
-    AutoPrintHttpNetUtils.getData(this, url, params, new HttpNetUtils.RequestListener<BaseBean<List<String>>>() {
+    AutoPrintHttpNetUtils.getData(url, params, new HttpNetUtils.RequestListener<BaseBean<List<String>>>() {
 
         @Override
         public void onSuccess(BaseBean<List<String>> listBaseBean) {
@@ -72,7 +72,19 @@ compile 'com.dahanis:foundation:1.3.0'
              * 所以此处可以做收尾工作
              */
         }
-    });
+    }).setTag(this.toString());//最后一行设置当前请求任务的tag，以后可以用这个tag进行取消任务操作
+    
+    
+     @Override
+        protected void onDestroy() {
+            
+            HttpNetUtils.cancelAll(this.toString());
+            
+            super.onDestroy();
+        }
+        
+     记住：tag不能直接用activity和fragment本身的实例对象，否则会造成内在泄漏问题
+     
 ```
 
 使用DhHttpNetUtils同名方法，可以更全套化节省开发时间，内部集成了请稍候对话框和网络情况提示，让开发只专注于界面开发，从而无需关注网络相关内容

@@ -368,7 +368,7 @@ class NetListViewDelegate implements NLVCommonInterface {
             onLoadStartListener.onLoadStart(refreshing);
         }
 
-        AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView);
+        AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
 
         if (pageNo != startPageNo || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
 

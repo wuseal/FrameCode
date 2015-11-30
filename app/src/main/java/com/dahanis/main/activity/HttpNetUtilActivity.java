@@ -7,6 +7,7 @@ import com.dahanis.main.ReturnObj;
 import com.dahanis.main.TruckBean;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
 import com.dh.foundation.utils.DhHttpNetUtils;
+import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.ProgressDialogUtil;
 import com.dh.foundation.utils.RequestParams;
 import com.dh.foundation.utils.ToastUtils;
@@ -69,5 +70,14 @@ public class HttpNetUtilActivity extends Activity{
             }
 
         });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        HttpNetUtils.cancelAll(toString());
+
+        super.onDestroy();
     }
 }

@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -44,9 +45,14 @@ class NetRequest<ReturnObj> extends StringRequest {
 
         setShouldCache(false);
 
-        Object tag = method == Method.GET ? url : url + requestParams;
+        Object tag = getTag(method, url, requestParams);
 
         setTag(tag);
+    }
+
+    private static String getTag(int method, String url, RequestParams requestParams) {
+
+        return method == Method.GET ? url : url + requestParams;
     }
 
 
