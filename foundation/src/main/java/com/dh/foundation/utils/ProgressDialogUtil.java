@@ -124,7 +124,7 @@ public class ProgressDialogUtil {
 
                 DLoggerUtils.e(e);
 
-            }finally {
+            } finally {
 
                 progressDialog = null;
             }
@@ -146,17 +146,15 @@ public class ProgressDialogUtil {
 
                 DLoggerUtils.e(e);
 
-            } finally {
-
-                /**
-                 * 复位
-                 */
-                level = 0;
-
-                progressDialog = null;
             }
 
         }
+        /**
+         * 复位
+         */
+        level = 0;
+
+        progressDialog = null;
     }
 
 }
