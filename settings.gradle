@@ -1,1 +1,1 @@
-include ':app', ':foundation'
+include ':app', ':foundation', ':bluetoothprinter'

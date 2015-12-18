@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/wuseal/FrameCode'
     gitUrl = 'https://github.com/wuseal/FrameCode.git'
 
-    libraryVersion = '1.4.0'
+    libraryVersion = '1.5.0'
 
     developerId = 'seal.wu'
     developerName = 'Seal.Wu'
@@ -30,8 +30,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 22
-        versionCode 8
-        versionName "1.4.0"
+        versionCode 9
+        versionName "1.5.0"
     }
     buildTypes {
         release {

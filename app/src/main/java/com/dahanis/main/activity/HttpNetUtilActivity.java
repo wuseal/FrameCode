@@ -69,7 +69,7 @@ public class HttpNetUtilActivity extends Activity{
                 ProgressDialogUtil.dismissProgressDialog();
             }
 
-        });
+        }).setTag(toString());
     }
 
 
