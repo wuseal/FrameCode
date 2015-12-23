@@ -166,7 +166,7 @@ compile 'com.dahanis:foundation:1.5.0'
 ```
 
 
-#二．控件(1.2版本中方可使用)
+#二．控件
 ####AfkImageView
 
 简介：作用于切换图片效果的控件，也可以自定义切换动画效果。
