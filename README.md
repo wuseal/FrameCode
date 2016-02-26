@@ -284,16 +284,19 @@ compile 'com.dahanis:foundation:1.5.0'
         }
     }
 ```
-######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView
+######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView以及NetErrorView
 示例如下：
 ```xml
     <com.dh.foundation.widget.netlistview.NetListView
                     android:id="@+id/listview"
                     app:load_more_layout="@layout/loadmore"
                     app:empty_view_id="@id/load_image"
+                    app:net_error_view_id="@id/error_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 ```
+其中NetErrorView指的是当网络请求出错时显示的View,这应该就是完整的listView的网络逻辑了
+
 #其它
 
 ####ProgressDialogUtil－－全局性的等待对话框框架工具
