@@ -104,8 +104,6 @@ public class NetListViewActivity extends Activity {
          *
          */
 
-        listView.setEmptyViewId(R.id.empty_view);
-        listView.setNetErrorViewId(R.id.error_id);
     }
 
     class MBaseAdapter extends NetListViewBaseAdapter<ReturnObj, TruckBean> {

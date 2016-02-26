@@ -25,6 +25,10 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
 
     private static final int DEFAULT_LOAD_MORE_LAYOUT = R.layout.dh_net_lv_load_more;//加载更多脚部
 
+    private int emptyViewId;
+
+    private int netErrorViewId;
+
 
     public NetListView(Context context) {
         this(context, null);
@@ -48,9 +52,10 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
 
             setLoadMoreView(LayoutInflater.from(getContext()).inflate(loadMoreLayout, this, false));
 
-            setEmptyViewId(a.getResourceId(R.styleable.NetListView_empty_view_id, 0));
+            emptyViewId = a.getResourceId(R.styleable.NetListView_empty_view_id, 0);
 
-            setNetErrorViewId(a.getResourceId(R.styleable.NetListView_net_error_view_id, 0));
+            netErrorViewId = a.getResourceId(R.styleable.NetListView_net_error_view_id, 0);
+
         }
 
 
@@ -157,6 +162,10 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName) {
 
+        setEmptyViewId(emptyViewId);
+
+        setNetErrorViewId(netErrorViewId);
+
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName);
     }
 
@@ -169,6 +178,10 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
      * @param emptyView 当无数据时指定显示的view
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName, final View emptyView) {
+
+        setEmptyViewId(emptyViewId);
+
+        setNetErrorViewId(netErrorViewId);
 
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName, emptyView);
     }

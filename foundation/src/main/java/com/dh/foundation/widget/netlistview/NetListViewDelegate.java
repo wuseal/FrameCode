@@ -70,7 +70,7 @@ class NetListViewDelegate implements NLVCommonInterface {
      */
     private int emptyViewId;
 
-    private  View emptyView;
+    private View emptyView;
 
     private View netErrorView;
 
@@ -245,7 +245,7 @@ class NetListViewDelegate implements NLVCommonInterface {
     }
 
     @Override
-      public void setNetErrorViewId(int netErrorViewId) {
+    public void setNetErrorViewId(int netErrorViewId) {
 
         this.netErrorViewId = netErrorViewId;
 
