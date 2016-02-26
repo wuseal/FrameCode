@@ -120,7 +120,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
             if (netListViewDelegate.netErrorView != null) {
 
-                netListViewDelegate.netErrorView.setVisibility(View.INVISIBLE);
+                netListViewDelegate.netErrorView.setVisibility(View.GONE);
             }
 
             final List<?> fetchedData = netListViewDelegate.loadMoreAbleListener.getLoadedData(t);
@@ -160,7 +160,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
                     netListViewDelegate.netErrorView.setVisibility(View.VISIBLE);
 
-                    netListViewDelegate.listView.getEmptyView().setVisibility(View.INVISIBLE);
+                    netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
                 }
 
                 if (netListViewDelegate.isNetErrorToast) {
@@ -398,13 +398,13 @@ class NetListViewDelegate implements NLVCommonInterface {
 
             netErrorView = listView.getRootView().findViewById(netErrorViewId);
 
-            netErrorView.setVisibility(View.INVISIBLE);
+            netErrorView.setVisibility(View.GONE);
 
             netErrorView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    netErrorView.setVisibility(View.INVISIBLE);
+                    netErrorView.setVisibility(View.GONE);
 
                     refreshData();
                 }
