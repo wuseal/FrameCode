@@ -2,17 +2,17 @@
 
 FrameCode for android team
 
-Latest Version is :1.5.0
+Latest Version is :1.5.1
 
 
 <h3>How to use</h3>
 <h4>In gradle you can set it in by a single line Code in your build.gradle:</h4>
-<code>compile 'com.dahanis:foundation:1.5.0'</code>
+<code>compile 'com.dahanis:foundation:1.5.1'</code>
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入<br>
-compile 'com.dahanis:foundation:1.5.0'
+compile 'com.dahanis:foundation:1.5.1'
 即可完成引入</h4>
 #####集成步骤：
-* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.5.0'</code>
+* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.5.1'</code>
 * 然后让app的application继承FoundationApplication就可以了
 
 #一．网络部分
@@ -284,16 +284,19 @@ compile 'com.dahanis:foundation:1.5.0'
         }
     }
 ```
-######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView
+######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView以及NetErrorView
 示例如下：
 ```xml
     <com.dh.foundation.widget.netlistview.NetListView
                     android:id="@+id/listview"
                     app:load_more_layout="@layout/loadmore"
                     app:empty_view_id="@id/load_image"
+                    app:net_error_view_id="@id/error_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 ```
+其中NetErrorView指的是当网络请求出错时显示的View,这应该就是完整的listView的网络逻辑了
+
 #其它
 
 ####ProgressDialogUtil－－全局性的等待对话框框架工具
