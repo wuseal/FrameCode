@@ -57,7 +57,6 @@ public class NetListViewActivity extends Activity {
         /**
          * 接着为ListView设置加载更多功能配置监听器
          */
-
         listView.setLoadMoreAbleListener(new NetListViewCompat.LoadMoreAbleListener<ReturnObj>() {
             @Override
             public boolean isLoadMoreAble(ReturnObj returnObj, List allListData) {
@@ -105,7 +104,8 @@ public class NetListViewActivity extends Activity {
          *
          */
 
-
+        listView.setEmptyViewId(R.id.empty_view);
+        listView.setNetErrorViewId(R.id.error_id);
     }
 
     class MBaseAdapter extends NetListViewBaseAdapter<ReturnObj, TruckBean> {

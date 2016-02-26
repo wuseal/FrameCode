@@ -27,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:empty_view_id="@id/empty_view"
-        app:net_error_view_id="@id/error_id"
         app:load_more_layout="@layout/loadmore"/>
 
 </FrameLayout>

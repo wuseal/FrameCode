@@ -70,6 +70,8 @@ class NetListViewDelegate implements NLVCommonInterface {
      */
     private int emptyViewId;
 
+    private  View emptyView;
+
     private View netErrorView;
 
     /**
@@ -217,12 +219,56 @@ class NetListViewDelegate implements NLVCommonInterface {
     public void setEmptyViewId(int emptyViewId) {
 
         this.emptyViewId = emptyViewId;
+
+        if (this.emptyViewId != 0) {
+
+            this.emptyView = listView.getRootView().findViewById(emptyViewId);
+
+            if (emptyView != null) {
+
+                emptyView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        emptyView.setVisibility(View.GONE);
+
+                        refreshData();
+                    }
+                });
+
+                listView.setEmptyView(emptyView);
+
+                emptyView.setVisibility(View.GONE);
+
+            }
+        }
     }
 
     @Override
-    public void setNetErrorViewId(int netErrorViewId) {
+      public void setNetErrorViewId(int netErrorViewId) {
 
         this.netErrorViewId = netErrorViewId;
+
+        if (this.netErrorViewId != 0) {
+
+            netErrorView = listView.getRootView().findViewById(netErrorViewId);
+
+            if (netErrorView != null) {
+
+                netErrorView.setVisibility(View.GONE);
+
+                netErrorView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        netErrorView.setVisibility(View.GONE);
+
+                        refreshData();
+                    }
+                });
+            }
+
+        }
     }
 
     @Override
@@ -375,7 +421,6 @@ class NetListViewDelegate implements NLVCommonInterface {
             });
         }
 
-
         if (emptyView != null) {
 
             emptyView.setOnClickListener(new View.OnClickListener() {
@@ -392,23 +437,6 @@ class NetListViewDelegate implements NLVCommonInterface {
 
             emptyView.setVisibility(View.GONE);
 
-        }
-
-        if (netErrorViewId != 0) {
-
-            netErrorView = listView.getRootView().findViewById(netErrorViewId);
-
-            netErrorView.setVisibility(View.GONE);
-
-            netErrorView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    netErrorView.setVisibility(View.GONE);
-
-                    refreshData();
-                }
-            });
         }
         getData();
     }
@@ -512,20 +540,28 @@ class NetListViewDelegate implements NLVCommonInterface {
     /**
      * 网络状态是否不可用
      */
-    private <T> boolean isNetStateUnavailable(HttpNetUtils.RequestListener<T> requestListener) {
+    private <T> boolean isNetStateUnavailable(final HttpNetUtils.RequestListener<T> requestListener) {
+
         if (!NetWorkDetector.isNetConnected()) {
 
-            if (isNetErrorToast) {
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
 
-                ToastUtils.toast("无可用网络请检查网络设置");
-            }
+                    if (isNetErrorToast) {
 
-            if (requestListener != null) {
+                        ToastUtils.toast("无可用网络请检查网络设置");
+                    }
 
-                requestListener.onFailed(new DhRequestError(new NetworkErrorException("无可用网络请检查网络设置")));
+                    if (requestListener != null) {
 
-                requestListener.onFinished();
-            }
+                        requestListener.onFailed(new DhRequestError(new NetworkErrorException("无可用网络请检查网络设置")));
+
+                        requestListener.onFinished();
+                    }
+                }
+            });
+
             return true;
         }
         return false;
