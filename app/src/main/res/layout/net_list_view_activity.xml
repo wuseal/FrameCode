@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,6 +12,13 @@
         android:id="@+id/empty_view"
         android:text="暂无数据"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:id="@+id/error_id"
+        android:text="网络请求出错"/>
+
 
 
 
@@ -20,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:empty_view_id="@id/empty_view"
+        app:net_error_view_id="@id/error_id"
         app:load_more_layout="@layout/loadmore"/>
 
-</LinearLayout>
+</FrameLayout>

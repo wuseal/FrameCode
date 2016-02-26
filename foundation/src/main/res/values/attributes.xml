@@ -6,6 +6,8 @@
 
         <attr name="empty_view_id" format="reference" />
 
+        <attr name="net_error_view_id" format="reference" />
+
     </declare-styleable>
 
     <attr name="NetListViewStyle" format="reference" />

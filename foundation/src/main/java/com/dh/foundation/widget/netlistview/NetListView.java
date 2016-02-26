@@ -49,6 +49,8 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
             setLoadMoreView(LayoutInflater.from(getContext()).inflate(loadMoreLayout, this, false));
 
             setEmptyViewId(a.getResourceId(R.styleable.NetListView_empty_view_id, 0));
+
+            setNetErrorViewId(a.getResourceId(R.styleable.NetListView_net_error_view_id, 0));
         }
 
 
@@ -69,12 +71,29 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
         netListViewDelegate.setEmptyViewId(emptyViewId);
     }
 
+    @Override
+    public void setNetErrorViewId(int netErrorViewId) {
+
+        netListViewDelegate.setNetErrorViewId(netErrorViewId);
+    }
+
+    @Override
+    public View getNetErrorView() {
+        return netListViewDelegate.getNetErrorView();
+    }
+
     /**
      * 加载全部是否进行提示
      */
     public void setLoadOkToast(boolean isLoadOkToast) {
 
         netListViewDelegate.setLoadOkToast(isLoadOkToast);
+    }
+
+    @Override
+    public void setNetErrorToast(boolean isNetErrorToast) {
+
+        netListViewDelegate.setNetErrorToast(isNetErrorToast);
     }
 
     /**

@@ -30,12 +30,36 @@ interface NLVCommonInterface {
      */
     void setEmptyViewId(int emptyViewId);
 
+
+    /**
+     * 设置网络请求错显示的view的id
+     *
+     * @param netErrorViewId 网络请求错显示的view的id
+     */
+    void setNetErrorViewId(int netErrorViewId);
+
+
+    /**
+     * 获取网络出错提示的View
+     *
+     * @return 网络出错提示的View
+     */
+    View getNetErrorView();
+
     /**
      * 设置是否弹出提示＂已经全部加载＂
      *
      * @param isLoadOkToast 是否弹出提示＂已经全部加载＂
      */
     void setLoadOkToast(boolean isLoadOkToast);
+
+
+    /**
+     * 是否设置网络出错提示
+     *
+     * @param isNetErrorToast true:代表设置
+     */
+    void setNetErrorToast(boolean isNetErrorToast);
 
     /**
      * 设置刷新时是否显示等待框
@@ -143,12 +167,17 @@ interface NLVCommonInterface {
     /**
      * 加载完成监听器
      */
-    interface OnLoadFinishListener {
+    interface OnLoadFinishListener<ReturnData> {
 
         /**
          * 当一次加载完成时调用
+         *
+         * @param isRefreshing  是否是刷新动作
+         * @param isLoadSuccess 是否成功通过网络请求到数据
+         * @param returnData    返回的数据对象
+         * @param error         失败时的错误提示
          */
-        void onLoadFinished(boolean isRefreshing);
+        void onLoadFinished(boolean isRefreshing, boolean isLoadSuccess, ReturnData returnData, Throwable error);
     }
 
 

@@ -9,7 +9,6 @@ import android.widget.ListView;
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.exception.DhRequestError;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
-import com.dh.foundation.utils.DhHttpNetUtils;
 import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.NetWorkDetector;
 import com.dh.foundation.utils.NumUtils;
@@ -53,13 +52,15 @@ class NetListViewDelegate implements NLVCommonInterface {
 
     private int startPageNo;//分页功能起始页码
 
-    private NLVCommonInterface.LoadMoreAbleListener loadMoreAbleListener;//扩展接口，是否可加载更多自定义使能
+    private NLVCommonInterface.LoadMoreAbleListener<Object> loadMoreAbleListener;//扩展接口，是否可加载更多自定义使能
 
-    private NLVCommonInterface.OnLoadFinishListener onLoadFinishListener;
+    private NLVCommonInterface.OnLoadFinishListener<Object> onLoadFinishListener;
 
     private NLVCommonInterface.OnLoadStartListener onLoadStartListener;//刚开始加载监听器
 
     private boolean isLoadOkToast = true;//加载全部是否进行提示
+
+    private boolean isNetErrorToast = true;//是否出错提示
 
     private boolean isShowProgressDialog = true;
 
@@ -68,6 +69,13 @@ class NetListViewDelegate implements NLVCommonInterface {
      * 　数据为空指示view
      */
     private int emptyViewId;
+
+    private View netErrorView;
+
+    /**
+     * 网络请求出错提示viewId
+     */
+    private int netErrorViewId;
 
     private AbsListView.OnScrollListener onScrollListener;
     /**
@@ -78,6 +86,11 @@ class NetListViewDelegate implements NLVCommonInterface {
 
     private static class RequestListener extends HttpNetUtils.RequestListener<Object> {
 
+        private boolean isLoadSuccess = true;
+
+        private Throwable error;
+
+        private Object returnData;
 
         private WeakReference<NetListViewDelegate> weakReference;
 
@@ -89,6 +102,10 @@ class NetListViewDelegate implements NLVCommonInterface {
         @Override
         public void onSuccess(Object t) {
 
+            isLoadSuccess = true;
+
+            returnData = t;
+
             final NetListViewDelegate netListViewDelegate = weakReference.get();
 
             if (netListViewDelegate == null) {
@@ -99,6 +116,11 @@ class NetListViewDelegate implements NLVCommonInterface {
             if (netListViewDelegate.loadMoreAbleListener == null) {
 
                 return;
+            }
+
+            if (netListViewDelegate.netErrorView != null) {
+
+                netListViewDelegate.netErrorView.setVisibility(View.INVISIBLE);
             }
 
             final List<?> fetchedData = netListViewDelegate.loadMoreAbleListener.getLoadedData(t);
@@ -124,14 +146,28 @@ class NetListViewDelegate implements NLVCommonInterface {
         @Override
         public void onFailed(Throwable throwable) {
 
+            isLoadSuccess = false;
+
+            this.error = throwable;
+
             final NetListViewDelegate netListViewDelegate = weakReference.get();
 
             if (netListViewDelegate != null) {
 
                 netListViewDelegate.loadMoreFailedReset();
-            }
 
-            ToastUtils.toast(throwable.getMessage());
+                if (netListViewDelegate.netErrorView != null) {
+
+                    netListViewDelegate.netErrorView.setVisibility(View.VISIBLE);
+
+                    netListViewDelegate.listView.getEmptyView().setVisibility(View.INVISIBLE);
+                }
+
+                if (netListViewDelegate.isNetErrorToast) {
+
+                    ToastUtils.toast(throwable.getMessage());
+                }
+            }
 
         }
 
@@ -145,12 +181,16 @@ class NetListViewDelegate implements NLVCommonInterface {
 
                 if (netListViewDelegate.onLoadFinishListener != null) {
 
-                    netListViewDelegate.onLoadFinishListener.onLoadFinished(netListViewDelegate.refreshing);
+                    netListViewDelegate.onLoadFinishListener.onLoadFinished(netListViewDelegate.refreshing, isLoadSuccess, returnData, error);
                 }
 
                 netListViewDelegate.listView.removeFooterView(netListViewDelegate.loadMoreView);
 
-                netListViewDelegate.adapter.notifyDataSetChanged();
+                if (isLoadSuccess) {
+
+                    netListViewDelegate.adapter.notifyDataSetChanged();
+                }
+
 
                 netListViewDelegate.refreshing = false;
             }
@@ -175,7 +215,19 @@ class NetListViewDelegate implements NLVCommonInterface {
 
     @Override
     public void setEmptyViewId(int emptyViewId) {
+
         this.emptyViewId = emptyViewId;
+    }
+
+    @Override
+    public void setNetErrorViewId(int netErrorViewId) {
+
+        this.netErrorViewId = netErrorViewId;
+    }
+
+    @Override
+    public View getNetErrorView() {
+        return netErrorView;
     }
 
     /**
@@ -184,6 +236,11 @@ class NetListViewDelegate implements NLVCommonInterface {
     public void setLoadOkToast(boolean isLoadOkToast) {
 
         this.isLoadOkToast = isLoadOkToast;
+    }
+
+    @Override
+    public void setNetErrorToast(boolean isNetErrorToast) {
+        this.isNetErrorToast = isNetErrorToast;
     }
 
     /**
@@ -248,6 +305,7 @@ class NetListViewDelegate implements NLVCommonInterface {
 
             emptyView = listView.getRootView().findViewById(emptyViewId);
         }
+
         initNetListView(baseAddress, params, adapter, pageName, emptyView);
     }
 
@@ -334,6 +392,23 @@ class NetListViewDelegate implements NLVCommonInterface {
 
             emptyView.setVisibility(View.GONE);
 
+        }
+
+        if (netErrorViewId != 0) {
+
+            netErrorView = listView.getRootView().findViewById(netErrorViewId);
+
+            netErrorView.setVisibility(View.INVISIBLE);
+
+            netErrorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    netErrorView.setVisibility(View.INVISIBLE);
+
+                    refreshData();
+                }
+            });
         }
         getData();
     }
@@ -440,7 +515,10 @@ class NetListViewDelegate implements NLVCommonInterface {
     private <T> boolean isNetStateUnavailable(HttpNetUtils.RequestListener<T> requestListener) {
         if (!NetWorkDetector.isNetConnected()) {
 
-            ToastUtils.toast("无可用网络请检查网络设置");
+            if (isNetErrorToast) {
+
+                ToastUtils.toast("无可用网络请检查网络设置");
+            }
 
             if (requestListener != null) {
 

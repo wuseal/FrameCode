@@ -105,6 +105,8 @@ public class ImageNetLoader {
 
     public void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
 
+        DLoggerUtils.i("ImageNetLoader url =========> " + url);
+
         final BitmapReceiverHolder bitmapReceiverHolder = new BitmapReceiverHolder(bitmapReceiver);
 
         final ImageLoader.ImageContainer imageContainer = getImageLoader().get(url, new ImageLoader.ImageListener() {
