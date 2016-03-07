@@ -39,6 +39,8 @@ public class ImageNetLoader {
 
     private final static String DEFAULT_CACHE_DIR = "volley/image";
 
+    private final static String NULL = "null";
+
     private final static BitmapCache imageCache = new BitmapCache();
 
     private final ImageLoader imageLoader = new ImageLoader(newImageRequestQueue(FoundationManager.getContext(), null), imageCache);
@@ -103,7 +105,12 @@ public class ImageNetLoader {
         }
     }
 
-    public void getBitmap(final String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
+    public void getBitmap(String url, final BitmapReceiver bitmapReceiver, int maxWidth, int maxHigh) {
+
+        if (url == null) {
+
+            url = NULL;
+        }
 
         DLoggerUtils.i("ImageNetLoader url =========> " + url);
 
@@ -163,7 +170,12 @@ public class ImageNetLoader {
      * @param maxWidth          设置显示的最大宽度
      * @param maxHigh           设置显示的最大高度
      */
-    public void loadImage(final ImageView imageView, final String url, final int errorImageResId, final int defaultImageResId, int maxWidth, int maxHigh) {
+    public void loadImage(final ImageView imageView, String url, final int errorImageResId, final int defaultImageResId, int maxWidth, int maxHigh) {
+
+        if (url == null) {
+
+            url = NULL;
+        }
 
         imageView.setTag(url);
 
@@ -199,11 +211,13 @@ public class ImageNetLoader {
             return;
         }
 
+        final String finalUrl = url;
+
         getBitmap(url, new BitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (imageView.getTag().equals(url)) {
+                if (imageView.getTag().equals(finalUrl)) {
 
                     imageView.setImageBitmap(bitmap);
 
@@ -221,7 +235,7 @@ public class ImageNetLoader {
             @Override
             public void onError(Throwable error) {
 
-                if (errorImageResId != 0 && imageView.getTag().equals(url)) {
+                if (errorImageResId != 0 && imageView.getTag().equals(finalUrl)) {
 
                     imageView.setImageResource(errorImageResId);
                 }
@@ -318,6 +332,11 @@ public class ImageNetLoader {
      * @param url 请求的image的url
      */
     public void cancel(String url) {
+
+        if (url == null) {
+
+            url = NULL;
+        }
 
         for (Map.Entry<String, WeakReference<ImageLoader.ImageContainer>> entry : imageContainerMap.entrySet()) {
 
