@@ -16,7 +16,9 @@ import com.dh.foundation.utils.StringUtils;
  */
 public class NetAfkImageView extends AfkImageView {
 
-    private ImageNetLoader imageNetLoader = ImageNetLoader.getDefault();
+    private final static String NULL = "null";
+
+    private static final ImageNetLoader imageNetLoader = new ImageNetLoader();
 
     /**
      * 图片请求地址
@@ -31,7 +33,12 @@ public class NetAfkImageView extends AfkImageView {
         super(context, attrs);
     }
 
-    public void setImageUrl(final String url) {
+    public void setImageUrl(String url) {
+
+        if (url == null) {
+
+            url = NULL;
+        }
 
         if (!StringUtils.equals(this.url, url) && StringUtils.isNotEmpty(this.url)) {
 
@@ -41,11 +48,13 @@ public class NetAfkImageView extends AfkImageView {
 
         this.url = url;
 
+        final String finalUrl = url;
+
         imageNetLoader.getBitmap(url, new ImageNetLoader.SimpleBitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (NetAfkImageView.this.url.equals(url)) {
+                if (NetAfkImageView.this.url.equals(finalUrl)) {
 
                     setTransitionAnimationEnable(!isImmediate);
 
@@ -57,7 +66,12 @@ public class NetAfkImageView extends AfkImageView {
     }
 
 
-    public void setImageUrl(final String url, final int errorImageResId, final int defaultImageResId) {
+    public void setImageUrl(String url, final int errorImageResId, final int defaultImageResId) {
+
+        if (url == null) {
+
+            url = NULL;
+        }
 
         if (!StringUtils.equals(this.url, url) && StringUtils.isNotEmpty(this.url)) {
 
@@ -71,12 +85,14 @@ public class NetAfkImageView extends AfkImageView {
 
         setImageResource(defaultImageResId);
 
+        final String finalUrl = url;
+
         imageNetLoader.getBitmap(url, new ImageNetLoader.BitmapReceiver() {
 
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (NetAfkImageView.this.url.equals(url)) {
+                if (NetAfkImageView.this.url.equals(finalUrl)) {
 
                     setTransitionAnimationEnable(!isImmediate);
 
@@ -88,7 +104,7 @@ public class NetAfkImageView extends AfkImageView {
             @Override
             public void onError(Throwable error) {
 
-                if (NetAfkImageView.this.url.equals(url)) {
+                if (NetAfkImageView.this.url.equals(finalUrl)) {
 
                     setTransitionAnimationEnable(false);
 
