@@ -8,8 +8,8 @@ android {
         applicationId "com.dahanis.main"
         minSdkVersion 12
         targetSdkVersion 22
-        versionCode 8
-        versionName "1.5.0"
+        versionCode 13
+        versionName "1.5.4"
     }
     buildTypes {
         release {
