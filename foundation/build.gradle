@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/wuseal/FrameCode'
     gitUrl = 'https://github.com/wuseal/FrameCode.git'
 
-    libraryVersion = '1.5.4'
+    libraryVersion = '1.6.0'
 
     developerId = 'seal.wu'
     developerName = 'Seal.Wu'
@@ -24,14 +24,14 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.0"
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 12
         targetSdkVersion 22
-        versionCode 13
-        versionName "1.5.4"
+        versionCode 14
+        versionName "1.6.0"
     }
     buildTypes {
         release {
@@ -43,7 +43,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
 }
 
 
