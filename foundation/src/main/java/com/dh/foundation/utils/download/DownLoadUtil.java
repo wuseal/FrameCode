@@ -205,15 +205,15 @@ public class DownLoadUtil implements Handler.Callback {
     }
 
 
-    /**
-     * 重新尝试再次开启任务
-     *
-     * @param downloadId 下载任务的标识唯一id
-     */
-    public void retryTask(long downloadId) {
-
-        downloadManager.restartDownload(downloadId);
-    }
+//    /**
+//     * 重新尝试再次开启任务
+//     *
+//     * @param downloadId 下载任务的标识唯一id
+//     */
+//    public void retryTask(long downloadId) {
+//
+//        downloadManager.restartDownload(downloadId);
+//    }
 
     public static File getFile(String url) {
 

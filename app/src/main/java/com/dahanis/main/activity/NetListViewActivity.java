@@ -91,7 +91,7 @@ public class NetListViewActivity extends Activity {
             }
         });
 
-        /**
+              /**
          * 因为没有做分页，所以pageName分页名称我们就不传了
          */
         listView.initNetListView(baseAddress, params, new MBaseAdapter(), null);

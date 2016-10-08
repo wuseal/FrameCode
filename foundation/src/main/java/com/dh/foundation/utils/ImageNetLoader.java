@@ -4,29 +4,25 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
-import com.android.volley.Network;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.HttpClientStack;
-import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.ImageLoader;
-import com.dh.foundation.manager.FoundationManager;
+import com.dh.foundation.volley.RequestQueue;
+import com.dh.foundation.volley.VolleyError;
+import com.dh.foundation.volley.toolbox.BasicNetwork;
+import com.dh.foundation.volley.toolbox.HttpClientStack;
+import com.dh.foundation.volley.toolbox.HttpStack;
+import com.dh.foundation.volley.toolbox.ImageLoader;
 import com.dh.foundation.volley.patch.ImageDiskBasedCache;
+import com.dh.foundation.volley.Network;
+import com.dh.foundation.volley.toolbox.HurlStack;
+import com.dh.foundation.manager.FoundationManager;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +39,8 @@ public class ImageNetLoader {
 
     private final static BitmapCache imageCache = new BitmapCache();
 
-    private final ImageLoader imageLoader = new ImageLoader(newImageRequestQueue(FoundationManager.getContext(), null), imageCache);
+    private final RequestQueue imageRequestQueue = newImageRequestQueue(FoundationManager.getContext(), null);
+    private final ImageLoader imageLoader = new ImageLoader(imageRequestQueue, imageCache);
 
     private Map<String, WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
 
@@ -363,6 +360,15 @@ public class ImageNetLoader {
                 break;
             }
         }
+    }
+
+
+    /**
+     * 销毁当前图片加载器
+     */
+    public void destroy() {
+
+        imageRequestQueue.stop();
     }
 
     static final class BitmapReceiverHolder {

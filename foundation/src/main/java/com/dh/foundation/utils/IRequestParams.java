@@ -14,16 +14,23 @@ public interface IRequestParams {
 
     Map<String, String> getHeaders();
 
-    public void putParams(String key, String value);
+    void putParams(String key, String value);
 
-    public void setParams(String key, String value);
+    void setParams(String key, String value);
 
-    public void removeParams(String ke);
+    void removeParams(String ke);
 
-    public Map<String, String> getParams();
+    Map<String, String> getParams();
 
     void setParamsEncoding(String paramsEncoding);
 
     String getParamsEncoding();
+
+    /**
+     * 获取json参数对象的json字符数据
+     *
+     * @return json参数对象的json字符数据
+     */
+    String getParamObjJsonData();
 
 }

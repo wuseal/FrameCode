@@ -10,7 +10,7 @@ public class NetRequestError extends Exception {
 
 
     public NetRequestError() {
-        this("网络请求出错");
+        this("网络请求异常");
     }
 
     public NetRequestError(String detailMessage) {
@@ -22,7 +22,7 @@ public class NetRequestError extends Exception {
     }
 
     public NetRequestError(Throwable throwable) {
-        super("网络请求出错", throwable);
+        super("网络请求异常", throwable);
     }
 
 }

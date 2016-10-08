@@ -6,9 +6,9 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.net.Uri;
 
+import com.dh.foundation.receiver.DownloadCompleteReceiver;
 import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.observer.DownloadChangeObserver;
-import com.dh.foundation.receiver.DownloadCompleteReceiver;
 import com.dh.foundation.utils.download.DownLoadUtil;
 
 public class FoundationApplicationDelegate {

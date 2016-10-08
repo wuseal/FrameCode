@@ -1,5 +1,7 @@
 package com.dh.foundation.utils;
 
+import com.google.gson.Gson;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -11,13 +13,19 @@ import java.util.Map;
  * Date: 2015/4/7
  * Time: 10:57
  */
-public class RequestParams implements IRequestParams {
+public class RequestParams<ParamsObj> implements IRequestParams {
 
-    private String paramsEncoding = "utf-8";
+    private final static Gson gson = new Gson();
 
-    private Map<String, String> params;
+    private transient String paramsEncoding = "utf-8";
 
-    private Map<String,String> headers;
+    private transient Map<String, String> params;
+
+    private transient Map<String, String> headers;
+
+    private transient boolean isRestStyle = false;
+
+    private ParamsObj data;
 
     public RequestParams() {
         this.params = new HashMap<String, String>(4);
@@ -76,8 +84,60 @@ public class RequestParams implements IRequestParams {
         }
     }
 
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+
+    /**
+     * 是否为rest风格请求
+     *
+     * @return 是或否
+     */
+    public boolean isRestStyle() {
+        return isRestStyle;
+    }
+
+    /**
+     * 设置是否为rest风格请求
+     *
+     * @param isRestStyle 是或否
+     */
+    public void setIsRestStyle(boolean isRestStyle) {
+        this.isRestStyle = isRestStyle;
+    }
+
+    /**
+     * 当为restStyle样式时要传入的参数对象
+     *
+     * @return 参数对象
+     */
+    public ParamsObj getParamsObj() {
+        return data;
+    }
+
+    /**
+     * 设置参数对象
+     *
+     * @param paramsObj 参数对象
+     */
+    public void setParamsObj(ParamsObj paramsObj) {
+        this.data = paramsObj;
+    }
+
     @Override
     public String toString() {
         return encodeParameters(this.params, paramsEncoding);
+    }
+
+
+    public String getParamObjJsonData() {
+
+        if (getParamsObj() != null) {
+
+             return gson.toJson(getParamsObj());
+        }
+
+        return gson.toJson(new Object());
     }
 }

@@ -9,15 +9,18 @@ import android.widget.ListView;
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.exception.DhRequestError;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
+import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.NetWorkDetector;
 import com.dh.foundation.utils.NumUtils;
 import com.dh.foundation.utils.ProgressDialogUtil;
+import com.dh.foundation.utils.ReflectUtils;
 import com.dh.foundation.utils.RequestParams;
 import com.dh.foundation.utils.ToastUtils;
 import com.google.gson.internal.$Gson$Types;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -158,16 +161,21 @@ class NetListViewDelegate implements NLVCommonInterface {
 
                 netListViewDelegate.loadMoreFailedReset();
 
-                if (netListViewDelegate.netErrorView != null) {
+                if (netListViewDelegate.netErrorView != null && netListViewDelegate.list.isEmpty()) {
 
                     netListViewDelegate.netErrorView.setVisibility(View.VISIBLE);
 
-                    netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
+                    if (netListViewDelegate.listView.getEmptyView() != null) {
+
+                        netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
+                    }
+
                 }
 
                 if (netListViewDelegate.isNetErrorToast) {
 
-                    ToastUtils.toast(throwable.getMessage());
+                    final String message = throwable.getCause().getMessage();
+                    ToastUtils.toast(message);
                 }
             }
 
@@ -222,7 +230,9 @@ class NetListViewDelegate implements NLVCommonInterface {
 
         if (this.emptyViewId != 0) {
 
-            this.emptyView = listView.getRootView().findViewById(emptyViewId);
+            final View emptyView = listView.getRootView().findViewById(emptyViewId);
+
+            this.emptyView = emptyView;
 
             if (emptyView != null) {
 
@@ -251,7 +261,9 @@ class NetListViewDelegate implements NLVCommonInterface {
 
         if (this.netErrorViewId != 0) {
 
-            netErrorView = listView.getRootView().findViewById(netErrorViewId);
+            final View netErrorView = listView.getRootView().findViewById(netErrorViewId);
+
+            this.netErrorView = listView.getRootView().findViewById(netErrorViewId);
 
             if (netErrorView != null) {
 
@@ -375,12 +387,30 @@ class NetListViewDelegate implements NLVCommonInterface {
 
         this.pageName = pageName == null ? "" : pageName;
 
-        String page = this.params.getParams().get(pageName);
+        if (params != null) {
+            if (params.isRestStyle()) {
+                Object paramObj = params.getParamsObj();
+                Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
+                if (field != null) {
+                    field.setAccessible(true);
+                    try {
+                        startPageNo = pageNo = field.getInt(paramObj);
+                    } catch (IllegalAccessException e) {
+                        DLoggerUtils.e(e);
+                    }
+                }
 
-        if (NumUtils.isInteger(page)) {
+            } else {
 
-            startPageNo = pageNo = Integer.valueOf(page);
+                String page = (String) this.params.getParams().get(pageName);
+
+                if (NumUtils.isInteger(page)) {
+
+                    startPageNo = pageNo = Integer.valueOf(page);
+                }
+            }
         }
+
         this.adapter.setList(list);
 
         listView.addFooterView(loadMoreView);
@@ -398,7 +428,7 @@ class NetListViewDelegate implements NLVCommonInterface {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                    if (scrollState == SCROLL_STATE_IDLE && lastVisibleItem == adapter.getCount() - 1 && loadMoreAble) {
+                    if (scrollState == SCROLL_STATE_IDLE && lastVisibleItem == adapter.getCount() + listView.getHeaderViewsCount() + listView.getFooterViewsCount() - 1 && loadMoreAble) {
 
                         loadMore();
                     }
@@ -458,20 +488,37 @@ class NetListViewDelegate implements NLVCommonInterface {
      */
     public void getData() {
 
+        if (onLoadStartListener != null) {
+
+            onLoadStartListener.onLoadStart(refreshing);
+        }
         if (isNetStateUnavailable(listener)) {
 
             return;
         }
         ProgressDialogUtil.showProgressDialog(context);
 
-        params.setParams(pageName, pageNo + "");
-
-        if (onLoadStartListener != null) {
-
-            onLoadStartListener.onLoadStart(refreshing);
+        if (params.isRestStyle()) {
+            Object paramObj = params.getParamsObj();
+            Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
+            if (field != null) {
+                field.setAccessible(true);
+                try {
+                    field.setInt(paramObj, pageNo);
+                } catch (IllegalAccessException e) {
+                    DLoggerUtils.e(e);
+                }
+            }
+        } else {
+            params.setParams(pageName, pageNo + "");
         }
 
-        AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
+        if (params.isRestStyle()) {
+
+            AutoPrintHttpNetUtils.postData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
+        } else {
+            AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
+        }
 
         if (pageNo != startPageNo || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
 
@@ -547,11 +594,6 @@ class NetListViewDelegate implements NLVCommonInterface {
             listView.post(new Runnable() {
                 @Override
                 public void run() {
-
-                    if (isNetErrorToast) {
-
-                        ToastUtils.toast("无可用网络请检查网络设置");
-                    }
 
                     if (requestListener != null) {
 

@@ -1,8 +1,6 @@
 package com.dh.foundation.utils;
 
-import android.content.Context;
-
-import com.android.volley.Request;
+import com.dh.foundation.volley.Request;
 
 import java.lang.reflect.Type;
 
@@ -36,13 +34,13 @@ public class AutoPrintHttpNetUtils extends HttpNetUtils {
 
     public static synchronized <T> Request getData(String baseAddress, RequestParams requestParams, RequestListener<T> requestListener) {
         printCompleteUrl(baseAddress, requestParams);
-        Request request = HttpNetUtils.buildGetRequestTask(baseAddress, requestParams, requestListener);
-        return HttpNetUtils.addToExecuteQueue(request);
+        Request request = buildGetRequestTask(baseAddress, requestParams, requestListener);
+        return addToExecuteQueue(request);
     }
 
     public static synchronized <T> Request postData(String baseAddress, RequestParams requestParams, RequestListener<T> requestListener) {
         printCompleteUrl(baseAddress, requestParams);
-        Request request = HttpNetUtils.buildPostRequestTask(baseAddress, requestParams, requestListener);
-        return HttpNetUtils.addToExecuteQueue(request);
+        Request request = buildPostRequestTask(baseAddress, requestParams, requestListener);
+        return addToExecuteQueue(request);
     }
 }

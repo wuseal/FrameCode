@@ -7,9 +7,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.telephony.TelephonyManager;
 
-import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.utils.DLoggerUtils;
+import com.dh.foundation.manager.FoundationManager;
 
 /**
  * 应用程序信息工具类
@@ -167,6 +168,17 @@ public class ApplicationUtil {
 
     public static ComponentName getComponentName(Context context) {
         return new ComponentName(context, context.getClass());
+    }
+
+    /**
+     * 获取唯一设备号
+     * */
+    public static String getIMEI() {
+        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (null == telephonyManager.getDeviceId()) {
+            return "未知";
+        }
+        return telephonyManager.getDeviceId();
     }
 
 }

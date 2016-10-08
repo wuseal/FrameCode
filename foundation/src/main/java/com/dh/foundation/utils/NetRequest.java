@@ -3,17 +3,17 @@ package com.dh.foundation.utils;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.dh.foundation.volley.AuthFailureError;
+import com.dh.foundation.volley.DefaultRetryPolicy;
+import com.dh.foundation.volley.Response;
+import com.dh.foundation.volley.VolleyError;
+import com.dh.foundation.volley.toolbox.StringRequest;
 import com.dh.foundation.exception.DataFormatError;
 import com.dh.foundation.exception.NetRequestError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -26,6 +26,8 @@ import java.util.Map;
 class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
+
+    private final static Gson gson = new Gson();
 
     /**
      * 网络请求参数
@@ -52,7 +54,7 @@ class NetRequest<ReturnObj> extends StringRequest {
 
     private static String getTag(int method, String url, RequestParams requestParams) {
 
-        return method == Method.GET ? url : url + requestParams;
+        return method == Method.GET ? url : url + (requestParams.isRestStyle() ? requestParams.getParamObjJsonData() : requestParams.getParams());
     }
 
 
@@ -70,6 +72,33 @@ class NetRequest<ReturnObj> extends StringRequest {
     protected Map<String, String> getParams() throws AuthFailureError {
 
         return requestParams.getParams();
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+
+        if (requestParams.isRestStyle()) {
+            try {
+                final String json = gson.toJson(requestParams.getParamsObj());
+                return json.getBytes(getParamsEncoding());
+            } catch (UnsupportedEncodingException e) {
+                DLoggerUtils.e(e);
+                return null;
+            }
+        }
+
+        return super.getBody();
+    }
+
+    @Override
+    public String getBodyContentType() {
+
+        if (requestParams.isRestStyle()) {
+
+            return "application/json;charset=" + getParamsEncoding();
+        } else {
+            return super.getBodyContentType();
+        }
     }
 
     @Override
@@ -99,11 +128,11 @@ class NetRequest<ReturnObj> extends StringRequest {
         @Override
         public void onResponse(final String response) {
 
+            DLoggerUtils.i(response);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-
-                    Gson gson = new Gson();
 
                     ReturnObj o;
 

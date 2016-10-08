@@ -1,7 +1,5 @@
 package com.dh.foundation.exception;
 
-import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
-
 /**
  * 请求异常类
  * Created By: Seal.Wu

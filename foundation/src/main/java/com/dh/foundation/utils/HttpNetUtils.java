@@ -1,12 +1,10 @@
 package com.dh.foundation.utils;
 
-import android.app.Activity;
-import android.content.Context;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.dh.foundation.volley.Request;
+import com.dh.foundation.volley.RequestQueue;
+import com.dh.foundation.volley.toolbox.Volley;
 import com.dh.foundation.manager.FoundationManager;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -19,8 +17,14 @@ import java.lang.reflect.Type;
  */
 public class HttpNetUtils {
 
-    private static RequestQueue mRequestQueue;
+    private static RequestQueue mRequestQueue= Volley.newRequestQueue(FoundationManager.getContext());;
 
+    private final static Gson gson = new Gson();
+
+
+    public static RequestQueue getRequestQueue() {
+        return mRequestQueue;
+    }
 
     /**
      * GET请求网络接口数据
@@ -38,10 +42,6 @@ public class HttpNetUtils {
 
         final String url = baseAddress + (requestParams == null ? "" : requestParams.toString());
 
-        if (mRequestQueue == null) {
-
-            mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
-        }
         Request request = new NetRequest<T>(Request.Method.GET, url, requestParams, type, requestListener);
 
         return addToExecuteQueue(request);
@@ -57,10 +57,6 @@ public class HttpNetUtils {
      */
     public static synchronized <T> Request postData(String baseAddress, final RequestParams requestParams, final Type type, final HttpJsonRequest<T> requestListener) {
 
-        if (mRequestQueue == null) {
-
-            mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
-        }
 
         Request request = new NetRequest<T>(Request.Method.POST, baseAddress, requestParams, type, requestListener);
 
@@ -104,7 +100,7 @@ public class HttpNetUtils {
 
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
-        String url = baseAddress + params.toString();
+        String url = baseAddress + (params.isRestStyle() ? "JsonData ======>"+params.getParamObjJsonData() : params.toString());
 
         DLoggerUtils.i("HttpNetUtils=======>url= " + url);
     }
@@ -183,11 +179,6 @@ public class HttpNetUtils {
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
         final String url = baseAddress + (requestParams == null ? "" : requestParams.toString());
-
-        if (mRequestQueue == null) {
-
-            mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
-        }
 
         return new NetRequest<>(Request.Method.GET, url, requestParams, requestListener.getType(), requestListener);
     }

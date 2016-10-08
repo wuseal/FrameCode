@@ -68,7 +68,7 @@ public class UnCatchExceptionHandler implements Thread.UncaughtExceptionHandler 
         collectDeviceInfo(context);
         //保存日志文件
         saveCrashInfo2File(ex);
-        return true;
+        return false;
     }
 
     /**

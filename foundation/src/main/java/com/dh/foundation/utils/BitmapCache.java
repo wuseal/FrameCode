@@ -1,11 +1,11 @@
 package com.dh.foundation.utils;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
+import android.util.LruCache;
 
-import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.dh.foundation.volley.toolbox.ImageLoader;
 
-public class BitmapCache implements ImageCache {
+public class BitmapCache implements ImageLoader.ImageCache {
 
     private LruCache<String, Bitmap> cache;
 

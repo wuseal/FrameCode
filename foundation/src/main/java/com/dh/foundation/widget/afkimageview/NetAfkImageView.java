@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 
-import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.ImageNetLoader;
 import com.dh.foundation.utils.StringUtils;
 

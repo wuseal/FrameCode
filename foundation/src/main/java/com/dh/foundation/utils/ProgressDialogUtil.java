@@ -3,10 +3,6 @@ package com.dh.foundation.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
-import android.view.ContextThemeWrapper;
-
-import java.lang.reflect.Field;
 
 /**
  * 等待进度条展示工具类
@@ -69,8 +65,12 @@ public class ProgressDialogUtil {
         showProgressDialog(context, null);
     }
 
-
     public static synchronized void showProgressDialog(Context context, String content) {
+
+        showProgressDialog(context, content, false);
+    }
+
+    public static synchronized void showProgressDialog(Context context, String content,boolean cancelAble) {
 
         if (context instanceof Activity) {
 
@@ -92,10 +92,18 @@ public class ProgressDialogUtil {
                     defaultProgressDialogMaker.setContent(content);
 
                     progressDialog = defaultProgressDialogMaker.makeDialog(context);
+
                 }
 
                 progressDialog.setOwnerActivity((Activity) context);
 
+                if (!cancelAble) {
+
+                    progressDialog.setCanceledOnTouchOutside(false);
+
+                    progressDialog.setCancelable(false);
+
+                }
                 progressDialog.show();
             }
 

@@ -4,7 +4,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.dh.foundation.manager.managerinterface.IActivityStackManager;
+import com.dh.foundation.manager.managerinterface.IFoundationCacheManager;
 import com.dh.foundation.manager.managerinterface.IHandlerManager;
 
 /**
@@ -23,8 +23,9 @@ public class FoundationManager {
         singletonInjectFactory.registerDependencySingletonObject(SharedPreferences.class, sharedPreferences);
         singletonInjectFactory.registerDependencySingletonClass(SharedPreferenceManager.class);
         singletonInjectFactory.registerDependencySingletonImplementObject(IHandlerManager.class, HandlerManager.getInstance());
-        singletonInjectFactory.registerDependencySingletonImplementObject(ActivityStackManager.class,new ActivityStackManager());
+        singletonInjectFactory.registerDependencySingletonImplementObject(ActivityStackManager.class, new ActivityStackManager());
         singletonInjectFactory.registerDependencySingletonObject(DownloadManager.class, (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE));
+        singletonInjectFactory.registerDependencySingletonImplementObject(IFoundationCacheManager.class, new FoundationCacheManager());
     }
 
 
@@ -50,5 +51,12 @@ public class FoundationManager {
 
     public static DownloadManager getDownloadManager() {
         return singletonInjectFactory.getObjectByClass(DownloadManager.class);
+    }
+
+    /**
+     * 获取缓存管理者
+     */
+    public static IFoundationCacheManager getFoundationCacheManager() {
+        return singletonInjectFactory.getObjectByClass(IFoundationCacheManager.class);
     }
 }

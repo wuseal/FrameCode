@@ -67,11 +67,12 @@ public class SharedPreferenceManager {
         return SharedPreferenceUtils.STRING_CONTROLLER.get(userPhoneKey, "");
     }
 
-    public String getRoleCode() {
-        return SharedPreferenceUtils.STRING_CONTROLLER.get(roleCodeKey, "");
+    public int getRoleCode() {
+        return SharedPreferenceUtils.INTEGER_CONTROLLER.get(roleCodeKey, 3);
     }
 
-    public void setRoleCode(String roleCode) {
-        SharedPreferenceUtils.STRING_CONTROLLER.set(roleCodeKey, roleCode);
+    public void setRoleCode(int roleCode) {
+        SharedPreferenceUtils.INTEGER_CONTROLLER.set(roleCodeKey, roleCode);
     }
+
 }

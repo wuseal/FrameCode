@@ -2,15 +2,15 @@ package com.dh.foundation.widget.netlistview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.internal.widget.ListViewCompat;
+import android.support.v7.widget.ListViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 
 import com.dahanis.foundation.R;
-import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.utils.HttpNetUtils;
+import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.utils.RequestParams;
 
 /**

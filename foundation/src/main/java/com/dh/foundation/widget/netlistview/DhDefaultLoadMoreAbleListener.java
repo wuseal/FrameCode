@@ -5,7 +5,6 @@ import com.dh.foundation.utils.ToastUtils;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

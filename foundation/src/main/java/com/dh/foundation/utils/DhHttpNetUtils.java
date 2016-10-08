@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.dh.foundation.exception.DhBaseBeanError;
 import com.dh.foundation.exception.DhRequestError;
-import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.utils.bluetooth.bluetoothbean.BaseBean;
 
 /**
