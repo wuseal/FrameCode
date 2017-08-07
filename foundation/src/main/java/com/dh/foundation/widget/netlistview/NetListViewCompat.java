@@ -19,7 +19,7 @@ import com.dh.foundation.utils.RequestParams;
  * Date: 2015/9/28
  * Time: 17:01
  */
-public class NetListViewCompat extends ListViewCompat implements NLVCommonInterface, SuperScrollListenerSetter {
+public class NetListViewCompat extends ListViewCompat implements NLVCommonInterface, SuperScrollListenerSetter, ParamMakerSetter {
 
     private NLVCommonInterface netListViewDelegate;
 
@@ -219,5 +219,11 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
 
         super.onDetachedFromWindow();
 
+    }
+
+    @Override
+    public void setParamMaker(ParamMaker paramMaker) {
+
+        netListViewDelegate.setParamMaker(paramMaker);
     }
 }

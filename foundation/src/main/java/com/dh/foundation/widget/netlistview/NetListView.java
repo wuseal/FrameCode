@@ -19,7 +19,7 @@ import com.dh.foundation.utils.RequestParams;
  * Date: 2015/9/28
  * Time: 15:34
  */
-public class NetListView extends ListView implements NLVCommonInterface,SuperScrollListenerSetter {
+public class NetListView extends ListView implements NLVCommonInterface, SuperScrollListenerSetter, ParamMakerSetter {
 
     private NLVCommonInterface netListViewDelegate;
 
@@ -59,10 +59,8 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
         }
 
 
-
         a.recycle();
     }
-
 
 
     public void setLoadMoreView(View loadMoreView) {
@@ -156,9 +154,9 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
     /**
      * 初始化网络处理功能ListView
      *
-     * @param params    参数
-     * @param adapter   专用适配器
-     * @param pageName  页码名称
+     * @param params   参数
+     * @param adapter  专用适配器
+     * @param pageName 页码名称
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName) {
 
@@ -169,7 +167,7 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName);
     }
 
-       /**
+    /**
      * 初始化网络处理功能ListView
      *
      * @param params    参数
@@ -207,5 +205,11 @@ public class NetListView extends ListView implements NLVCommonInterface,SuperScr
         HttpNetUtils.cancelAll(hashCode());
 
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    public void setParamMaker(ParamMaker paramMaker) {
+
+        netListViewDelegate.setParamMaker(paramMaker);
     }
 }

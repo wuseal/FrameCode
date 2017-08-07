@@ -22,6 +22,9 @@ public interface IRequestParams {
 
     Map<String, String> getParams();
 
+    String getParam(String key);
+
+
     void setParamsEncoding(String paramsEncoding);
 
     String getParamsEncoding();

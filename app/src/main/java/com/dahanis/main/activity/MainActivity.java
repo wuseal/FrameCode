@@ -46,6 +46,11 @@ public class MainActivity extends Activity {
 
     }
 
+    public void netListViewWithParamMakerActivityDemo(View view) {
+
+        IntentInvokeUtils.invokeActivity(this, NetListViewWithParamMakerActivity.class);
+
+    }
     public void imageNetLoaderDemo(View view) {
 
         IntentInvokeUtils.invokeActivity(this, LoadImageActivity.class);
