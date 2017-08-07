@@ -541,7 +541,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
             AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
         }
 
-        if (refreshing || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
+        if (!refreshing || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
 
             ProgressDialogUtil.dismissProgressDialog();
         }
