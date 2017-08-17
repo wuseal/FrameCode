@@ -205,10 +205,9 @@ public interface NLVCommonInterface extends ParamMakerSetter {
          *
          * @param preParam   上一次请求使用的参数
          * @param isInit     是否是初始化NetListView或是刷新时请求这次参数生成
-         * @param <ParamObj> 如果当前参数是使用RestStyle则指的是参数对象中使用的Json对象类型
          * @return 新生成的即将被下一次请求使用的参数对象
          */
-        <ParamObj> RequestParams<ParamObj> makeParam(RequestParams<ParamObj> preParam, boolean isInit);
+        RequestParams makeParam(RequestParams preParam, boolean isInit);
     }
 }
 

@@ -385,6 +385,8 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName, final View emptyView) {
 
+        refreshing = true;
+
         this.baseAddress = baseAddress;
 
         this.params = params == null ? new RequestParams() : params;

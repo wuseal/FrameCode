@@ -59,7 +59,7 @@ public class NetListViewWithParamMakerActivity extends Activity {
 
         listView.setParamMaker(new NLVCommonInterface.ParamMaker() {
             @Override
-            public <ParamObj> RequestParams<ParamObj> makeParam(RequestParams<ParamObj> preParam, boolean isInit) {
+            public  RequestParams makeParam(RequestParams preParam, boolean isInit) {
                 if (isInit) {
                     RequestParams params = new RequestParams();
                     params.putParams("token", "Zrmp6OJN8JilVNd66DSRntEQAzPtNXNdQzGUK8FDhavb9Lv%2BGSEmpqVvPXLgk0S00F1isuQY5R4%3D");
@@ -73,7 +73,7 @@ public class NetListViewWithParamMakerActivity extends Activity {
                         DLoggerUtils.i("current PageNo is " + pageNo);
                     }
                 }
-                return preParam;
+                return new RequestParams();
             }
         });
 
