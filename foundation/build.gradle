@@ -25,10 +25,10 @@ ext {
 }
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        minSdkVersion 12
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 17
         versionName "1.6.1"
@@ -46,7 +46,3 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     provided files('libs/org.apache.http.legacy.jar')
 }
-
-
-apply from: rootProject.file('artifacts.gradle')
-apply from: rootProject.file('bintray-push.gradle')
