@@ -69,6 +69,11 @@ public class RequestParams<ParamsObj> implements IRequestParams {
         return params;
     }
 
+    @Override
+    public String getParam(String key) {
+        return params.get(key);
+    }
+
     private String encodeParameters(Map<String, String> params, String paramsEncoding) {
         StringBuilder encodedParams = new StringBuilder();
         try {

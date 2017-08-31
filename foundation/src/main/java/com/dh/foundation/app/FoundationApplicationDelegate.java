@@ -11,7 +11,7 @@ import com.dh.foundation.manager.FoundationManager;
 import com.dh.foundation.observer.DownloadChangeObserver;
 import com.dh.foundation.utils.download.DownLoadUtil;
 
-public class FoundationApplicationDelegate {
+public class FoundationApplicationDelegate implements IFoundationApplicationDelegate {
 
     private final Application application;
 
@@ -25,6 +25,7 @@ public class FoundationApplicationDelegate {
         this.application = application;
     }
 
+    @Override
     public void onCreate() {
 
         FoundationManager.init(application);
@@ -45,6 +46,7 @@ public class FoundationApplicationDelegate {
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
+    @Override
     public void onTerminate() {
 
         application.getContentResolver().unregisterContentObserver(dataChangeObserver);

@@ -10,7 +10,7 @@ import android.app.Application;
  */
 public class FoundationApplication extends Application {
 
-    private final FoundationApplicationDelegate applicationDelegate = new FoundationApplicationDelegate(this);
+    private final IFoundationApplicationDelegate applicationDelegate = new FoundationApplicationDelegate(this);
 
     @Override
     public void onCreate() {

@@ -31,7 +31,7 @@ import java.util.List;
  * Created by Seal.Wu
  * On :2015.09.28
  */
-class NetListViewDelegate implements NLVCommonInterface {
+class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
     private final ListView listView;
 
@@ -87,6 +87,8 @@ class NetListViewDelegate implements NLVCommonInterface {
      * 妥协处理，泛型仅用于交互
      */
     private HttpNetUtils.RequestListener<Object> listener;
+
+    private NLVCommonInterface.ParamMaker paramMaker;
 
 
     private static class RequestListener extends HttpNetUtils.RequestListener<Object> {
@@ -217,6 +219,12 @@ class NetListViewDelegate implements NLVCommonInterface {
         this.context = listView.getContext();
 
         this.listener = new RequestListener(this);
+    }
+
+
+    @Override
+    public void setParamMaker(ParamMaker paramMaker) {
+        this.paramMaker = paramMaker;
     }
 
     public void setLoadMoreView(View loadMoreView) {
@@ -377,6 +385,8 @@ class NetListViewDelegate implements NLVCommonInterface {
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName, final View emptyView) {
 
+        refreshing = true;
+
         this.baseAddress = baseAddress;
 
         this.params = params == null ? new RequestParams() : params;
@@ -388,25 +398,31 @@ class NetListViewDelegate implements NLVCommonInterface {
         this.pageName = pageName == null ? "" : pageName;
 
         if (params != null) {
-            if (params.isRestStyle()) {
-                Object paramObj = params.getParamsObj();
-                Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
-                if (field != null) {
-                    field.setAccessible(true);
-                    try {
-                        startPageNo = pageNo = field.getInt(paramObj);
-                    } catch (IllegalAccessException e) {
-                        DLoggerUtils.e(e);
-                    }
-                }
 
+            if (paramMaker != null) {
+                this.params = paramMaker.makeParam(params, refreshing);
             } else {
 
-                String page = (String) this.params.getParams().get(pageName);
+                if (params.isRestStyle()) {
+                    Object paramObj = params.getParamsObj();
+                    Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
+                    if (field != null) {
+                        field.setAccessible(true);
+                        try {
+                            startPageNo = pageNo = field.getInt(paramObj);
+                        } catch (IllegalAccessException e) {
+                            DLoggerUtils.e(e);
+                        }
+                    }
 
-                if (NumUtils.isInteger(page)) {
+                } else {
 
-                    startPageNo = pageNo = Integer.valueOf(page);
+                    String page = (String) this.params.getParams().get(pageName);
+
+                    if (NumUtils.isInteger(page)) {
+
+                        startPageNo = pageNo = Integer.valueOf(page);
+                    }
                 }
             }
         }
@@ -498,21 +514,28 @@ class NetListViewDelegate implements NLVCommonInterface {
         }
         ProgressDialogUtil.showProgressDialog(context);
 
-        if (params.isRestStyle()) {
-            Object paramObj = params.getParamsObj();
-            Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
-            if (field != null) {
-                field.setAccessible(true);
-                try {
-                    field.setInt(paramObj, pageNo);
-                } catch (IllegalAccessException e) {
-                    DLoggerUtils.e(e);
-                }
-            }
-        } else {
-            params.setParams(pageName, pageNo + "");
-        }
 
+        if (paramMaker != null) {
+
+            this.params = paramMaker.makeParam(params, refreshing);
+
+        } else {
+
+            if (params.isRestStyle()) {
+                Object paramObj = params.getParamsObj();
+                Field field = ReflectUtils.getDeclaredField(paramObj.getClass(), pageName);
+                if (field != null) {
+                    field.setAccessible(true);
+                    try {
+                        field.setInt(paramObj, pageNo);
+                    } catch (IllegalAccessException e) {
+                        DLoggerUtils.e(e);
+                    }
+                }
+            } else {
+                params.setParams(pageName, pageNo + "");
+            }
+        }
         if (params.isRestStyle()) {
 
             AutoPrintHttpNetUtils.postData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
@@ -520,7 +543,7 @@ class NetListViewDelegate implements NLVCommonInterface {
             AutoPrintHttpNetUtils.getData(baseAddress, params, getSuperclassTypeParameter(adapter.getClass()), listener).setTag(listView.hashCode());
         }
 
-        if (pageNo != startPageNo || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
+        if (!refreshing || !isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
 
             ProgressDialogUtil.dismissProgressDialog();
         }

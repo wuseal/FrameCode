@@ -26,6 +26,7 @@
         <activity android:name=".activity.LoadImageAfkImageViewActivity"/>
         <activity android:name=".activity.LoadNetAfkImageViewActivity" />
         <activity android:name=".activity.NetListViewActivity" />
+        <activity android:name=".activity.NetListViewWithParamMakerActivity" />
         <activity android:name=".activity.DhNetListViewActivity" />
         <activity android:name=".activity.HttpNetUtilActivity" />
         <activity android:name=".activity.DownloadActivity" />

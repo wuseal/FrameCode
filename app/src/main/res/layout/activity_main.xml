@@ -22,6 +22,14 @@
         android:text="NetListViewDemo" />
 
     <Button
+        android:id="@+id/netListViewWithParamMakerDemo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:onClick="netListViewWithParamMakerActivityDemo"
+        android:text="netListViewWithParamMakerDemo" />
+    <Button
         android:id="@+id/imageNetLoaderDemo"
         android:layout_width="match_parent"
         android:layout_height="40dp"
