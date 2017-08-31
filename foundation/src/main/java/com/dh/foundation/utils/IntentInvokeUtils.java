@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
@@ -16,7 +18,7 @@ import java.io.File;
 public class IntentInvokeUtils {
 
 
-    public static void invokeActivity(Context context,Class<? extends Activity> activityClass) {
+    public static void invokeActivity(Context context, Class<? extends Activity> activityClass) {
         Intent intent = new Intent(context, activityClass);
         context.startActivity(intent);
     }
@@ -51,7 +53,7 @@ public class IntentInvokeUtils {
      *
      * @param telephone 电话号码
      */
-    public static void invokeDial(Context context,String telephone) {
+    public static void invokeDial(Context context, String telephone) {
         if (StringUtils.isNotEmpty(telephone)) {
             Uri uri = Uri.parse("tel:" + telephone);
             Intent it = new Intent(Intent.ACTION_DIAL, uri);
@@ -81,8 +83,16 @@ public class IntentInvokeUtils {
         if (StringUtils.isNotEmpty(apkPath)) {
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, "com.dahanis.foundation.fileProvider", new File(apkPath));
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+
+            } else {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
+            }
 
             context.startActivity(intent);
         }
