@@ -21,6 +21,14 @@ public class DLoggerUtils {
         dhLogger.logError(throwable.getMessage(), throwable);
     }
 
+    public static void e(String tag, Throwable throwable) {
+        dhLogger.logError(tag, throwable.getMessage(), throwable);
+    }
+
+    public static void e(String tag, String info, Throwable throwable) {
+        dhLogger.logError(tag, info, throwable);
+    }
+
     public static void setLevel(Level level) {
         dhLogger.setLogLevel(level);
     }

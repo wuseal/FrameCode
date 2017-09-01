@@ -50,6 +50,22 @@ public class RequestParams<ParamsObj> implements IRequestParams {
     }
 
     @Override
+    public String getHeadersString() {
+        StringBuilder encodedHeaders = new StringBuilder();
+        try {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                encodedHeaders.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
+                encodedHeaders.append('=');
+                encodedHeaders.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
+                encodedHeaders.append('\n');
+            }
+            return encodedHeaders.toString();
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
+        }
+    }
+
+    @Override
     public void putParams(String key, String value) {
         params.put(key, value);
     }
@@ -140,7 +156,7 @@ public class RequestParams<ParamsObj> implements IRequestParams {
 
         if (getParamsObj() != null) {
 
-             return gson.toJson(getParamsObj());
+            return gson.toJson(getParamsObj());
         }
 
         return gson.toJson(new Object());

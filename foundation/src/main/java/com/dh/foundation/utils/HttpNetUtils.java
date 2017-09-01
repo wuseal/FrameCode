@@ -17,7 +17,8 @@ import java.lang.reflect.Type;
  */
 public class HttpNetUtils {
 
-    private static RequestQueue mRequestQueue= Volley.newRequestQueue(FoundationManager.getContext());;
+    private static RequestQueue mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
+    ;
 
     private final static Gson gson = new Gson();
 
@@ -100,9 +101,15 @@ public class HttpNetUtils {
 
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
-        String url = baseAddress + (params.isRestStyle() ? "JsonData ======>"+params.getParamObjJsonData() : params.toString());
+        String url = baseAddress + (params.isRestStyle() ? "" : params.toString());
 
-        DLoggerUtils.i("HttpNetUtils=======>url= " + url);
+        String headers = params.getHeadersString();
+
+        String printJsonBody = params.isRestStyle() ? " \n|RequestJsonParamData| ======>" + params.getParamObjJsonData() : "";
+
+        final String printHeadersString = headers.isEmpty() ? "" : "\n|RequestHeaders|=======>" + headers;
+
+        DLoggerUtils.i("HttpNetUtils=======>url= " + url + printHeadersString + printJsonBody);
     }
 
 

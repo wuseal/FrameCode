@@ -65,6 +65,15 @@ class DhLogger implements ILogger {
     }
 
     @Override
+    public void logError(String tag, String info, Throwable throwable) {
+
+        if (level.intValue() <= Level.WARNING.intValue()) {
+
+            Log.e(tag, info, throwable);
+        }
+    }
+
+    @Override
     public void setLogLevel(Level logLevel) {
         this.level = level;
     }

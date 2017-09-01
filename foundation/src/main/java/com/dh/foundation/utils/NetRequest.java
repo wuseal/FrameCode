@@ -132,7 +132,7 @@ class NetRequest<ReturnObj> extends StringRequest {
         @Override
         public void onResponse(final String response) {
 
-            DLoggerUtils.i(url + "\n" + response);
+            DLoggerUtils.i(url + " |return data========>" + response);
 
             handler.post(new Runnable() {
                 @Override

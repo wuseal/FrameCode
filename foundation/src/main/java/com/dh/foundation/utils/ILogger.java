@@ -18,8 +18,11 @@ public interface ILogger {
 
     public void logError(String info, Throwable throwable);
 
+    public void logError(String tag, String info, Throwable throwable);
+
 
     void setLogLevel(Level logLevel);
+
     /**
      * 关闭日志打印
      */

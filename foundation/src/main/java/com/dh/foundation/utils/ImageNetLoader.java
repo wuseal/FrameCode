@@ -35,6 +35,7 @@ import java.util.Map;
  */
 public class ImageNetLoader {
 
+    private static final String LOG_TAG = "ImageNetLoader";
     private final static String DEFAULT_CACHE_DIR = "volley/image";
 
     private final static String NULL = "null";
@@ -119,7 +120,7 @@ public class ImageNetLoader {
             url = NULL;
         }
 
-        DLoggerUtils.i("ImageNetLoader url =========> " + url);
+        DLoggerUtils.i(LOG_TAG, "ImageNetLoader url =========> " + url);
 
         final BitmapReceiverHolder bitmapReceiverHolder = new BitmapReceiverHolder(bitmapReceiver);
 
@@ -141,7 +142,7 @@ public class ImageNetLoader {
                     bitmapReceiverHolder.getBitmapReceiver().onError(error);
                 }
 
-                DLoggerUtils.e(error);
+                DLoggerUtils.e(LOG_TAG, error);
             }
         }, maxWidth, maxHigh);
 
