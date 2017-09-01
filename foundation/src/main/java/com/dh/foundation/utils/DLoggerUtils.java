@@ -22,6 +22,25 @@ public class DLoggerUtils {
     }
 
     public static void setLevel(Level level) {
-        dhLogger.setLevel(level);
+        dhLogger.setLogLevel(level);
+    }
+
+    public static void i(String tag, String info) {
+        dhLogger.logInfo(tag, info);
+    }
+
+
+    public static void w(String warnInfo) {
+        dhLogger.logWarn(warnInfo);
+    }
+
+
+    public static void w(String tag, String warnInfo) {
+        dhLogger.logWarn(tag, warnInfo);
+    }
+
+
+    public static void offLog() {
+        dhLogger.offLog();
     }
 }

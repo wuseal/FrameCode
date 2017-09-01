@@ -24,7 +24,6 @@ import java.util.Map;
  * Time: 16:11
  */
 
-//// TODO: 2017/8/31 接口请求成功或是失败要与之前的请求链接关联起来
 class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
@@ -39,7 +38,7 @@ class NetRequest<ReturnObj> extends StringRequest {
 
     public NetRequest(int method, String url, RequestParams requestParams, Type returnType, HttpNetUtils.HttpJsonRequest<ReturnObj> requestListener) {
 
-        super(method, url, new Listener<ReturnObj>(returnType, requestListener), new ErrorListener(requestListener));
+        super(method, url, new Listener<ReturnObj>(url, returnType, requestListener), new ErrorListener(url, requestListener));
 
         this.requestParams = requestParams;
 
@@ -110,6 +109,8 @@ class NetRequest<ReturnObj> extends StringRequest {
 
     private static class Listener<ReturnObj> implements Response.Listener<String> {
 
+        private String url;
+
         /**
          * 返回对象数据类型
          */
@@ -120,7 +121,8 @@ class NetRequest<ReturnObj> extends StringRequest {
          */
         private final HttpNetUtils.HttpJsonRequest requestListener;
 
-        public Listener(Type returnType, HttpNetUtils.HttpJsonRequest<ReturnObj> requestListener) {
+        public Listener(String url, Type returnType, HttpNetUtils.HttpJsonRequest<ReturnObj> requestListener) {
+            this.url = url;
 
             this.returnType = returnType;
 
@@ -130,7 +132,7 @@ class NetRequest<ReturnObj> extends StringRequest {
         @Override
         public void onResponse(final String response) {
 
-            DLoggerUtils.i(response);
+            DLoggerUtils.i(url + "\n" + response);
 
             handler.post(new Runnable() {
                 @Override
@@ -163,14 +165,16 @@ class NetRequest<ReturnObj> extends StringRequest {
 
 
     private static class ErrorListener implements Response.ErrorListener {
+        String url;
 
         /**
          * 返回数据监听接口
          */
         private final HttpNetUtils.HttpJsonRequest requestListener;
 
-        public ErrorListener(HttpNetUtils.HttpJsonRequest requestListener) {
+        public ErrorListener(String url, HttpNetUtils.HttpJsonRequest requestListener) {
 
+            this.url = url;
             this.requestListener = requestListener;
         }
 
@@ -181,6 +185,7 @@ class NetRequest<ReturnObj> extends StringRequest {
                 @Override
                 public void run() {
 
+                    DLoggerUtils.i(url+"request error,reason =======>");
                     DLoggerUtils.e(error);
 
                     requestListener.onFailed(new NetRequestError(error));
