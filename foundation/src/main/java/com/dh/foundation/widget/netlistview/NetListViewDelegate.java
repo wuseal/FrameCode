@@ -3,6 +3,7 @@ package com.dh.foundation.widget.netlistview;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -238,7 +239,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
         if (this.emptyViewId != 0) {
 
-            final View emptyView = listView.getRootView().findViewById(emptyViewId);
+            final View emptyView = findNearestViewByIdFromView((ViewGroup) listView.getParent(), emptyViewId);
 
             this.emptyView = emptyView;
 
@@ -259,6 +260,20 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
                 emptyView.setVisibility(View.GONE);
 
             }
+        }
+    }
+
+
+    private View findNearestViewByIdFromView(ViewGroup viewGroup, int viewId) {
+        if (viewGroup == null) {
+            return null;
+        }
+        final View viewById = viewGroup.findViewById(viewId);
+        if (viewById != null) {
+            return viewById;
+        } else {
+            ViewGroup parent = (ViewGroup) viewGroup.getParent();
+            return findNearestViewByIdFromView(parent, viewId);
         }
     }
 
@@ -365,14 +380,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
      */
     public void initNetListView(String baseAddress, RequestParams params, final NetListViewBaseAdapter adapter, String pageName) {
 
-        View emptyView = null;
-
-        if (emptyViewId != 0) {
-
-            emptyView = listView.getRootView().findViewById(emptyViewId);
-        }
-
-        initNetListView(baseAddress, params, adapter, pageName, emptyView);
+        initNetListView(baseAddress, params, adapter, pageName, null);
     }
 
     /**

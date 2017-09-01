@@ -23,6 +23,8 @@ import java.util.Map;
  * Date: 2015/10/20
  * Time: 16:11
  */
+
+//// TODO: 2017/8/31 接口请求成功或是失败要与之前的请求链接关联起来
 class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());

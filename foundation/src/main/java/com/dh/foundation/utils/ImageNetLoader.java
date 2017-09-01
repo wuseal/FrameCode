@@ -22,7 +22,9 @@ import com.dh.foundation.manager.FoundationManager;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,7 +88,10 @@ public class ImageNetLoader {
 
         setEnable(true);
 
+        List<ImageViewInfoHolder> tobeRemove = new ArrayList<>();
+
         for (Map.Entry<ImageViewInfoHolder, WeakReference<ImageView>> entry : imageViews.entrySet()) {
+
 
             final ImageView imageView = entry.getValue().get();
 
@@ -97,8 +102,13 @@ public class ImageNetLoader {
 
             } else {
 
-                imageViews.remove(key);
+                tobeRemove.add(key);
             }
+        }
+
+        for (ImageViewInfoHolder imageViewInfoHolder : tobeRemove) {
+
+            imageViews.remove(imageViewInfoHolder);
         }
     }
 
@@ -210,21 +220,28 @@ public class ImageNetLoader {
 
         final String finalUrl = url;
 
+        final WeakReference<ImageView> imageWeakReference = new WeakReference<ImageView>(imageView);
+
         getBitmap(url, new BitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (imageView.getTag().equals(finalUrl)) {
+                final ImageView imageView = imageWeakReference.get();
 
-                    imageView.setImageBitmap(bitmap);
+                if (imageView != null) {
 
-                    if (!isImmediate) {
+                    if (imageView.getTag().equals(finalUrl)) {
 
-                        AlphaAnimation animation = new AlphaAnimation(0, 1);
+                        imageView.setImageBitmap(bitmap);
 
-                        animation.setDuration(300);
+                        if (!isImmediate) {
 
-                        imageView.startAnimation(animation);
+                            AlphaAnimation animation = new AlphaAnimation(0, 1);
+
+                            animation.setDuration(300);
+
+                            imageView.startAnimation(animation);
+                        }
                     }
                 }
             }
@@ -232,9 +249,13 @@ public class ImageNetLoader {
             @Override
             public void onError(Throwable error) {
 
-                if (errorImageResId != 0 && imageView.getTag().equals(finalUrl)) {
+                final ImageView imageView = imageWeakReference.get();
 
-                    imageView.setImageResource(errorImageResId);
+                if (imageView != null) {
+                    if (errorImageResId != 0 && imageView.getTag().equals(finalUrl)) {
+
+                        imageView.setImageResource(errorImageResId);
+                    }
                 }
             }
         }, maxWidth, maxHigh);
