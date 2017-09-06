@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 
+import com.dh.foundation.app.ApplicationUtil;
+
 import java.io.File;
 
 /**
@@ -86,7 +88,7 @@ public class IntentInvokeUtils {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(context, "com.dahanis.foundation.fileProvider", new File(apkPath));
+                Uri contentUri = FileProvider.getUriForFile(context, ApplicationUtil.getPackageName()+".fileProvider", new File(apkPath));
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
 
             } else {
