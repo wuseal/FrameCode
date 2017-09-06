@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.dahanis.main.R;
-import com.dh.foundation.utils.DLoggerUtils;
+import com.dh.foundation.utils.download.AppDownLoaderWithNotification;
 import com.dh.foundation.utils.download.DownLoadUtil;
 import com.dh.foundation.utils.download.DownloadListener;
 
@@ -23,7 +23,7 @@ import butterknife.OnClick;
  */
 public class DownloadActivity extends Activity {
 
-    String url = "http://cdn6.down.apk.gfan.com/asdf/Pfiles/2015/9/21/148567_5cc64a68-393b-4872-ae54-739873c146bc.apk";
+    String url = "http://cdn12.down.apk.gfan.com/Pfiles/2017/09/04/1131772_44589ae3-5825-4a21-a975-fe552313f0f7.apk";
 
 
     @Bind(R.id.progressBar)
@@ -94,7 +94,7 @@ public class DownloadActivity extends Activity {
         ButterKnife.bind(this);
         downLoadUtil = DownLoadUtil.getInstance();
 
-
+        new AppDownLoaderWithNotification(url).start();
 
     }
 

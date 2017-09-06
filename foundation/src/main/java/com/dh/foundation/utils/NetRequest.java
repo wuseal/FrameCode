@@ -3,14 +3,15 @@ package com.dh.foundation.utils;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.dh.foundation.volley.AuthFailureError;
-import com.dh.foundation.volley.DefaultRetryPolicy;
-import com.dh.foundation.volley.Response;
-import com.dh.foundation.volley.VolleyError;
-import com.dh.foundation.volley.toolbox.StringRequest;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.dh.foundation.exception.DataFormatError;
 import com.dh.foundation.exception.NetRequestError;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
@@ -27,6 +28,8 @@ import java.util.Map;
 class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
+
+    private final static Gson prettyFormatGson = new GsonBuilder().setPrettyPrinting().create();
 
     private final static Gson gson = new Gson();
 
@@ -132,8 +135,6 @@ class NetRequest<ReturnObj> extends StringRequest {
         @Override
         public void onResponse(final String response) {
 
-            DLoggerUtils.i(url + " |return data========>" + response);
-
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -142,7 +143,10 @@ class NetRequest<ReturnObj> extends StringRequest {
 
                     try {
 
-                        o = gson.fromJson(response, returnType);
+                        o = NetRequest.gson.fromJson(response, returnType);
+
+                        printResponse(o);
+
 
                     } catch (JsonSyntaxException e) {
 
@@ -158,6 +162,12 @@ class NetRequest<ReturnObj> extends StringRequest {
                     requestListener.onSuccess(o);
 
                     requestListener.onFinished();
+                }
+
+                private void printResponse(ReturnObj o) {
+
+                    DLog.i(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestResponse") + DLog.makeSubTitle("URL") + url + "\n"
+                            + DLog.makeSubTitle("return data") + prettyFormatGson.toJson(o) + DLog.END_LINE);
                 }
             });
         }
@@ -185,12 +195,17 @@ class NetRequest<ReturnObj> extends StringRequest {
                 @Override
                 public void run() {
 
-                    DLoggerUtils.i(url+"request error,reason =======>");
-                    DLoggerUtils.e(error);
+                    printErrorInfo();
 
                     requestListener.onFailed(new NetRequestError(error));
 
                     requestListener.onFinished();
+                }
+
+                private void printErrorInfo() {
+                    String errorResponse = new String(error.networkResponse != null ? error.networkResponse.data : error.getMessage().getBytes());
+                    DLog.e(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestError") + DLog.makeSubTitle("URL") + url
+                            + "\n" + DLog.makeSubTitle("Error") + errorResponse, error);
                 }
             });
         }

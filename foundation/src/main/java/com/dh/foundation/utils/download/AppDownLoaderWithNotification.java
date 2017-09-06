@@ -30,16 +30,16 @@ public class AppDownLoaderWithNotification {
     public void start() {
 
         DownLoadUtil.getInstance().startADownloadTask(url, ApplicationUtil.getAppName(), "下载完后请点击打开"
-                , "application/vnd.android.package-archive", true, new DownloadListener() {
-            @Override
-            public void onLoadChange(int total, int currentSize, int state) {
-            }
+                , "application/vnd.android.package-archive", true, true, new DownloadListener() {
+                    @Override
+                    public void onLoadChange(int total, int currentSize, int state) {
+                    }
 
-            @Override
-            public void onComplete(long downloadId, String filePath) {
+                    @Override
+                    public void onComplete(long downloadId, String filePath) {
 
-                IntentInvokeUtils.setupAPK(FoundationManager.getContext(), filePath);
-            }
-        });
+                        IntentInvokeUtils.setupAPK(FoundationManager.getContext(), filePath);
+                    }
+                });
     }
 }

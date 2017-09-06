@@ -1,6 +1,6 @@
 package com.dh.foundation.manager;
 
-import  com.dh.foundation.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.DiskBasedCache;
 import com.dh.foundation.manager.managerinterface.IFoundationCacheManager;
 import com.dh.foundation.utils.HttpNetUtils;
 import com.dh.foundation.utils.ImageNetLoader;

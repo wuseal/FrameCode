@@ -9,16 +9,17 @@ import android.os.Build;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
-import com.dh.foundation.volley.RequestQueue;
-import com.dh.foundation.volley.VolleyError;
-import com.dh.foundation.volley.toolbox.BasicNetwork;
-import com.dh.foundation.volley.toolbox.HttpClientStack;
-import com.dh.foundation.volley.toolbox.HttpStack;
-import com.dh.foundation.volley.toolbox.ImageLoader;
-import com.dh.foundation.volley.patch.ImageDiskBasedCache;
-import com.dh.foundation.volley.Network;
-import com.dh.foundation.volley.toolbox.HurlStack;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HttpStack;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
 import com.dh.foundation.manager.FoundationManager;
+import com.dh.foundation.volley.patch.DImageLoader;
+import com.dh.foundation.volley.patch.ImageDiskBasedCache;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -43,7 +44,7 @@ public class ImageNetLoader {
     private final static BitmapCache imageCache = new BitmapCache();
 
     private final RequestQueue imageRequestQueue = newImageRequestQueue(FoundationManager.getContext(), null);
-    private final ImageLoader imageLoader = new ImageLoader(imageRequestQueue, imageCache);
+    private final ImageLoader imageLoader = new DImageLoader(imageRequestQueue, imageCache);
 
     private Map<String, WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
 
