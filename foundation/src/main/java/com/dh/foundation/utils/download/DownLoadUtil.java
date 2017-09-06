@@ -157,7 +157,7 @@ public class DownLoadUtil implements Handler.Callback {
             req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         } else {
-            req.setVisibleInDownloadsUi(false);
+            req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         }
 
         // 设置下载文件存放的路径，同样你可以选择以下方法存放在你想要的位置。

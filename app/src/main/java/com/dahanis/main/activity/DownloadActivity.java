@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.dahanis.main.R;
-import com.dh.foundation.utils.download.AppDownLoaderWithNotification;
 import com.dh.foundation.utils.download.DownLoadUtil;
 import com.dh.foundation.utils.download.DownloadListener;
 
@@ -93,9 +92,6 @@ public class DownloadActivity extends Activity {
         setContentView(R.layout.activity_donwload);
         ButterKnife.bind(this);
         downLoadUtil = DownLoadUtil.getInstance();
-
-        new AppDownLoaderWithNotification(url).start();
-
     }
 
 
