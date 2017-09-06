@@ -3,7 +3,8 @@ package com.dh.foundation.utils;
 import android.widget.AbsListView;
 
 /**
- * 图片加载获取列表滚动监听器
+ * 操控图片加载列表滚动监听器
+ * 可以是控制是否在列表滚动加载图片,或是是否在飞速滚动的时候执行加载图片操作
  * Created By: Seal.Wu
  * Date: 2015/11/12
  * Time: 17:44

@@ -30,6 +30,32 @@ class DhLogger implements ILogger {
     }
 
     @Override
+    public void logInfo(String tag, String info) {
+        if (level.intValue() <= Level.INFO.intValue()) {
+
+            Log.i(tag, info);
+        }
+    }
+
+    @Override
+    public void logWarn(String tag, String warn) {
+
+        if (level.intValue() <= Level.WARNING.intValue()) {
+
+            Log.i(tag, warn);
+        }
+    }
+
+    @Override
+    public void logWarn(String warn) {
+
+        if (level.intValue() <= Level.WARNING.intValue()) {
+
+            Log.i(LOG_TAG, warn);
+        }
+    }
+
+    @Override
     public void logError(String info, Throwable throwable) {
 
         if (level.intValue() <= Level.WARNING.intValue()) {
@@ -38,11 +64,29 @@ class DhLogger implements ILogger {
         }
     }
 
+    @Override
+    public void logError(String tag, String info, Throwable throwable) {
+
+        if (level.intValue() <= Level.WARNING.intValue()) {
+
+            Log.e(tag, info, throwable);
+        }
+    }
+
+    @Override
+    public void setLogLevel(Level logLevel) {
+        this.level = level;
+    }
+
+    @Override
+    public void offLog() {
+        setLogLevel(Level.OFF);
+    }
+
     public static final DhLogger getInstance() {
         return dhLogger;
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
-    }
+
+
 }

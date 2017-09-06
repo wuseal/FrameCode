@@ -1,10 +1,11 @@
 package com.dh.foundation.utils;
 
-import com.dh.foundation.volley.Request;
-import com.dh.foundation.volley.RequestQueue;
-import com.dh.foundation.volley.toolbox.Volley;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.dh.foundation.manager.FoundationManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -17,7 +18,11 @@ import java.lang.reflect.Type;
  */
 public class HttpNetUtils {
 
-    private static RequestQueue mRequestQueue= Volley.newRequestQueue(FoundationManager.getContext());;
+    public static final String LOG_TAG = "HttpNetUtils";
+
+    private final static Gson prettyFormatGson = new GsonBuilder().setPrettyPrinting().create();
+
+    private static RequestQueue mRequestQueue = Volley.newRequestQueue(FoundationManager.getContext());
 
     private final static Gson gson = new Gson();
 
@@ -100,9 +105,15 @@ public class HttpNetUtils {
 
         baseAddress += baseAddress.contains("?") ? "&" : "?";
 
-        String url = baseAddress + (params.isRestStyle() ? "JsonData ======>"+params.getParamObjJsonData() : params.toString());
+        String url = baseAddress + (params.isRestStyle() ? "" : params.toString());
 
-        DLoggerUtils.i("HttpNetUtils=======>url= " + url);
+        String headers = params.getHeadersString();
+
+        String printJsonBody = params.isRestStyle() ? " \n" + DLog.makeSubTitle("RequestJsonParamData") + prettyFormatGson.toJson(params.getParamsObj()) : "";
+
+        final String printHeadersString = headers.isEmpty() ? "" : "\n" + DLog.makeSubTitle("RequestHeaders") + "\n" + headers;
+
+        DLog.i(LOG_TAG, DLog.makeTitle("URLRequest")  + DLog.makeSubTitle("url") + url + printHeadersString + printJsonBody);
     }
 
 

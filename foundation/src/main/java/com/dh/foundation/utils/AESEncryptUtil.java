@@ -1,8 +1,9 @@
 package com.dh.foundation.utils;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -13,20 +14,35 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class AESEncryptUtil {
 
-    private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
+    private static final String ALGORITHM_ECB = "AES/ECB/PKCS5Padding";
+    private static final String ALGORITHM_CBC = "AES/CBC/PKCS5Padding";
+    private static final String DEFAULT_IV = "com.dahanis.foundation";
 
     private static final String DEFAULT_KEY = "com.dahanis.foundation";
 
     private String key;
 
+    private String iv;
+
+    private String algorithm;
+
     private static final AESEncryptUtil instance = new AESEncryptUtil();
 
     private AESEncryptUtil() {
-        key = StringUtils.substring(DEFAULT_KEY, 0, 16);
+        key = DEFAULT_KEY.substring(0, 16);
+        iv = DEFAULT_IV.substring(0, 16);
+        algorithm = ALGORITHM_CBC;
+    }
+
+    private AESEncryptUtil(String key, String iv) {
+        this.key = key;
+        this.iv = iv;
+        algorithm = ALGORITHM_CBC;
     }
 
     private AESEncryptUtil(String key) {
         this.key = key;
+        algorithm = ALGORITHM_ECB;
     }
 
 
@@ -38,13 +54,20 @@ public class AESEncryptUtil {
     }
 
     /**
+     * 获取默认的加密对象
+     */
+    public static AESEncryptUtil getInstance(String key) {
+        return new AESEncryptUtil(key);
+    }
+
+    /**
      * 获取定制的加密对象
      *
      * @param key 加密密钥
      * @return 加密对象
      */
-    public static AESEncryptUtil getInstance(String key) {
-        return new AESEncryptUtil(key);
+    public static AESEncryptUtil getInstance(String key, String iv) {
+        return new AESEncryptUtil(key, iv);
     }
 
     /**
@@ -78,8 +101,9 @@ public class AESEncryptUtil {
             } else {
                 return new String(bytes, "UTF-8");
             }
-        } catch (UnsupportedEncodingException e) {
-            DLoggerUtils.e(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
         return "";
     }
@@ -98,16 +122,29 @@ public class AESEncryptUtil {
         try {
 
             byte[] raw = key.getBytes("UTF-8");
-            SecretKeySpec skeySpec = new SecretKeySpec(raw, AESEncryptUtil.ALGORITHM);
-            Cipher cipher = Cipher.getInstance(AESEncryptUtil.ALGORITHM);
-            cipher.init(cryptionMode, skeySpec);
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+            Cipher cipher = Cipher.getInstance(algorithm);
+            if (algorithm.equals(ALGORITHM_CBC)) {
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes(Charset.forName("utf-8")));
+                cipher.init(cryptionMode, skeySpec, ivParameterSpec);
+            } else if (algorithm.equals(ALGORITHM_ECB)) {
+                cipher.init(cryptionMode, skeySpec);
+            }
             if (isEncrypt) {
                 outputBytes = cipher.doFinal(input);
                 return outputBytes;
             }
             return cipher.doFinal(input);
         } catch (Exception e) {
-            DLoggerUtils.e(e);
+            e.printStackTrace();
+
+            try {
+                if (!isEncrypt) {
+                    System.out.println(Base64.encode(input));
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
         return new byte[]{};
     }

@@ -29,6 +29,8 @@ public interface IRequestParams {
 
     String getParamsEncoding();
 
+    String getHeadersString();
+
     /**
      * 获取json参数对象的json字符数据
      *

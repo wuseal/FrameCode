@@ -9,20 +9,23 @@ import android.os.Build;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
-import com.dh.foundation.volley.RequestQueue;
-import com.dh.foundation.volley.VolleyError;
-import com.dh.foundation.volley.toolbox.BasicNetwork;
-import com.dh.foundation.volley.toolbox.HttpClientStack;
-import com.dh.foundation.volley.toolbox.HttpStack;
-import com.dh.foundation.volley.toolbox.ImageLoader;
-import com.dh.foundation.volley.patch.ImageDiskBasedCache;
-import com.dh.foundation.volley.Network;
-import com.dh.foundation.volley.toolbox.HurlStack;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HttpStack;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
 import com.dh.foundation.manager.FoundationManager;
+import com.dh.foundation.volley.patch.DImageLoader;
+import com.dh.foundation.volley.patch.ImageDiskBasedCache;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +36,7 @@ import java.util.Map;
  */
 public class ImageNetLoader {
 
+    private static final String LOG_TAG = "ImageNetLoader";
     private final static String DEFAULT_CACHE_DIR = "volley/image";
 
     private final static String NULL = "null";
@@ -40,7 +44,7 @@ public class ImageNetLoader {
     private final static BitmapCache imageCache = new BitmapCache();
 
     private final RequestQueue imageRequestQueue = newImageRequestQueue(FoundationManager.getContext(), null);
-    private final ImageLoader imageLoader = new ImageLoader(imageRequestQueue, imageCache);
+    private final ImageLoader imageLoader = new DImageLoader(imageRequestQueue, imageCache);
 
     private Map<String, WeakReference<ImageLoader.ImageContainer>> imageContainerMap = new HashMap<>();
 
@@ -86,7 +90,10 @@ public class ImageNetLoader {
 
         setEnable(true);
 
+        List<ImageViewInfoHolder> tobeRemove = new ArrayList<>();
+
         for (Map.Entry<ImageViewInfoHolder, WeakReference<ImageView>> entry : imageViews.entrySet()) {
+
 
             final ImageView imageView = entry.getValue().get();
 
@@ -97,8 +104,13 @@ public class ImageNetLoader {
 
             } else {
 
-                imageViews.remove(key);
+                tobeRemove.add(key);
             }
+        }
+
+        for (ImageViewInfoHolder imageViewInfoHolder : tobeRemove) {
+
+            imageViews.remove(imageViewInfoHolder);
         }
     }
 
@@ -109,7 +121,7 @@ public class ImageNetLoader {
             url = NULL;
         }
 
-        DLoggerUtils.i("ImageNetLoader url =========> " + url);
+        DLoggerUtils.i(LOG_TAG, "ImageNetLoader url =========> " + url);
 
         final BitmapReceiverHolder bitmapReceiverHolder = new BitmapReceiverHolder(bitmapReceiver);
 
@@ -131,7 +143,7 @@ public class ImageNetLoader {
                     bitmapReceiverHolder.getBitmapReceiver().onError(error);
                 }
 
-                DLoggerUtils.e(error);
+                DLoggerUtils.e(LOG_TAG, error);
             }
         }, maxWidth, maxHigh);
 
@@ -210,21 +222,28 @@ public class ImageNetLoader {
 
         final String finalUrl = url;
 
+        final WeakReference<ImageView> imageWeakReference = new WeakReference<ImageView>(imageView);
+
         getBitmap(url, new BitmapReceiver() {
             @Override
             public void onReceiveBitmap(Bitmap bitmap, boolean isImmediate) {
 
-                if (imageView.getTag().equals(finalUrl)) {
+                final ImageView imageView = imageWeakReference.get();
 
-                    imageView.setImageBitmap(bitmap);
+                if (imageView != null) {
 
-                    if (!isImmediate) {
+                    if (imageView.getTag().equals(finalUrl)) {
 
-                        AlphaAnimation animation = new AlphaAnimation(0, 1);
+                        imageView.setImageBitmap(bitmap);
 
-                        animation.setDuration(300);
+                        if (!isImmediate) {
 
-                        imageView.startAnimation(animation);
+                            AlphaAnimation animation = new AlphaAnimation(0, 1);
+
+                            animation.setDuration(300);
+
+                            imageView.startAnimation(animation);
+                        }
                     }
                 }
             }
@@ -232,9 +251,13 @@ public class ImageNetLoader {
             @Override
             public void onError(Throwable error) {
 
-                if (errorImageResId != 0 && imageView.getTag().equals(finalUrl)) {
+                final ImageView imageView = imageWeakReference.get();
 
-                    imageView.setImageResource(errorImageResId);
+                if (imageView != null) {
+                    if (errorImageResId != 0 && imageView.getTag().equals(finalUrl)) {
+
+                        imageView.setImageResource(errorImageResId);
+                    }
                 }
             }
         }, maxWidth, maxHigh);

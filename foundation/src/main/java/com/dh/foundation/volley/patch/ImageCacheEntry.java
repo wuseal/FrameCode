@@ -1,6 +1,5 @@
 package com.dh.foundation.volley.patch;
-
-import com.dh.foundation.volley.Cache;
+import com.android.volley.Cache;
 
 /**
  * 图片缓存入口记录对象:图片永远不过期

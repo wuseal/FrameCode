@@ -3,7 +3,8 @@ package com.dh.foundation.utils;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
-import com.dh.foundation.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader;
+
 
 public class BitmapCache implements ImageLoader.ImageCache {
 

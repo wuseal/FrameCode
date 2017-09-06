@@ -92,9 +92,6 @@ public class DownloadActivity extends Activity {
         setContentView(R.layout.activity_donwload);
         ButterKnife.bind(this);
         downLoadUtil = DownLoadUtil.getInstance();
-
-
-
     }
 
 

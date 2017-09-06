@@ -120,7 +120,7 @@ public class DownLoadUtil implements Handler.Callback {
 
     public long startADownloadTask(String url, DownloadListener downloadListener) {
 
-        return startADownloadTask(url, null, null, null, false, downloadListener);
+        return startADownloadTask(url, null, null, null, false, true, downloadListener);
     }
 
     /**
@@ -135,24 +135,29 @@ public class DownLoadUtil implements Handler.Callback {
      * @return 下载任务的标识唯一id
      */
     public long startADownloadTask(String url, String title, String description, String
-            mimeType, boolean notificationVisibility, DownloadListener downloadListener) {
+            mimeType, boolean notificationVisibility, boolean allowMobileNetWork, DownloadListener downloadListener) {
         Uri uri = Uri.parse(url);
         // uri 是你的下载地址，可以使用Uri.parse("http://")包装成Uri对象
         DownloadManager.Request req = new DownloadManager.Request(uri);
 
         // 通过setAllowedNetworkTypes方法可以设置允许在何种网络下下载，
         // 也可以使用setAllowedOverRoaming方法，它更加灵活
-        req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+        if (!allowMobileNetWork) {
+            req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+        } else {
+            req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        }
 
+        req.setAllowedOverRoaming(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            req.setAllowedOverMetered(true);
         if (notificationVisibility) {
             // 此方法表示在下载过程中通知栏会一直显示该下载，在下载完成后仍然会显示，
             // 直到用户点击该通知或者消除该通知。还有其他参数可供选择
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
-                req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         } else {
-            req.setVisibleInDownloadsUi(false);
-
+            req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         }
 
         // 设置下载文件存放的路径，同样你可以选择以下方法存放在你想要的位置。
