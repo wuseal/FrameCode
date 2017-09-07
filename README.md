@@ -26,6 +26,7 @@ Latest Version is :1.7.0
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入<br>
 compile 'com.dahanis:foundation:1.7.0'
 即可完成引入</h4>
+
 ##### 集成步骤：
 * 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.7.0'</code>
 * 然后让app的application继承FoundationApplication就可以了
