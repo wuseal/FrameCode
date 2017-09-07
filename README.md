@@ -2,22 +2,31 @@
 
 FrameCode for android team
 
-Latest Version is :1.6.0
+Latest Version is :1.7.0
 
+### 更新日志:
+#### 1.7.0:
+1.NetListView多个在一个布局时候若使用EmptyView会出现异常
+2.文件下载功能在TargetSDKVersion为24以上的时候会直接崩溃
+3.BitmapOnScrollListener这个类使用在多个Fragment互相切换的时候会崩溃
+4.网络请求日志打印需要把返回数据和请求连接关联起来
+5.文件下载功能模块在移动网络下不执行下载
+6.把Gson和Volley库可以抽离出来,方便各自更新
+7.美化日志打印
 
 <h3>How to use</h3>
 <h4>In gradle you can set it in by a single line Code in your build.gradle:</h4>
-<code>compile 'com.dahanis:foundation:1.6.0'</code>
+<code>compile 'com.dahanis:foundation:1.7.0'</code>
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入<br>
-compile 'com.dahanis:foundation:1.6.0'
+compile 'com.dahanis:foundation:1.7.0'
 即可完成引入</h4>
-#####集成步骤：
-* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.6.0'</code>
+##### 集成步骤：
+* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.7.0'</code>
 * 然后让app的application继承FoundationApplication就可以了
 
-#一．网络部分
+# 一．网络部分
 
-####网络请求框架
+#### 网络请求框架
 简介：基于volley进行二次开发的网络请求框架
 <h4>示例代码</h4>
 
@@ -93,7 +102,7 @@ compile 'com.dahanis:foundation:1.6.0'
 注：使用网络请求框架时，最好在Activity的生命周期的onDestroy方法中调用AutoPrintHttpNetUtils.cancelAll(Object tag)进行销毁取消未完成的请求操作，否则可能导致窗口溢出．
 
 
-####网络图片加载框架
+#### 网络图片加载框架
 示例代码<br>
 
 ```java
@@ -121,7 +130,7 @@ compile 'com.dahanis:foundation:1.6.0'
     imageNetLoader: 为你listView用来加载图片用的ImageNetLoader实例</br>
     true:表示在触摸滚动时可以进行图片加载
 
-####文件下载框架
+#### 文件下载框架
 简介：基于DownloadManager进行二次开发<br>
 示例代码<br>
 ```java
@@ -166,8 +175,8 @@ compile 'com.dahanis:foundation:1.6.0'
 ```
 
 
-#二．控件
-####AfkImageView
+# 二．控件
+#### AfkImageView
 
 简介：作用于切换图片效果的控件，也可以自定义切换动画效果。
 
@@ -175,7 +184,7 @@ compile 'com.dahanis:foundation:1.6.0'
 
 若想自定义切换效果，实现TransitionAnimation接口，然后调用AfkImageView.setTransitionAnimation(TransitionAnimation animation)即可，<b>注意，必须在setImage(image)之前设置动画效果才会生效用于切换图片效果的控件<B>
 
-####示例代码
+#### 示例代码
 
             AfkImageView afkImageView = (AfkImageView) v.findViewById(R.id.ii_aiv);
             afkImageView.setImage(R.drawable.image1);
@@ -183,12 +192,12 @@ compile 'com.dahanis:foundation:1.6.0'
 
 
 
-####NetAfkImageView
+#### NetAfkImageView
 
 简介：继承于AfkImageView，实现了类似唯品会app的网络图片加载效果。
 
 
-####示例代码
+#### 示例代码
 
             NetAfkImageView netAfkImageView = (NetAfkImageView) v.findViewById(R.id.ii_aiv);
             netAfkImageView.setImageUrl(url, R.drawable.error, R.drawable.default);
@@ -199,9 +208,9 @@ compile 'com.dahanis:foundation:1.6.0'
             netAfkImageView.setImageUrl(url);
             
 
-####NetListView
+#### NetListView
 简介：全自动获取网络数据并且到底自动加载更多ListView
-####示例代码：
+#### 示例代码：
 ```java
     /**
      * 还是以以下的地址来进行说明，因些地址没有做分页功能，所以我们要专门的定制化下，若是有分页功能，则正常定制就可以了
@@ -284,7 +293,7 @@ compile 'com.dahanis:foundation:1.6.0'
         }
     }
 ```
-######也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView以及NetErrorView
+###### 也可以直接在布局文件中指定当前ListView的加载更多footer和EmptyView以及NetErrorView
 示例如下：
 ```xml
     <com.dh.foundation.widget.netlistview.NetListView
@@ -297,24 +306,24 @@ compile 'com.dahanis:foundation:1.6.0'
 ```
 其中NetErrorView指的是当网络请求出错时显示的View,这应该就是完整的listView的网络逻辑了
 
-#其它
+# 其它
 
-####ProgressDialogUtil－－全局性的等待对话框框架工具
+#### ProgressDialogUtil－－全局性的等待对话框框架工具
 简介：内有默认实现等待对话框，可以自定义对话框样式，全局性显示隐藏对话框api，当某些异常请求需要开启等待而有时候会有多个重复的请求时
 多交调用ProgressDialogUtil．show()方法时，在界面上永远只会有一个等待框，不会造成多余的等待框，从而导致内存浪费
-#####示例代码
+##### 示例代码
 ```java       
         ProgressDialogUtil.showProgressDialog(this);
         ProgressDialogUtil.dismissProgressDialog();
 ```
 
-####ToastUtils--全局性toast显示
+#### ToastUtils--全局性toast显示
 简介：调用api类似ProgressDialogUtil
 
-####SharedPreferenceManager--直接可以使用的SharedPreference配置操作类
+#### SharedPreferenceManager--直接可以使用的SharedPreference配置操作类
 简介：里面已经实现基本大多数常用设置(AppToken,userId,userName,phone,password,isLogin等等)，如有需要扩展，继承此类实现方法即可
 
-#####示例代码
+##### 示例代码
 两种实例方法均可：
 
 ```java
@@ -332,28 +341,28 @@ compile 'com.dahanis:foundation:1.6.0'
                         
 ```
 
-####ActivityStackManager--activity的栈管理者
+#### ActivityStackManager--activity的栈管理者
 简介：像正常栈管理一样出栈入栈即可，同时提供了销毁全部activity的方法，可用于退出应用时调用
 
-####ApplicationUtil--用于获取application的应用信息
+#### ApplicationUtil--用于获取application的应用信息
 简介：获取包括应用名称，id，meta-data，versionCode等信息
 
-####AESEncryptUtil－－加密工具
-简介：AES/ECB/PKCS5Padding形式加密工具类
-#####示例代码
+#### AESEncryptUtil－－加密工具
+简介：AES/ECB/PKCS5Padding或AES/CBC/PKCS5Padding形式加密工具类
+##### 示例代码
 ```java
 
     AESEncryptUtil instance = AESEncryptUtil.getInstance("your_key");
     String encrypt = instance.encrypt("clearText");
     
 ```
-####InputUtils－－输入法软键盘控制工具
+#### InputUtils－－输入法软键盘控制工具
 * hideKeyboard(View v):隐藏输入软键盘
 * showKeyboard(View v):显示输入软键盘
 * setupUISoftKeyBoardHideSystem(final View viewGroup):设置当前ViewGroup内输入隐藏逻辑，实现效果为在当前viewGroup内点击输入框外的区域隐藏输入法软键盘.<br>
   前提，当前ViewGroup内不能有控件设置onTouchListener
 
-####AppDownLoaderWithNotification－－app版本更新升级下载工具
+#### AppDownLoaderWithNotification－－app版本更新升级下载工具
 会启用一个通知栏进行下载，下载完成后自动打开提示用户安装
 
 ``` new AppDownLoaderWithNotification( versionInfo.getDownLoadUrl()).start(); ```
