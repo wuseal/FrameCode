@@ -7,11 +7,17 @@ Latest Version is :1.7.0
 ### 更新日志:
 #### 1.7.0:
 1.NetListView多个在一个布局时候若使用EmptyView会出现异常
+
 2.文件下载功能在TargetSDKVersion为24以上的时候会直接崩溃
+
 3.BitmapOnScrollListener这个类使用在多个Fragment互相切换的时候会崩溃
+
 4.网络请求日志打印需要把返回数据和请求连接关联起来
+
 5.文件下载功能模块在移动网络下不执行下载
+
 6.把Gson和Volley库可以抽离出来,方便各自更新
+
 7.美化日志打印
 
 <h3>How to use</h3>
