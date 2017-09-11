@@ -5,6 +5,10 @@ FrameCode for android team
 Latest Version is :1.7.0
 
 ### 更新日志:
+
+#### 1.7.1
+1.修复Headers未设置时会崩溃的问题
+2.调整Json数据打印保留Null字段
 #### 1.7.0:
 1.NetListView多个在一个布局时候若使用EmptyView会出现异常
 
