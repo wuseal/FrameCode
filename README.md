@@ -2,7 +2,7 @@
 
 FrameCode for android team
 
-Latest Version is :1.7.0
+Latest Version is :1.7.1
 
 ### 更新日志:
 
@@ -26,13 +26,13 @@ Latest Version is :1.7.0
 
 <h3>How to use</h3>
 <h4>In gradle you can set it in by a single line Code in your build.gradle:</h4>
-<code>compile 'com.dahanis:foundation:1.7.0'</code>
+<code>compile 'com.dahanis:foundation:1.7.1'</code>
 <h4>像上面那样直接在gradle中的dependencies {...}的大括号内加入<br>
-compile 'com.dahanis:foundation:1.7.0'
+compile 'com.dahanis:foundation:1.7.1'
 即可完成引入</h4>
 
 ##### 集成步骤：
-* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.7.0'</code>
+* 先在build.gradle文件中引入<code>compile 'com.dahanis:foundation:1.7.1'</code>
 * 然后让app的application继承FoundationApplication就可以了
 
 # 一．网络部分
