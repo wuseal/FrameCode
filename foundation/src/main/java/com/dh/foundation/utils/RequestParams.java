@@ -51,6 +51,9 @@ public class RequestParams<ParamsObj> implements IRequestParams {
 
     @Override
     public String getHeadersString() {
+        if (headers == null) {
+            return "";
+        }
         StringBuilder encodedHeaders = new StringBuilder();
         try {
             for (Map.Entry<String, String> entry : headers.entrySet()) {

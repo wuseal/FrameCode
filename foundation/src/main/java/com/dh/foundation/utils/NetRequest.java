@@ -12,6 +12,7 @@ import com.dh.foundation.exception.DataFormatError;
 import com.dh.foundation.exception.NetRequestError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
@@ -29,7 +30,7 @@ class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
-    private final static Gson prettyFormatGson = new GsonBuilder().setPrettyPrinting().create();
+    private final static Gson prettyFormatGson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     private final static Gson gson = new Gson();
 
@@ -134,6 +135,8 @@ class NetRequest<ReturnObj> extends StringRequest {
 
         @Override
         public void onResponse(final String response) {
+//            String a = "{\"name\": \"seal\",\"age\": null,\"height\": 175}";
+//            NetRequest.printResponse("http://baidu.com", formatJsonString(a));
 
             handler.post(new Runnable() {
                 @Override
@@ -144,9 +147,6 @@ class NetRequest<ReturnObj> extends StringRequest {
                     try {
 
                         o = NetRequest.gson.fromJson(response, returnType);
-
-                        printResponse(o);
-
 
                     } catch (JsonSyntaxException e) {
 
@@ -164,15 +164,23 @@ class NetRequest<ReturnObj> extends StringRequest {
                     requestListener.onFinished();
                 }
 
-                private void printResponse(ReturnObj o) {
 
-                    DLog.i(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestResponse") + DLog.makeSubTitle("URL") + url + "\n"
-                            + DLog.makeSubTitle("return data") + prettyFormatGson.toJson(o) + DLog.END_LINE);
-                }
             });
+
+            printResponse(url, formatJsonString(response));
+
         }
     }
 
+    private static String formatJsonString(String response) {
+        return prettyFormatGson.toJson(new JsonParser().parse(response));
+    }
+
+    private static void printResponse(String url, String response) {
+
+        DLog.i(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestResponse") + DLog.makeSubTitle("URL") + url + "\n"
+                + DLog.makeSubTitle("return data") + response + DLog.END_LINE);
+    }
 
     private static class ErrorListener implements Response.ErrorListener {
         String url;
