@@ -2,6 +2,7 @@ package com.dh.foundation.widget.netlistview;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -239,7 +240,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
         if (this.emptyViewId != 0) {
 
-            final View emptyView = findNearestViewByIdFromView((ViewGroup) listView.getParent(), emptyViewId);
+            final View emptyView = findNearestViewById(emptyViewId);
 
             this.emptyView = emptyView;
 
@@ -263,6 +264,11 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
         }
     }
 
+    @Nullable
+    private View findNearestViewById(int id) {
+        return findNearestViewByIdFromView((ViewGroup) listView.getParent(), id);
+    }
+
 
     private View findNearestViewByIdFromView(ViewGroup viewGroup, int viewId) {
         if (viewGroup == null) {
@@ -284,9 +290,9 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
         if (this.netErrorViewId != 0) {
 
-            final View netErrorView = listView.getRootView().findViewById(netErrorViewId);
+            final View netErrorView = findNearestViewById(netErrorViewId);
 
-            this.netErrorView = listView.getRootView().findViewById(netErrorViewId);
+            this.netErrorView = netErrorView;
 
             if (netErrorView != null) {
 
