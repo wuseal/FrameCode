@@ -16,4 +16,5 @@ interface ParamMakerSetter {
      * 参数生成器
      */
     void setParamMaker(NLVCommonInterface.ParamMaker paramMaker);
+
 }

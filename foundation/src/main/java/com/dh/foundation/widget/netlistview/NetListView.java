@@ -212,4 +212,9 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
 
         netListViewDelegate.setParamMaker(paramMaker);
     }
+
+    @Override
+    public void setServerReturnDataOKListener(ServerReturnDataOKListener serverReturnDataOKListener) {
+        netListViewDelegate.setServerReturnDataOKListener(serverReturnDataOKListener);
+    }
 }

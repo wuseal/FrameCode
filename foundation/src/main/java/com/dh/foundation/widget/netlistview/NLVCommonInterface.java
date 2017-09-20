@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 2015/9/28
  * Time: 17:35
  */
-public interface NLVCommonInterface extends ParamMakerSetter {
+public interface NLVCommonInterface extends ParamMakerSetter,ServerReturnDataOKListenerSetter {
 
     /**
      * 设置加载更多的footView
@@ -203,11 +203,17 @@ public interface NLVCommonInterface extends ParamMakerSetter {
         /**
          * 生产出新的参数对象
          *
-         * @param preParam   上一次请求使用的参数
-         * @param isInit     是否是初始化NetListView或是刷新时请求这次参数生成
+         * @param preParam 上一次请求使用的参数
+         * @param isInit   是否是初始化NetListView或是刷新时请求这次参数生成
          * @return 新生成的即将被下一次请求使用的参数对象
          */
         RequestParams makeParam(RequestParams preParam, boolean isInit);
     }
+
+}
+
+interface ServerReturnDataOKListenerSetter {
+
+    void setServerReturnDataOKListener(ServerReturnDataOKListener serverReturnDataOKListener);
 }
 

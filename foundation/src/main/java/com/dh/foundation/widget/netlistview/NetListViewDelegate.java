@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.exception.DhRequestError;
+import com.dh.foundation.exception.ServerReturnError;
 import com.dh.foundation.utils.AutoPrintHttpNetUtils;
 import com.dh.foundation.utils.DLoggerUtils;
 import com.dh.foundation.utils.HttpNetUtils;
@@ -33,7 +34,7 @@ import java.util.List;
  * Created by Seal.Wu
  * On :2015.09.28
  */
-class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
+class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, ServerReturnDataOKListenerSetter {
 
     private final ListView listView;
 
@@ -63,6 +64,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
     private NLVCommonInterface.OnLoadStartListener onLoadStartListener;//刚开始加载监听器
 
+    private ServerReturnDataOKListener serverReturnDataOKListener;
     private boolean isLoadOkToast = true;//加载全部是否进行提示
 
     private boolean isNetErrorToast = true;//是否出错提示
@@ -110,12 +112,18 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
         @Override
         public void onSuccess(Object t) {
+            final NetListViewDelegate netListViewDelegate = weakReference.get();
 
+            if (netListViewDelegate.serverReturnDataOKListener != null && !netListViewDelegate.serverReturnDataOKListener.isServerReturnDataOK(t)) {
+                ServerReturnError error = new ServerReturnError();
+                error.setReturnData(t);
+                onFailed(error);
+                return;
+            }
             isLoadSuccess = true;
 
             returnData = t;
 
-            final NetListViewDelegate netListViewDelegate = weakReference.get();
 
             if (netListViewDelegate == null) {
 
@@ -178,7 +186,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
 
                 if (netListViewDelegate.isNetErrorToast) {
 
-                    final String message = throwable.getCause().getMessage();
+                    final String message = throwable.getMessage();
                     ToastUtils.toast(message);
                 }
             }
@@ -224,6 +232,10 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
     }
 
 
+    public void setServerReturnDataOKListener(ServerReturnDataOKListener serverReturnDataOKListener) {
+        this.serverReturnDataOKListener = serverReturnDataOKListener;
+    }
+
     @Override
     public void setParamMaker(ParamMaker paramMaker) {
         this.paramMaker = paramMaker;
@@ -249,8 +261,6 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
                 emptyView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        emptyView.setVisibility(View.GONE);
 
                         refreshData();
                     }
@@ -301,8 +311,6 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter {
                 netErrorView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        netErrorView.setVisibility(View.GONE);
 
                         refreshData();
                     }
