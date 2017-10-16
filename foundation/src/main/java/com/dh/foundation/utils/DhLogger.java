@@ -75,7 +75,7 @@ class DhLogger implements ILogger {
 
     @Override
     public void setLogLevel(Level logLevel) {
-        this.level = level;
+        this.level = logLevel;
     }
 
     @Override

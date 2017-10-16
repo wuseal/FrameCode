@@ -183,7 +183,7 @@ class NetRequest<ReturnObj> extends StringRequest {
                 + DLog.makeSubTitle("return data") + response + DLog.END_LINE);
     }
 
-    private static class ErrorListener implements Response.ErrorListener {
+    static class ErrorListener implements Response.ErrorListener {
         String url;
 
         /**
@@ -200,7 +200,7 @@ class NetRequest<ReturnObj> extends StringRequest {
         @Override
         public void onErrorResponse(final VolleyError error) {
 
-            handler.post(new Runnable() {
+            new Runnable() {
                 @Override
                 public void run() {
 
@@ -216,7 +216,7 @@ class NetRequest<ReturnObj> extends StringRequest {
                     DLog.e(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestError") + DLog.makeSubTitle("URL") + url
                             + "\n" + DLog.makeSubTitle("Error") + errorResponse, error);
                 }
-            });
+            }.run();
         }
     }
 }

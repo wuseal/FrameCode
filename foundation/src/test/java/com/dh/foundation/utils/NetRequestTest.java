@@ -29,4 +29,26 @@ public class NetRequestTest {
 
     }
 
+    @Test
+    public void ErrorListenerTest() {
+        DLog.offLog();
+        NetRequest.ErrorListener listener = new NetRequest.ErrorListener("", new HttpNetUtils.HttpJsonRequest() {
+            @Override
+            public void onSuccess(Object o) {
+
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+        listener.onErrorResponse(new NetworkError());
+    }
+
 }
