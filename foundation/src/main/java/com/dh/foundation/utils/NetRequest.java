@@ -145,8 +145,9 @@ class NetRequest<ReturnObj> extends StringRequest {
                     ReturnObj o;
 
                     try {
+                        String newResponse = gson.toJson(new JsonParser().parse(response));
 
-                        o = NetRequest.gson.fromJson(response, returnType);
+                        o = NetRequest.gson.fromJson(newResponse, returnType);
 
                     } catch (JsonSyntaxException e) {
 
@@ -211,7 +212,7 @@ class NetRequest<ReturnObj> extends StringRequest {
                 }
 
                 private void printErrorInfo() {
-                    String errorResponse = new String(error.networkResponse != null ? error.networkResponse.data : error.getMessage().getBytes());
+                    String errorResponse = new String(error.networkResponse != null ? error.networkResponse.data : (error.getMessage() == null ? error.toString().getBytes() : error.getMessage().getBytes()));
                     DLog.e(HttpNetUtils.LOG_TAG, DLog.makeTitle("RequestError") + DLog.makeSubTitle("URL") + url
                             + "\n" + DLog.makeSubTitle("Error") + errorResponse, error);
                 }

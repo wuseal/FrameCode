@@ -142,6 +142,15 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
 
             final List<?> fetchedData = netListViewDelegate.loadMoreAbleListener.getLoadedData(t);
 
+            if (netListViewDelegate.listView.getAdapter() == null) {
+
+                netListViewDelegate.listView.addFooterView(netListViewDelegate.loadMoreView);
+
+                netListViewDelegate.listView.setAdapter(netListViewDelegate.adapter);
+
+                netListViewDelegate.listView.removeFooterView(netListViewDelegate.loadMoreView);
+            }
+
             if (netListViewDelegate.refreshing) {
 
                 netListViewDelegate.list.clear();//如果此次请求是刷新动作，则先清空数据
@@ -451,11 +460,6 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
 
         this.adapter.setList(list);
 
-        listView.addFooterView(loadMoreView);
-
-        listView.setAdapter(adapter);
-
-        listView.removeFooterView(loadMoreView);
 
         if (listView instanceof SuperScrollListenerSetter) {
 
