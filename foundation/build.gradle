@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/wuseal/FrameCode'
     gitUrl = 'https://github.com/wuseal/FrameCode.git'
 
-    libraryVersion = '1.7.0'
+    libraryVersion = '1.7.3-test-12'
 
     developerId = 'seal.wu'
     developerName = 'Seal.Wu'
@@ -47,7 +47,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     provided files('libs/org.apache.http.legacy.jar')
     testCompile 'junit:junit:4.12'
-    testCompile 'org.testng:testng:6.9.6'
 }
 
 
