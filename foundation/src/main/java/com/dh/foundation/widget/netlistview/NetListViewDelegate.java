@@ -209,6 +209,10 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
 
             if (netListViewDelegate != null) {
 
+                if (netListViewDelegate.refreshing && netListViewDelegate.isShowProgressDialog()) {//代表在刷新,仅仅刷新的时候显示等待进度条
+
+                    ProgressDialogUtil.dismissProgressDialog();
+                }
 
                 if (netListViewDelegate.onLoadFinishListener != null) {
 
@@ -226,7 +230,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
                 netListViewDelegate.refreshing = false;
             }
 
-            ProgressDialogUtil.dismissProgressDialog();
+
         }
 
     }
