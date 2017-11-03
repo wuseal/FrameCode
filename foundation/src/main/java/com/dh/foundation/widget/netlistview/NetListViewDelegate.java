@@ -114,7 +114,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
         public void onSuccess(Object t) {
             final NetListViewDelegate netListViewDelegate = weakReference.get();
 
-            if (netListViewDelegate.serverReturnDataOKListener != null && !netListViewDelegate.serverReturnDataOKListener.isServerReturnDataOK(t)) {
+            if (netListViewDelegate != null && netListViewDelegate.serverReturnDataOKListener != null && !netListViewDelegate.serverReturnDataOKListener.isServerReturnDataOK(t)) {
                 ServerReturnError error = new ServerReturnError();
                 error.setReturnData(t);
                 onFailed(error);

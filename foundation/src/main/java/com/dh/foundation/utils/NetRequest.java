@@ -26,7 +26,7 @@ import java.util.Map;
  * Time: 16:11
  */
 
-class NetRequest<ReturnObj> extends StringRequest {
+public class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
 

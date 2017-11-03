@@ -4,6 +4,8 @@ import com.android.volley.VolleyError;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 
@@ -14,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Date: 2017/10/16
  * Time: 14:25
  */
+@RunWith(MockitoJUnitRunner.class)
 public class NetRequestTest {
 
     @Test
@@ -50,5 +53,4 @@ public class NetRequestTest {
         });
         listener.onErrorResponse(new NetworkError());
     }
-
 }
