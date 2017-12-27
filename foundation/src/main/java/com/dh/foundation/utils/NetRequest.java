@@ -30,9 +30,9 @@ public class NetRequest<ReturnObj> extends StringRequest {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
-    private final static Gson prettyFormatGson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private final static Gson prettyFormatGson = new GsonBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting().create();
 
-    private final static Gson gson = new Gson();
+    private final static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     /**
      * 网络请求参数

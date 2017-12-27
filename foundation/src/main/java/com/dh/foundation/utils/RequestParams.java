@@ -58,7 +58,7 @@ public class RequestParams<ParamsObj> implements IRequestParams {
         try {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 encodedHeaders.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
-                encodedHeaders.append('=');
+                encodedHeaders.append(" : ");
                 encodedHeaders.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
                 encodedHeaders.append('\n');
             }
