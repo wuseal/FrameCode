@@ -428,7 +428,12 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
 
         this.adapter = adapter;
 
-        this.list = new ArrayList<>();
+        /**
+         * 当原来已经有数据存在时，先不急着改变数据，因为在改变数据后未消执行adapter.notifyDataChange的时候去点击原来的界面会导致数组越界异常的崩溃
+         */
+        if (list == null) {
+            this.list = new ArrayList<>();
+        }
 
         this.pageName = pageName == null ? "" : pageName;
 
