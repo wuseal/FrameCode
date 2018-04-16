@@ -1,5 +1,6 @@
 package com.dh.foundation.utils;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -138,39 +139,50 @@ public class NetRequest<ReturnObj> extends StringRequest {
 //            String a = "{\"name\": \"seal\",\"age\": null,\"height\": 175}";
 //            NetRequest.printResponse("http://baidu.com", formatJsonString(a));
 
-            handler.post(new Runnable() {
+            AsyncTask.SERIAL_EXECUTOR.execute(new Runnable() {
                 @Override
                 public void run() {
-
-                    ReturnObj o;
+                    ReturnObj o = null;
 
                     try {
                         String newResponse = gson.toJson(new JsonParser().parse(response));
 
                         o = NetRequest.gson.fromJson(newResponse, returnType);
 
-                    } catch (JsonSyntaxException e) {
+                    } catch (final JsonSyntaxException e) {
 
                         DLoggerUtils.e(e);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                requestListener.onFailed(new DataFormatError(e));
 
-                        requestListener.onFailed(new DataFormatError(e));
+                                requestListener.onFinished();
 
-                        requestListener.onFinished();
-
-                        return;
+                            }
+                        });
                     }
 
-                    requestListener.onSuccess(o);
+                    final ReturnObj finalO = o;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    requestListener.onFinished();
+                            requestListener.onSuccess(finalO);
+
+                            requestListener.onFinished();
+                        }
+
+
+                    });
+
+                    printResponse(url, formatJsonString(response));
                 }
-
-
             });
 
-            printResponse(url, formatJsonString(response));
 
         }
+
     }
 
     private static String formatJsonString(String response) {

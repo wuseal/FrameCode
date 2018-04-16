@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
 import com.android.volley.Network;
@@ -235,15 +234,6 @@ public class ImageNetLoader {
                     if (imageView.getTag().equals(finalUrl)) {
 
                         imageView.setImageBitmap(bitmap);
-
-                        if (!isImmediate) {
-
-                            AlphaAnimation animation = new AlphaAnimation(0, 1);
-
-                            animation.setDuration(300);
-
-                            imageView.startAnimation(animation);
-                        }
                     }
                 }
             }
