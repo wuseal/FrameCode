@@ -1,10 +1,12 @@
 package com.dh.foundation.app;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 
 import com.dh.foundation.utils.DLoggerUtils;
 
@@ -73,7 +75,6 @@ public class UnCatchExceptionHandler implements Thread.UncaughtExceptionHandler 
 
     /**
      * 收集设备参数信息
-     *
      */
     private void collectDeviceInfo(Context ctx) {
         try {
@@ -129,10 +130,11 @@ public class UnCatchExceptionHandler implements Thread.UncaughtExceptionHandler 
             String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss E", Locale.CHINA).format(new Date());
             String fileName = "crash-" + time + "-" + timestamp + ".log";
             String path;
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                 path = Environment.getExternalStorageDirectory().getPath() + "/" + ApplicationUtil.getPackageName();
+            boolean hasWritePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && hasWritePermission) {
+                path = Environment.getExternalStorageDirectory().getPath() + "/" + ApplicationUtil.getPackageName();
             } else {
-                path=context.getCacheDir()+ "/" + ApplicationUtil.getAppName();
+                path = context.getCacheDir() + "/" + ApplicationUtil.getAppName();
             }
             File dir = new File(path);
             if (!dir.exists()) {
