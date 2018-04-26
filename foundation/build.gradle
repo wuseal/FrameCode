@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 ext {
     bintrayRepo = 'maven'
@@ -13,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/wuseal/FrameCode'
     gitUrl = 'https://github.com/wuseal/FrameCode.git'
 
-    libraryVersion = '1.7.7'
+    libraryVersion = '1.8.0-t1'
 
     developerId = 'seal.wu'
     developerName = 'Seal.Wu'
@@ -71,8 +72,12 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.10.0"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 
 apply from: 'artifacts.gradle'
 apply from:'bintray-push.gradle'
+repositories {
+    mavenCentral()
+}
