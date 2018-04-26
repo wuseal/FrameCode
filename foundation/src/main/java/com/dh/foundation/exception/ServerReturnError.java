@@ -8,6 +8,9 @@ package com.dh.foundation.exception;
 
 public class ServerReturnError extends Exception {
 
+    public ServerReturnError(String message) {
+        super(message);
+    }
     private Object returnData;
 
     public Object getReturnData() {

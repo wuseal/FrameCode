@@ -29,6 +29,8 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
 
     private int netErrorViewId;
 
+    private int serverReturnDataErrorViewId;
+
 
     public NetListViewCompat(Context context) {
         this(context, null);
@@ -57,6 +59,8 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
 
             netErrorViewId = a.getResourceId(R.styleable.NetListView_net_error_view_id, 0);
 
+            serverReturnDataErrorViewId = a.getResourceId(R.styleable.NetListView_server_return_data_error_view_id, 0);
+
         }
 
 
@@ -84,8 +88,18 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
     }
 
     @Override
+    public void setNetServerReturnDataErrorViewId(int serverReturnDataErrorViewId) {
+        netListViewDelegate.setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
+    }
+
+    @Override
     public View getNetErrorView() {
         return netListViewDelegate.getNetErrorView();
+    }
+
+    @Override
+    public View getServerReturnDataErrorView() {
+        return netListViewDelegate.getServerReturnDataErrorView();
     }
 
     /**
@@ -174,6 +188,8 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
 
         setNetErrorViewId(netErrorViewId);
 
+        setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
+
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName);
     }
 
@@ -191,6 +207,8 @@ public class NetListViewCompat extends ListViewCompat implements NLVCommonInterf
         setEmptyViewId(emptyViewId);
 
         setNetErrorViewId(netErrorViewId);
+
+        setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
 
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName, emptyView);
     }

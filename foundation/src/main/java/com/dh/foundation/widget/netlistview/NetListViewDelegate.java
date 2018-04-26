@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.android.volley.ServerError;
 import com.dh.foundation.adapter.NetListViewBaseAdapter;
 import com.dh.foundation.exception.DhRequestError;
 import com.dh.foundation.exception.ServerReturnError;
@@ -80,11 +81,14 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
     private View emptyView;
 
     private View netErrorView;
+    private View serverReturnDataErrorView;
 
     /**
      * 网络请求出错提示viewId
      */
     private int netErrorViewId;
+
+    private int serverReturnDataErrorViewId;
 
     private AbsListView.OnScrollListener onScrollListener;
     /**
@@ -115,7 +119,7 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
             final NetListViewDelegate netListViewDelegate = weakReference.get();
 
             if (netListViewDelegate != null && netListViewDelegate.serverReturnDataOKListener != null && !netListViewDelegate.serverReturnDataOKListener.isServerReturnDataOK(t)) {
-                ServerReturnError error = new ServerReturnError();
+                ServerReturnError error = new ServerReturnError("请求服务失败");
                 error.setReturnData(t);
                 onFailed(error);
                 return;
@@ -182,16 +186,40 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
 
                 netListViewDelegate.loadMoreFailedReset();
 
-                if (netListViewDelegate.netErrorView != null && netListViewDelegate.list.isEmpty()) {
+                if (throwable instanceof ServerReturnError || (throwable.getCause() != null && throwable.getCause() instanceof ServerError)) {
 
-                    netListViewDelegate.netErrorView.setVisibility(View.VISIBLE);
+                    if (netListViewDelegate.serverReturnDataErrorView != null && netListViewDelegate.list.isEmpty()) {
 
-                    if (netListViewDelegate.listView.getEmptyView() != null) {
+                        netListViewDelegate.serverReturnDataErrorView.setVisibility(View.VISIBLE);
 
-                        netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
+                        if (netListViewDelegate.listView.getEmptyView() != null) {
+
+                            netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
+                        }
+
+                        if (netListViewDelegate.netErrorView != null) {
+                            netListViewDelegate.netErrorView.setVisibility(View.GONE);
+                        }
+
                     }
+                } else {
 
+                    if (netListViewDelegate.netErrorView != null && netListViewDelegate.list.isEmpty()) {
+
+                        netListViewDelegate.netErrorView.setVisibility(View.VISIBLE);
+
+                        if (netListViewDelegate.listView.getEmptyView() != null) {
+
+                            netListViewDelegate.listView.getEmptyView().setVisibility(View.GONE);
+                        }
+
+                        if (netListViewDelegate.serverReturnDataErrorView != null) {
+                            netListViewDelegate.serverReturnDataErrorView.setVisibility(View.GONE);
+                        }
+
+                    }
                 }
+
 
                 if (netListViewDelegate.isNetErrorToast) {
 
@@ -334,8 +362,40 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
     }
 
     @Override
+    public void setNetServerReturnDataErrorViewId(int serverReturnDataErrorViewId) {
+
+        this.serverReturnDataErrorViewId = serverReturnDataErrorViewId;
+
+        if (this.serverReturnDataErrorViewId != 0) {
+
+            final View serverReturnDataErrorView = findNearestViewById(serverReturnDataErrorViewId);
+
+            this.serverReturnDataErrorView = serverReturnDataErrorView;
+
+            if (serverReturnDataErrorView != null) {
+
+                serverReturnDataErrorView.setVisibility(View.GONE);
+
+                serverReturnDataErrorView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        refreshData();
+                    }
+                });
+            }
+
+        }
+    }
+
+    @Override
     public View getNetErrorView() {
         return netErrorView;
+    }
+
+    @Override
+    public View getServerReturnDataErrorView() {
+        return serverReturnDataErrorView;
     }
 
     /**

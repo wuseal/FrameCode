@@ -29,6 +29,9 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
 
     private int netErrorViewId;
 
+    private int serverReturnDataErrorViewId;
+
+
 
     public NetListView(Context context) {
         this(context, null);
@@ -56,6 +59,8 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
 
             netErrorViewId = a.getResourceId(R.styleable.NetListView_net_error_view_id, 0);
 
+            serverReturnDataErrorViewId = a.getResourceId(R.styleable.NetListView_server_return_data_error_view_id, 0);
+
         }
 
 
@@ -81,8 +86,18 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
     }
 
     @Override
+    public void setNetServerReturnDataErrorViewId(int serverReturnDataErrorViewId) {
+        netListViewDelegate.setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
+    }
+
+    @Override
     public View getNetErrorView() {
         return netListViewDelegate.getNetErrorView();
+    }
+
+    @Override
+    public View getServerReturnDataErrorView() {
+        return netListViewDelegate.getServerReturnDataErrorView();
     }
 
     /**
@@ -164,6 +179,8 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
 
         setNetErrorViewId(netErrorViewId);
 
+        setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
+
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName);
     }
 
@@ -180,6 +197,8 @@ public class NetListView extends ListView implements NLVCommonInterface, SuperSc
         setEmptyViewId(emptyViewId);
 
         setNetErrorViewId(netErrorViewId);
+
+        setNetServerReturnDataErrorViewId(serverReturnDataErrorViewId);
 
         netListViewDelegate.initNetListView(baseAddress, params, adapter, pageName, emptyView);
     }

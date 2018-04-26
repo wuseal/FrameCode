@@ -39,12 +39,30 @@ public interface NLVCommonInterface extends ParamMakerSetter,ServerReturnDataOKL
     void setNetErrorViewId(int netErrorViewId);
 
 
+
+    /**
+     * 设置服务器返回错误码显示的view的id
+     *
+     * @param serverReturnDataErrorViewId 服务返回错误码显示的view的id
+     */
+    void setNetServerReturnDataErrorViewId(int serverReturnDataErrorViewId);
+
+
     /**
      * 获取网络出错提示的View
      *
      * @return 网络出错提示的View
      */
     View getNetErrorView();
+
+
+    /**
+     * 获取网络出错提示的View
+     *
+     * @return 网络出错提示的View
+     */
+    View getServerReturnDataErrorView();
+
 
     /**
      * 设置是否弹出提示＂已经全部加载＂
