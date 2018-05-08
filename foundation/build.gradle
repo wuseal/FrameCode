@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/wuseal/FrameCode'
     gitUrl = 'https://github.com/wuseal/FrameCode.git'
 
-    libraryVersion = '1.8.0-t1'
+    libraryVersion = '1.8.1'
 
     developerId = 'seal.wu'
     developerName = 'Seal.Wu'

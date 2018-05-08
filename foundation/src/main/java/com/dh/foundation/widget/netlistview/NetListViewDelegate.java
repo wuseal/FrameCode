@@ -144,6 +144,11 @@ class NetListViewDelegate implements NLVCommonInterface, ParamMakerSetter, Serve
                 netListViewDelegate.netErrorView.setVisibility(View.GONE);
             }
 
+            if (netListViewDelegate.serverReturnDataErrorView != null) {
+
+                netListViewDelegate.serverReturnDataErrorView.setVisibility(View.GONE);
+            }
+
             final List<?> fetchedData = netListViewDelegate.loadMoreAbleListener.getLoadedData(t);
 
             if (netListViewDelegate.listView.getAdapter() == null) {

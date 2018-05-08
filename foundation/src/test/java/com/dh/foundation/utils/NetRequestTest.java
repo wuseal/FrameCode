@@ -54,3 +54,4 @@ public class NetRequestTest {
         listener.onErrorResponse(new NetworkError());
     }
 }
+
